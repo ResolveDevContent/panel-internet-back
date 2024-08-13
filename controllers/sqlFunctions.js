@@ -1,4 +1,4 @@
-const conn = require("../db")
+const conn = require("../db/db")
 
 const createTable = (schema) => {
   return new Promise((resolve, reject) => {
