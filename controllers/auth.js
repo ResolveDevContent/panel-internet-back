@@ -13,7 +13,7 @@ const generateAccessToken = (userId) => {
 };
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
   if (!email || !password) {
     res
       .status(400)
@@ -26,7 +26,9 @@ const register = async (req, res) => {
     userId: uuidv4(),
     email,
     password: hashedPassword,
+    role: role
   };
+  
   try {
     await createTable(userSchema);
     const userAlreadyExists = await checkRecordExists("users", "email", email);
@@ -68,6 +70,7 @@ const login = async (req, res) => {
         res.status(200).json({
           userId: existingUser.userId,
           email: existingUser.email,
+          role: existingUser.role,
           token: generateAccessToken(existingUser.userId),
         });
       } else {

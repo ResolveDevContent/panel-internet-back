@@ -5,6 +5,7 @@ const port = process.env.PORT;
 const cors = require("cors");
 const conn = require("./db/db")
 const auth = require("./routes/auth")
+const abm = require("./routes/abm")
 
 const app = express();
 
@@ -14,14 +15,15 @@ app.use(express.urlencoded({ extended: false }));
 
 conn.connect(err => {
     if (err) return console.log("Failed to connect", err);
-    console.log(`Successfully connected to mariadb server: ${conn.serverVersion()}`);
+    console.log(`Successfully connected to mariadb server: `);
 });
 
-app.get("/", (req,res) => {
-    res.send("Bienvenido a la API");
+app.get("/", async (req,res) => {
+  res.send("Bienvenidos a la API")
 });
 
 app.use("/auth", auth);
+app.use("/abm", abm);
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
