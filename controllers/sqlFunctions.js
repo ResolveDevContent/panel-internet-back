@@ -35,7 +35,7 @@ const insertRecord = (tableName, record) => {
       if (err) {
         reject(err);
       } else {
-        resolve("Se agrego correctamente!");
+        resolve(results);
       }
     });
   });

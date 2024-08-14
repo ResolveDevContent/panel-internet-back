@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 conn.connect(err => {
     if (err) return console.log("Failed to connect", err);
-    console.log(`Successfully connected to mariadb server: `);
+    console.log(`Successfully connected to mysql server: `);
 });
 
 app.get("/", async (req,res) => {

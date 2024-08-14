@@ -1,6 +1,11 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
+const { calcularPuntos } = require("../utils/calcularPuntos");
+
+const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require("uuid");
+
 const router = express.Router();
 
 
@@ -12,6 +17,7 @@ router.get("/comercios/listar", (req,res) => {
         res.send(results);
     })
 });
+
 router.get("/comercios/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     selectOneRecord("comercio", "ID_Comercio", id)
@@ -19,12 +25,45 @@ router.get("/comercios/listar/:id", authenticate, (req,res) => {
         res.send(results);
     })
 });
+
 router.post("/comercios/agregar", authenticate, (req,res) => {
+    const { email } = req.body;
+    const password = req.body.password;
+
+    delete req.body.password;
+
     insertRecord("comercio", req.body)
     .then((results) => {
-        res.send(results);
+        bcrypt.genSalt(10).then((salt) => {
+            bcrypt.hash(password, salt).then((hashedPassword) => {
+                const user = {
+                    userId: uuidv4(),
+                    email: email,
+                    password: hashedPassword,
+                    role: "comercio"
+                };
+                
+                try {
+                    checkRecordExists("users", "email", email)
+                    .then((exist) => {
+                        const userAlreadyExists = exist;
+                        if (userAlreadyExists) {
+                            res.status(409).json({ error: "Email ya existente" });
+                        } else {
+                            insertRecord("users", user)
+                            .then((insert) => {
+                                res.status(201).json({ message: "Usuario creado correctamente!" });
+                            })
+                        }
+                    })
+                } catch (error) {
+                    res.status(500).json({ error: error.message });
+                }
+            })
+        })
     })
 })
+
 router.put("/comercios/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("comercio", req.body, "ID_Comercio", id)
@@ -32,6 +71,7 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
 })
+
 router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("comercio", "ID_Comercio", id)
@@ -48,6 +88,7 @@ router.get("/clientes/listar", (req,res) => {
         res.send(results);
     })
 });
+
 router.get("/clientes/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     selectOneRecord("clientes", "ID_Cliente", id)
@@ -55,12 +96,45 @@ router.get("/clientes/listar/:id", authenticate, (req,res) => {
         res.send(results);
     })
 });
+
 router.post("/clientes/agregar", authenticate, (req,res) => {
+    const { email } = req.body;
+    const password = req.body.password;
+
+    delete req.body.password;
+
     insertRecord("clientes", req.body)
     .then((results) => {
-        res.send(results);
+        bcrypt.genSalt(10).then((salt) => {
+            bcrypt.hash(password, salt).then((hashedPassword) => {
+                const user = {
+                    userId: uuidv4(),
+                    email: email,
+                    password: hashedPassword,
+                    role: "cliente"
+                };
+                
+                try {
+                    checkRecordExists("users", "email", email)
+                    .then((exist) => {
+                        const userAlreadyExists = exist;
+                        if (userAlreadyExists) {
+                            res.status(409).json({ error: "Email ya existente" });
+                        } else {
+                            insertRecord("users", user)
+                            .then((insert) => {
+                                res.status(201).json({ message: "Usuario creado correctamente!" });
+                            })
+                        }
+                    })
+                } catch (error) {
+                    res.status(500).json({ error: error.message });
+                }
+            })
+        })
     })
 })
+
 router.put("/clientes/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("clientes", req.body, "ID_Cliente", id)
@@ -68,6 +142,7 @@ router.put("/clientes/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
 })
+
 router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("clientes", "ID_Cliente", id)
@@ -84,6 +159,7 @@ router.get("/transaccion/listar", (req,res) => {
         res.send(results);
     })
 });
+
 router.get("/transaccion/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     selectOneRecord("transaccion", "ID_Transaccion", id)
@@ -91,12 +167,24 @@ router.get("/transaccion/listar/:id", authenticate, (req,res) => {
         res.send(results);
     })
 });
+
 router.post("/transaccion/agregar", authenticate, (req,res) => {
-    insertRecord("transaccion", req.body)
-    .then((results) => {
-        res.send(results);
+    selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
+    .then((row) => {
+        row = row[0];
+
+        const puntos = calcularPuntos(row.porcentaje, req.body.monto_parcial)
+        delete req.body.puntos_parciales;
+
+        const body = {...req.body, puntos_parciales: puntos};
+
+        insertRecord("transacciones", body)
+        .then((results) => {
+            res.send(results)
+        })
     })
 })
+
 router.put("/transaccion/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("transaccion", req.body, "ID_Transaccion", id)
@@ -104,6 +192,7 @@ router.put("/transaccion/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
 })
+
 router.delete("/transaccion/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("transaccion", "ID_Transaccion", id)
