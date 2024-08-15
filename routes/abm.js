@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -82,74 +82,83 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
 
 //CRUD: CLIENTES ---------------------------------------------------------------------------------
 
-router.get("/clientes/listar", (req,res) => {
-    selectTable("clientes")
-    .then((results) => {
-        res.send(results);
-    })
-});
+// router.get("/clientes/listar", (req,res) => {
+//     selectTable("clientes")
+//     .then((results) => {
+//         res.send(results);
+//     })
+// });
 
-router.get("/clientes/listar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    selectOneRecord("clientes", "ID_Cliente", id)
-    .then((results) => {
-        res.send(results);
-    })
-});
+// router.get("/clientes/listar/:id", authenticate, (req,res) => {
+//     const { id } = req.params;
+//     selectOneRecord("clientes", "ID_Cliente", id)
+//     .then((results) => {
+//         res.send(results)
+//     })
+// });
 
-router.post("/clientes/agregar", authenticate, (req,res) => {
-    const { email } = req.body;
-    const password = req.body.password;
+// router.get("/clientes/puntos/:id", authenticate, (req,res) => {
+//     const { id } = req.params;
 
-    delete req.body.password;
+//     calculoDePuntos("transacciones", "ID_Cliente", id)
+//     .then((transacciones) => {
+//         res.send(transacciones);
+//     })
+// })
 
-    insertRecord("clientes", req.body)
-    .then((results) => {
-        bcrypt.genSalt(10).then((salt) => {
-            bcrypt.hash(password, salt).then((hashedPassword) => {
-                const user = {
-                    userId: uuidv4(),
-                    email: email,
-                    password: hashedPassword,
-                    role: "cliente"
-                };
+// router.post("/clientes/agregar", authenticate, (req,res) => {
+//     const { email } = req.body;
+//     const password = req.body.password;
+
+//     delete req.body.password;
+
+//     insertRecord("clientes", req.body)
+//     .then((results) => {
+//         bcrypt.genSalt(10).then((salt) => {
+//             bcrypt.hash(password, salt).then((hashedPassword) => {
+//                 const user = {
+//                     userId: uuidv4(),
+//                     email: email,
+//                     password: hashedPassword,
+//                     role: "cliente"
+//                 };
                 
-                try {
-                    checkRecordExists("users", "email", email)
-                    .then((exist) => {
-                        const userAlreadyExists = exist;
-                        if (userAlreadyExists) {
-                            res.status(409).json({ error: "Email ya existente" });
-                        } else {
-                            insertRecord("users", user)
-                            .then((insert) => {
-                                res.status(201).json({ message: "Usuario creado correctamente!" });
-                            })
-                        }
-                    })
-                } catch (error) {
-                    res.status(500).json({ error: error.message });
-                }
-            })
-        })
-    })
-})
+//                 try {
+//                     checkRecordExists("users", "email", email)
+//                     .then((exist) => {
+//                         const userAlreadyExists = exist;
+//                         if (userAlreadyExists) {
+//                             res.status(409).json({ error: "Email ya existente" });
+//                         } else {
+//                             insertRecord("users", user)
+//                             .then((insert) => {
+//                                 res.status(201).json({ message: "Usuario creado correctamente!" });
+//                             })
+//                         }
+//                     })
+//                 } catch (error) {
+//                     res.status(500).json({ error: error.message });
+//                 }
+//             })
+//         })
+//     })
+// })
 
-router.put("/clientes/modificar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    updateRecord("clientes", req.body, "ID_Cliente", id)
-    .then((results) => {
-        res.send(results);
-    })
-})
+// router.put("/clientes/modificar/:id", authenticate, (req,res) => {
+//     const { id } = req.params;
+//     updateRecord("clientes", req.body, "ID_Cliente", id)
+//     .then((results) => {
+//         res.send(results);
+//     })
+// })
 
-router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    deleteRecord("clientes", "ID_Cliente", id)
-    .then((results) => {
-        res.send(results);
-    })
-})
+// router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
+//     const { id } = req.params;
+//     deleteRecord("clientes", "ID_Cliente", id)
+//     .then((results) => {
+//         res.send(results);
+//     })
+// })
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
 

@@ -98,6 +98,20 @@ const updateRecord = (tableName, update, column, value) => {
   });
 }
 
+const calculoDePuntos = (tableName, column, value) => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales, SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
+
+    conn.query(query, [value], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 module.exports = {
   createTable,
   checkRecordExists,
@@ -105,5 +119,6 @@ module.exports = {
   selectTable,
   selectOneRecord,
   deleteRecord,
-  updateRecord
+  updateRecord,
+  calculoDePuntos
 };
