@@ -16,6 +16,9 @@ router.get("/comercios/listar", (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.send(err)
+    })
 });
 
 router.get("/comercios/listar/:id", authenticate, (req,res) => {
@@ -23,6 +26,9 @@ router.get("/comercios/listar/:id", authenticate, (req,res) => {
     selectOneRecord("comercio", "ID_Comercio", id)
     .then((results) => {
         res.send(results);
+    })
+    .catch((err) => {
+        res.send(err)
     })
 });
 
@@ -54,13 +60,24 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                             .then((insert) => {
                                 res.status(201).json({ message: "Usuario creado correctamente!" });
                             })
+                            .catch((err) => {
+                                res.status(404).json({ message: "Usuario no encontrado" })
+                            })
                         }
+                    })
+                    .catch((err) => {
+                        res.status(500).json({ error: err.message });
                     })
                 } catch (error) {
                     res.status(500).json({ error: error.message });
                 }
+            }).catch((err) => {
+                res.status(500).json({ error: err.message });
             })
         })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 })
 
@@ -70,6 +87,9 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 })
 
 router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
@@ -78,87 +98,116 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 })
 
 //CRUD: CLIENTES ---------------------------------------------------------------------------------
 
-// router.get("/clientes/listar", (req,res) => {
-//     selectTable("clientes")
-//     .then((results) => {
-//         res.send(results);
-//     })
-// });
+router.get("/clientes/listar", (req,res) => {
+    selectTable("clientes")
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+});
 
-// router.get("/clientes/listar/:id", authenticate, (req,res) => {
-//     const { id } = req.params;
-//     selectOneRecord("clientes", "ID_Cliente", id)
-//     .then((results) => {
-//         res.send(results)
-//     })
-// });
+router.get("/clientes/listar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    selectOneRecord("clientes", "ID_Cliente", id)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+});
 
-// router.get("/clientes/puntos/:id", authenticate, (req,res) => {
-//     const { id } = req.params;
+router.get("/clientes/puntos/:id", authenticate, (req,res) => {
+    const { id } = req.params;
 
-//     calculoDePuntos("transacciones", "ID_Cliente", id)
-//     .then((transacciones) => {
-//         res.send(transacciones);
-//     })
-// })
+    calculoDePuntos("transacciones", "ID_Cliente", id)
+    .then((transacciones) => {
+        res.send(transacciones);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
 
-// router.post("/clientes/agregar", authenticate, (req,res) => {
-//     const { email } = req.body;
-//     const password = req.body.password;
+router.post("/clientes/agregar", authenticate, (req,res) => {
+    const { email } = req.body;
+    const password = req.body.password;
 
-//     delete req.body.password;
+    delete req.body.password;
 
-//     insertRecord("clientes", req.body)
-//     .then((results) => {
-//         bcrypt.genSalt(10).then((salt) => {
-//             bcrypt.hash(password, salt).then((hashedPassword) => {
-//                 const user = {
-//                     userId: uuidv4(),
-//                     email: email,
-//                     password: hashedPassword,
-//                     role: "cliente"
-//                 };
+    insertRecord("clientes", req.body)
+    .then((results) => {
+        bcrypt.genSalt(10).then((salt) => {
+            bcrypt.hash(password, salt).then((hashedPassword) => {
+                const user = {
+                    userId: uuidv4(),
+                    email: email,
+                    password: hashedPassword,
+                    role: "cliente"
+                };
                 
-//                 try {
-//                     checkRecordExists("users", "email", email)
-//                     .then((exist) => {
-//                         const userAlreadyExists = exist;
-//                         if (userAlreadyExists) {
-//                             res.status(409).json({ error: "Email ya existente" });
-//                         } else {
-//                             insertRecord("users", user)
-//                             .then((insert) => {
-//                                 res.status(201).json({ message: "Usuario creado correctamente!" });
-//                             })
-//                         }
-//                     })
-//                 } catch (error) {
-//                     res.status(500).json({ error: error.message });
-//                 }
-//             })
-//         })
-//     })
-// })
+                try {
+                    checkRecordExists("users", "email", email)
+                    .then((exist) => {
+                        const userAlreadyExists = exist;
+                        if (userAlreadyExists) {
+                            res.status(409).json({ error: "Email ya existente" });
+                        } else {
+                            insertRecord("users", user)
+                            .then((insert) => {
+                                res.status(201).json({ message: "Usuario creado correctamente!" });
+                            })
+                            .catch((err) => {
+                                res.status(404).json({ message: "Usuario no encontrado!" });
+                            })
+                        }
+                    })
+                    .catch((err) => {
+                        res.status(500).json({ error: err.message });
+                    })
+                } catch (error) {
+                    res.status(500).json({ error: error.message });
+                }
+            }).catch((err) => {
+                res.status(500).json({ error: err.message });
+            })
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
 
-// router.put("/clientes/modificar/:id", authenticate, (req,res) => {
-//     const { id } = req.params;
-//     updateRecord("clientes", req.body, "ID_Cliente", id)
-//     .then((results) => {
-//         res.send(results);
-//     })
-// })
+router.put("/clientes/modificar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    updateRecord("clientes", req.body, "ID_Cliente", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
 
-// router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
-//     const { id } = req.params;
-//     deleteRecord("clientes", "ID_Cliente", id)
-//     .then((results) => {
-//         res.send(results);
-//     })
-// })
+router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    deleteRecord("clientes", "ID_Cliente", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
 
@@ -167,6 +216,9 @@ router.get("/transaccion/listar", (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 });
 
 router.get("/transaccion/listar/:id", authenticate, (req,res) => {
@@ -174,6 +226,9 @@ router.get("/transaccion/listar/:id", authenticate, (req,res) => {
     selectOneRecord("transaccion", "ID_Transaccion", id)
     .then((results) => {
         res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 });
 
@@ -191,6 +246,12 @@ router.post("/transaccion/agregar", authenticate, (req,res) => {
         .then((results) => {
             res.send(results)
         })
+        .catch((err) => {
+            res.status(500).json({ error: err.message });
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 })
 
@@ -200,6 +261,9 @@ router.put("/transaccion/modificar/:id", authenticate, (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 })
 
 router.delete("/transaccion/borrar/:id", authenticate, (req,res) => {
@@ -207,6 +271,9 @@ router.delete("/transaccion/borrar/:id", authenticate, (req,res) => {
     deleteRecord("transaccion", "ID_Transaccion", id)
     .then((results) => {
         res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 })
 
@@ -217,6 +284,9 @@ router.get("/asociaciones/listar", (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 });
 router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
@@ -224,11 +294,17 @@ router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 });
 router.post("/asociaciones/agregar", authenticate, (req,res) => {
     insertRecord("asociaciones", req.body)
     .then((results) => {
         res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 })
 router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
@@ -237,12 +313,18 @@ router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
     .then((results) => {
         res.send(results);
     })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
 })
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("asociaciones", "ID_asociacion", id)
     .then((results) => {
         res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 })
 
