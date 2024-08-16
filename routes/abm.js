@@ -58,10 +58,10 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                         } else {
                             insertRecord("users", user)
                             .then((insert) => {
-                                res.status(201).json({ message: "Usuario creado correctamente!" });
+                                res.status(201).json({ message: "Comercio creado correctamente!" });
                             })
                             .catch((err) => {
-                                res.status(404).json({ message: "Usuario no encontrado" })
+                                res.status(500).json({ message: "No se puedo crear correctamente!" })
                             })
                         }
                     })
@@ -167,7 +167,7 @@ router.post("/clientes/agregar", authenticate, (req,res) => {
                                 res.status(201).json({ message: "Usuario creado correctamente!" });
                             })
                             .catch((err) => {
-                                res.status(404).json({ message: "Usuario no encontrado!" });
+                                res.status(500).json({ message: "No se puedo crear correctamente!" })
                             })
                         }
                     })
@@ -211,8 +211,8 @@ router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
 
-router.get("/transaccion/listar", (req,res) => {
-    selectTable("transaccion")
+router.get("/transacciones/listar", (req,res) => {
+    selectTable("transacciones")
     .then((results) => {
         res.send(results);
     })
@@ -221,9 +221,9 @@ router.get("/transaccion/listar", (req,res) => {
     })
 });
 
-router.get("/transaccion/listar/:id", authenticate, (req,res) => {
+router.get("/transacciones/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    selectOneRecord("transaccion", "ID_Transaccion", id)
+    selectOneRecord("transacciones", "ID_Transaccion", id)
     .then((results) => {
         res.send(results);
     })
@@ -232,7 +232,7 @@ router.get("/transaccion/listar/:id", authenticate, (req,res) => {
     })
 });
 
-router.post("/transaccion/agregar", authenticate, (req,res) => {
+router.post("/transacciones/agregar", authenticate, (req,res) => {
     selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
     .then((row) => {
         row = row[0];
@@ -255,9 +255,9 @@ router.post("/transaccion/agregar", authenticate, (req,res) => {
     })
 })
 
-router.put("/transaccion/modificar/:id", authenticate, (req,res) => {
+router.put("/transacciones/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    updateRecord("transaccion", req.body, "ID_Transaccion", id)
+    updateRecord("transacciones", req.body, "ID_Transaccion", id)
     .then((results) => {
         res.send(results);
     })
@@ -266,9 +266,9 @@ router.put("/transaccion/modificar/:id", authenticate, (req,res) => {
     })
 })
 
-router.delete("/transaccion/borrar/:id", authenticate, (req,res) => {
+router.delete("/transacciones/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    deleteRecord("transaccion", "ID_Transaccion", id)
+    deleteRecord("transacciones", "ID_Transaccion", id)
     .then((results) => {
         res.send(results);
     })
