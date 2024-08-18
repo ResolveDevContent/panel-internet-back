@@ -120,5 +120,5 @@ module.exports = {
   selectOneRecord,
   deleteRecord,
   updateRecord,
-  calculoDePuntos
+  calculoDePuntos,
 };

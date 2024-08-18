@@ -94,9 +94,36 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
 
 router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    deleteRecord("comercio", "ID_Comercio", id)
-    .then((results) => {
-        res.send(results);
+    checkRecordExists("comercio", "ID_Comercio", id)
+    .then((exist) => {
+        if(!exist) {
+            res.status(404).json({ message: "Comercio no encontrado" })
+        } else {
+
+        }
+        checkRecordExists("transacciones", "ID_Comercio", id)
+        .then((exist2) => {
+            if(exist2) {
+                deleteRecord("transacciones", "ID_Comercio", id)
+                .then(() => {
+                    deleteRecord("asociaciones", "ID_Comercio", id)
+                    .then(() => {
+                        deleteRecord("comercio", "ID_Comercio", id)
+                        .then((results) => {
+                            res.send(results);
+                        })
+                    })
+                })
+            } else {
+                deleteRecord("comercio", "ID_Comercio", id)
+                .then((results) => {
+                    res.send(results);
+                })
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ error: err.message });
+        })
     })
     .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -200,13 +227,40 @@ router.put("/clientes/modificar/:id", authenticate, (req,res) => {
 
 router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    deleteRecord("clientes", "ID_Cliente", id)
-    .then((results) => {
-        res.send(results);
+    checkRecordExists("clientes", "ID_Cliente", id)
+    .then((exist) => {
+        if(!exist) {
+            res.status(404).json({ message: "Cliente no encontrado" });
+        } else {
+            checkRecordExists("transacciones", "ID_Cliente", id)
+            .then((exist2) => {
+                if(exist2) {
+                    deleteRecord("transacciones", "ID_Cliente", id)
+                    .then(() => {
+                        deleteRecord("asociaciones", "ID_Cliente", id)
+                        .then(() => {
+                            deleteRecord("clientes", "ID_Cliente", id)
+                            .then((results) => {
+                                res.send(results);
+                            })
+                        })
+                    })
+                } else {
+                    deleteRecord("clientes", "ID_Cliente", id)
+                    .then((results) => {
+                        res.send(results);
+                    })
+                }
+            })
+            .catch((err) => {
+                res.status(500).json({ error: err.message });
+            })
+        }
     })
     .catch((err) => {
         res.status(500).json({ error: err.message });
     })
+
 })
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
