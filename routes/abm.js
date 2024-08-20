@@ -142,6 +142,58 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
     })
 })
 
+//CRUD: PAGOS -----------
+
+router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
+    calculoDePuntosComercios("transacciones", "ID_Comercio", req.body.ID_Comercio)
+        .then((total) => {
+            if(total) {
+                if(total > 0) {
+                    if(Number(req.body.ID_Comercio) <= total) {
+                        insertRecord("pagos", body)
+                        .then((results) => {
+                            res.send(results)
+                        })
+                        .catch((err) => {
+                            res.status(500).json({ error: err.message });
+                        });
+                    } else {
+                        res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
+                    }
+                } else {
+                    res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
+                }
+            } else {
+                res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ error: err.message });
+        });
+});
+
+router.put("/comercios/pagos/modificar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    updateRecord("pagos", req.body, "ID_Pagos", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
+
+router.delete("/comercios/pagos/borrar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    deleteRecord("pagos", "ID_Pagos", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
+
 //CRUD: CLIENTES ---------------------------------------------------------------------------------
 
 router.get("/clientes/listar", (req,res) => {
@@ -302,6 +354,21 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
     selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
     .then((row) => {
         row = row[0];
+
+        if(req.body.puntos_pago != "" && Number(req.body.puntos_pago) > 0) {
+            calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
+            .then((totales) => {
+                // no se como llegan asi que voy a hacerlo suponiendo xD
+                if(req.body.puntos_pago > totales.puntos) {
+                    res.status(500).json({ error: "El cliente no posee esos puntos" });
+                }
+            })
+            .catch((err) => {
+                res.status(500).json({ error: err.message });
+            })
+        } else {
+            req.body.puntos_pago = 0;
+        }
 
         const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
         const puntosFinales = calcularPuntos(row.porcentaje, puntos);

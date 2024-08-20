@@ -43,7 +43,7 @@ const insertRecord = (tableName, record) => {
 
 const selectTable = (tableName) => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT * FROM ${tableName}`
+    query = `SELECT * FROM ${tableName}`;
 
     conn.query(query, (err, results) => {
       if(err) {
@@ -119,15 +119,15 @@ const calculoDePuntos = (tableName, column, value) => {
   });
 }
 
-const calculoDePuntosComercios = (tableName, column, value) => {
+const calculoDePuntosComercios = (tableName, tableName2, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales FROM ${tableName} WHERE ${column} = ?`;
 
     // const query2 = `SELECT ${column}, 
     //                   (SELECT ${column}, SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
     //                     -
-    //                   (SELECT ${column}, SUM(puntos_pago) FROM ${tableName} WHERE ${column} = ?) 
-    //                   as puntos_totales, FROM ${tableName} WHERE ${column} = ?`;
+    //                   (SELECT ${column}, SUM(pagos) FROM ${tableName2} WHERE ${column} = ?) 
+    //                   as total, FROM ${tableName} WHERE ${column} = ?`;
 
     conn.query(query, [value], (err, results) => {
       if (err) {
