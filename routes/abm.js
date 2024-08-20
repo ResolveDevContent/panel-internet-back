@@ -32,6 +32,18 @@ router.get("/comercios/listar/:id", authenticate, (req,res) => {
     })
 });
 
+router.get("/comercios/puntos/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+
+    calculoDePuntosComercios("transacciones", "ID_Comercio", id)
+    .then((transacciones) => {
+        res.send(transacciones);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+})
+
 router.post("/comercios/agregar", authenticate, (req,res) => {
     const { email } = req.body;
     const password = req.body.password;
@@ -291,10 +303,11 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
     .then((row) => {
         row = row[0];
 
-        const puntos = calcularPuntos(row.porcentaje, req.body.monto_parcial)
+        const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
+        const puntosFinales = calcularPuntos(row.porcentaje, puntos);
         delete req.body.puntos_parciales;
 
-        const body = {...req.body, puntos_parciales: puntos};
+        const body = {...req.body, puntos_parciales: puntosFinales};
 
         insertRecord("transacciones", body)
         .then((results) => {

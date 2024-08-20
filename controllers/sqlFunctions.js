@@ -102,6 +102,33 @@ const calculoDePuntos = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales, SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
 
+    const query2 = `SELECT ${column}, 
+                      (SELECT ${column}, SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
+                        -
+                      (SELECT ${column}, SUM(puntos_pago) FROM ${tableName} WHERE ${column} = ?) 
+                      as puntos_totales, 
+                      SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
+
+    conn.query(query, [value], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
+const calculoDePuntosComercios = (tableName, column, value) => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales FROM ${tableName} WHERE ${column} = ?`;
+
+    const query2 = `SELECT ${column}, 
+                      (SELECT ${column}, SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
+                        -
+                      (SELECT ${column}, SUM(puntos_pago) FROM ${tableName} WHERE ${column} = ?) 
+                      as puntos_totales, FROM ${tableName} WHERE ${column} = ?`;
+
     conn.query(query, [value], (err, results) => {
       if (err) {
         reject(err);
@@ -121,4 +148,5 @@ module.exports = {
   deleteRecord,
   updateRecord,
   calculoDePuntos,
+  calculoDePuntosComercios
 };
