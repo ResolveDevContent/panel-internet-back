@@ -400,7 +400,6 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
 
         req.body.monto_parcial = Number(req.body.monto_parcial)
         const body = {...req.body, puntos_parciales: puntosFinales, fecha: Date.now().toString()};
-
         if(Number(req.body.puntos_pago) > 0) {
             calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
             .then((totales) => {
@@ -424,6 +423,7 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                 res.status(500).json({ error: err.message });
             })
         } else {
+            console.log(body)
             insertRecord("transacciones", body)
             .then((results) => {
                 res.send(results)
