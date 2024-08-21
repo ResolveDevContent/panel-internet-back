@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -29,6 +29,17 @@ router.get("/comercios/listar/:id", authenticate, (req,res) => {
     })
     .catch((err) => {
         res.send(err)
+    })
+});
+
+router.get("/comercios/listarByEmail/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectOneRecord("comercio", "email", email)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
     })
 });
 
@@ -211,6 +222,17 @@ router.get("/clientes/listar", (req,res) => {
 router.get("/clientes/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     selectOneRecord("clientes", "ID_Cliente", id)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+});
+
+router.get("/clientes/listar/comercio/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    selectComercio(id)
     .then((results) => {
         res.send(results)
     })

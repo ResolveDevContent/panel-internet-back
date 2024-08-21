@@ -55,6 +55,22 @@ const selectTable = (tableName) => {
   })
 }
 
+const selectComercio = (value) => {
+  return new Promise((resolve, reject) => {
+    query = `SELECT * FROM clientes as p
+            JSON asociaciones as a on p.ID_Cliente = a.ID_Cliente
+            WHERE a.ID_Comercio = ?;`;
+
+    conn.query(query, [value], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  })
+}
+
 const selectOneRecord = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
@@ -144,6 +160,7 @@ module.exports = {
   checkRecordExists,
   insertRecord,
   selectTable,
+  selectComercio,
   selectOneRecord,
   deleteRecord,
   updateRecord,

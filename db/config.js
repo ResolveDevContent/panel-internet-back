@@ -3,7 +3,7 @@ const config = {
     port: process.env.MDB_PORT,
     user: process.env.MDB_USER,
     password: process.env.MDB_PASS,
-    database: process.env.MDB_DB,
+    database: process.env.MDB_DB, 
 };
   
 module.exports = config;
