@@ -46,9 +46,22 @@ router.get("/comercios/listarByEmail/:email", authenticate, (req,res) => {
 router.get("/comercios/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
 
-    calculoDePuntosComercios("transacciones", "", "ID_Comercio", id)
-    .then((transacciones) => {
-        res.send(transacciones);
+    calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
+    .then((puntos) => {
+        if(puntos) {
+            console.log(puntos)
+            calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
+            .then((total) => { 
+                console.log(total)
+                
+                res.send(total - puntos);
+            })
+            .catch((err) => {
+                res.status(500).json({ error: err.message });
+            })
+        } else {
+            res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
+        }
     })
     .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -156,26 +169,35 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
 //CRUD: PAGOS -----------
 
 router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
-    calculoDePuntosComercios("transacciones", "ID_Comercio", req.body.ID_Comercio)
-        .then((total) => {
-            if(total) {
-                if(total > 0) {
-                    if(Number(req.body.pago) <= total) {
-                        const body = {...req.body, fecha: Date.now()};
+    calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
+        .then((puntos) => {
+            if(puntos) {
+                console.log(puntos)
+                calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
+                .then((total) => { 
+                    console.log(total)
+                    if(total) {
+                        if((puntos - total) > 0) {
+                            if(Number(req.body.pago) <= (puntos - total)) {
+                                const body = {...req.body, fecha: Date.now()};
 
-                        insertRecord("pagos", body)
-                        .then((results) => {
-                            res.send(results)
-                        })
-                        .catch((err) => {
-                            res.status(500).json({ error: err.message });
-                        });
+                                insertRecord("pagos", body)
+                                .then((results) => {
+                                    res.send(results)
+                                })
+                                .catch((err) => {
+                                    res.status(500).json({ error: err.message });
+                                });
+                            } else {
+                                res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
+                            }
+                        } else {
+                            res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
+                        }
                     } else {
-                        res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
+                        res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
                     }
-                } else {
-                    res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
-                }
+                });
             } else {
                 res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
             }

@@ -135,15 +135,10 @@ const calculoDePuntos = (tableName, column, value) => {
   });
 }
 
-const calculoDePuntosComercios = (tableName, tableName2, column, value) => {
+const calculoDePuntosComercios = (tableName, suma, column, value) => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales FROM ${tableName} WHERE ${column} = ?`;
-
-    // const query= `SELECT ${column}, 
-    //                   (SELECT SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
-    //                     -
-    //                   (SELECT SUM(pagos) FROM ${tableName2} WHERE ${column} = ?) 
-    //                   as total, FROM ${tableName} WHERE ${column} = ?`;
+    // const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales FROM ${tableName} WHERE ${column} = ?`;
+    const query = `SELECT SUM(${suma}) FROM ${tableName} WHERE ${column} = ?`;
 
     conn.query(query, [value], (err, results) => {
       if (err) {
