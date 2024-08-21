@@ -100,16 +100,16 @@ const updateRecord = (tableName, update, column, value) => {
 
 const calculoDePuntos = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales, SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
+    // const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales, SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
 
-    // const query2 = `SELECT ${column}, 
-    //                   (SELECT ${column}, SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
-    //                     -
-    //                   (SELECT ${column}, SUM(puntos_pago) FROM ${tableName} WHERE ${column} = ?) 
-    //                   as puntos_totales, 
-    //                   SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
+    const query = `SELECT ${column}, 
+                  (SELECT SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
+                  -
+                  (SELECT SUM(puntos_pago) FROM ${tableName} WHERE ${column} = ?) 
+                  as puntos_totales, 
+                  SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
 
-    conn.query(query, [value], (err, results) => {
+    conn.query(query, [value, value, value], (err, results) => {
       if (err) {
         reject(err);
       } else {
@@ -123,10 +123,10 @@ const calculoDePuntosComercios = (tableName, tableName2, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales FROM ${tableName} WHERE ${column} = ?`;
 
-    // const query2 = `SELECT ${column}, 
-    //                   (SELECT ${column}, SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
+    // const query= `SELECT ${column}, 
+    //                   (SELECT SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
     //                     -
-    //                   (SELECT ${column}, SUM(pagos) FROM ${tableName2} WHERE ${column} = ?) 
+    //                   (SELECT SUM(pagos) FROM ${tableName2} WHERE ${column} = ?) 
     //                   as total, FROM ${tableName} WHERE ${column} = ?`;
 
     conn.query(query, [value], (err, results) => {

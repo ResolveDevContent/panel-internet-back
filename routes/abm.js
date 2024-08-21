@@ -35,7 +35,7 @@ router.get("/comercios/listar/:id", authenticate, (req,res) => {
 router.get("/comercios/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
 
-    calculoDePuntosComercios("transacciones", "ID_Comercio", id)
+    calculoDePuntosComercios("transacciones", "", "ID_Comercio", id)
     .then((transacciones) => {
         res.send(transacciones);
     })
@@ -149,7 +149,9 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
         .then((total) => {
             if(total) {
                 if(total > 0) {
-                    if(Number(req.body.ID_Comercio) <= total) {
+                    if(Number(req.body.pago) <= total) {
+                        const body = {...req.body, fecha: Date.now()};
+
                         insertRecord("pagos", body)
                         .then((results) => {
                             res.send(results)
@@ -209,6 +211,17 @@ router.get("/clientes/listar", (req,res) => {
 router.get("/clientes/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     selectOneRecord("clientes", "ID_Cliente", id)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: err.message });
+    })
+});
+
+router.get("/clientes/listarByEmail/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectOneRecord("clientes", "email", email)
     .then((results) => {
         res.send(results)
     })
@@ -355,18 +368,7 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
     .then((row) => {
         row = row[0];
 
-        if(req.body.puntos_pago != "" && Number(req.body.puntos_pago) > 0) {
-            calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
-            .then((totales) => {
-                // no se como llegan asi que voy a hacerlo suponiendo xD
-                if(req.body.puntos_pago > totales.puntos) {
-                    res.status(500).json({ error: "El cliente no posee esos puntos" });
-                }
-            })
-            .catch((err) => {
-                res.status(500).json({ error: err.message });
-            })
-        } else {
+        if(req.body.puntos_pago == "") {
             req.body.puntos_pago = 0;
         }
 
@@ -374,17 +376,44 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
         const puntosFinales = calcularPuntos(row.porcentaje, puntos);
         delete req.body.puntos_parciales;
 
-        const body = {...req.body, puntos_parciales: puntosFinales};
+        req.body.monto_parcial = Number(req.body.monto_parcial)
+        const body = {...req.body, puntos_parciales: puntosFinales, fecha: Date.now().toString()};
 
-        insertRecord("transacciones", body)
-        .then((results) => {
-            res.send(results)
-        })
-        .catch((err) => {
-            res.status(500).json({ error: err.message });
-        })
+        if(Number(req.body.puntos_pago) > 0) {
+            calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
+            .then((totales) => {
+                totales = totales[0]
+
+                if(req.body.puntos_pago > totales.puntos_totales) {
+                    res.status(500).json({ error: "El cliente no posee esos puntos" });
+                } else {
+                    insertRecord("transacciones", body)
+                    .then((results) => {
+                        res.send(results)
+                    })
+                    .catch((err) => {
+                        console.log("entr2")
+                        res.status(500).json({ error: err.message });
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log("entro1")
+                res.status(500).json({ error: err.message });
+            })
+        } else {
+            insertRecord("transacciones", body)
+            .then((results) => {
+                res.send(results)
+            })
+            .catch((err) => {
+                console.log("entr2")
+                res.status(500).json({ error: err.message });
+            })
+        }
     })
     .catch((err) => {
+        console.log("entro3")
         res.status(500).json({ error: err.message });
     })
 })

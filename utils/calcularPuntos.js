@@ -5,7 +5,7 @@ function calcularPuntos(porcentaje, monto) {
     porcentaje = Number(porcentaje) / 100;
     monto = Number(monto);
 
-    puntos = puntos * monto
+    puntos = porcentaje * monto
 
     return puntos
 }
