@@ -58,7 +58,7 @@ const selectTable = (tableName) => {
 const selectComercio = (value) => {
   return new Promise((resolve, reject) => {
     query = `SELECT * FROM clientes as p
-            JSON asociaciones as a on p.ID_Cliente = a.ID_Cliente
+            JOIN asociaciones as a on p.ID_Cliente = a.ID_Cliente
             WHERE a.ID_Comercio = ?;`;
 
     conn.query(query, [value], (err, results) => {
