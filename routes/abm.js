@@ -12,7 +12,7 @@ const router = express.Router();
 //CRUD: COMERCIOS ---------------------------------------------------------------------------------
 
 router.get("/comercios/listar", (req,res) => {
-    selectTable("comercio")
+    selectOneRecord("comercio", "activo", 1)
     .then((results) => {
         res.send(results);
     })
