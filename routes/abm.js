@@ -39,7 +39,7 @@ router.get("/comercios/listarByEmail/:email", authenticate, (req,res) => {
         res.send(results)
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -61,14 +61,14 @@ router.get("/comercios/puntos/:id", authenticate, (req,res) => {
                 }
             })
             .catch((err) => {
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         } else {
             res.send([{puntos_totales: 0}]);
         }
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -106,18 +106,18 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                         }
                     })
                     .catch((err) => {
-                        res.status(500).json({ error: err.message });
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                     })
                 } catch (error) {
-                    res.status(500).json({ error: error.message });
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                 }
             }).catch((err) => {
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
             })
         })
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -128,7 +128,7 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -160,12 +160,12 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
                 }
             })
             .catch((err) => {
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         }
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -192,7 +192,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                                     res.send(results)
                                 })
                                 .catch((err) => {
-                                    res.status(500).json({ error: err.message });
+                                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                                 });
                             } else {
                                 res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
@@ -209,7 +209,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                                 res.send(results)
                             })
                             .catch((err) => {
-                                res.status(500).json({ error: err.message });
+                                res.status(500).json({ error:"Se ha producido un error, intentelo nuevamente." });
                             });
                         } else {
                             res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
@@ -221,7 +221,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
             }
         })
         .catch((err) => {
-            res.status(500).json({ error: err.message });
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
         });
 });
 
@@ -232,7 +232,7 @@ router.put("/comercios/pagos/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -243,7 +243,7 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -255,7 +255,7 @@ router.get("/clientes/listar", (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -266,7 +266,7 @@ router.get("/clientes/listar/:id", authenticate, (req,res) => {
         res.send(results)
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -277,7 +277,7 @@ router.get("/clientes/listar/comercio/:id", authenticate, (req,res) => {
         res.send(results)
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -288,7 +288,7 @@ router.get("/clientes/listarByEmail/:email", authenticate, (req,res) => {
         res.send(results)
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -300,7 +300,7 @@ router.get("/clientes/puntos/:id", authenticate, (req,res) => {
         res.send(transacciones);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -338,18 +338,18 @@ router.post("/clientes/agregar", authenticate, (req,res) => {
                         }
                     })
                     .catch((err) => {
-                        res.status(500).json({ error: err.message });
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                     })
                 } catch (error) {
-                    res.status(500).json({ error: error.message });
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                 }
             }).catch((err) => {
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         })
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -360,7 +360,7 @@ router.put("/clientes/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -392,12 +392,12 @@ router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
                 }
             })
             .catch((err) => {
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         }
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 
 })
@@ -410,7 +410,7 @@ router.get("/transacciones/listar", (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -421,7 +421,7 @@ router.get("/transacciones/listar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 
@@ -453,14 +453,14 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                         res.send(results)
                     })
                     .catch((err) => {
-                        console.log("entr2")
-                        res.status(500).json({ error: err.message });
+                        console.log("entr2", err)
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                     })
                 }
             })
             .catch((err) => {
                 console.log("entro1")
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         } else {
             console.log(body)
@@ -469,14 +469,13 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                 res.send(results)
             })
             .catch((err) => {
-                console.log("entr2")
-                res.status(500).json({ error: err.message });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         }
     })
     .catch((err) => {
         console.log("entro3")
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -487,7 +486,7 @@ router.put("/transacciones/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -498,7 +497,7 @@ router.delete("/transacciones/borrar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
@@ -510,7 +509,7 @@ router.get("/asociaciones/listar", (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
@@ -520,7 +519,7 @@ router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
 router.post("/asociaciones/agregar", authenticate, (req,res) => {
@@ -529,7 +528,7 @@ router.post("/asociaciones/agregar", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
@@ -539,7 +538,7 @@ router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
@@ -549,7 +548,7 @@ router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
         res.send(results);
     })
     .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 
