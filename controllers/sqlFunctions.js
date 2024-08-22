@@ -93,7 +93,7 @@ const deleteRecord = (tableName, column, value) => {
       if (err) {
         reject(err);
       } else {
-        resolve("Se borro correctamente");
+        resolve({message: "Se borro correctamente"});
       }
     });
   });
@@ -108,7 +108,7 @@ const updateRecord = (tableName, update, column, value) => {
       if (err) {
         reject(err);
       } else {
-        resolve("Se edito correctamente");
+        resolve({message: "Se edito correctamente"});
       }
     });
   });
