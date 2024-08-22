@@ -48,19 +48,23 @@ router.get("/comercios/puntos/:id", authenticate, (req,res) => {
 
     calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
     .then((puntos) => {
-        if(puntos) {
-            console.log(puntos)
+        if(puntos[0].puntos_totales != null) {
+            puntos = puntos[0]
             calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
             .then((total) => { 
-                console.log(total)
-                
-                res.send(total - puntos);
+                total = total[0]
+                if(total.puntos_totales != null) {
+                    res.send([{puntos_totales: puntos.puntos_totales}])
+                } else {
+                    const result = total.puntos_totales - puntos.puntos_totales
+                    res.send([{puntos_totales: result}]);
+                }
             })
             .catch((err) => {
                 res.status(500).json({ error: err.message });
             })
         } else {
-            res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
+            res.send([{puntos_totales: 0}]);
         }
     })
     .catch((err) => {
@@ -135,31 +139,30 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
         if(!exist) {
             res.status(404).json({ message: "Comercio no encontrado" })
         } else {
-
-        }
-        checkRecordExists("transacciones", "ID_Comercio", id)
-        .then((exist2) => {
-            if(exist2) {
-                deleteRecord("transacciones", "ID_Comercio", id)
-                .then(() => {
-                    deleteRecord("asociaciones", "ID_Comercio", id)
+            checkRecordExists("transacciones", "ID_Comercio", id)
+            .then((exist2) => {
+                if(exist2) {
+                    deleteRecord("transacciones", "ID_Comercio", id)
                     .then(() => {
-                        deleteRecord("comercio", "ID_Comercio", id)
-                        .then((results) => {
-                            res.send(results);
+                        deleteRecord("asociaciones", "ID_Comercio", id)
+                        .then(() => {
+                            deleteRecord("comercio", "ID_Comercio", id)
+                            .then((results) => {
+                                res.send(results);
+                            })
                         })
                     })
-                })
-            } else {
-                deleteRecord("comercio", "ID_Comercio", id)
-                .then((results) => {
-                    res.send(results);
-                })
-            }
-        })
-        .catch((err) => {
-            res.status(500).json({ error: err.message });
-        })
+                } else {
+                    deleteRecord("comercio", "ID_Comercio", id)
+                    .then((results) => {
+                        res.send(results);
+                    })
+                }
+            })
+            .catch((err) => {
+                res.status(500).json({ error: err.message });
+            })
+        }
     })
     .catch((err) => {
         res.status(500).json({ error: err.message });
@@ -171,14 +174,14 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
 router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
     calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
         .then((puntos) => {
-            if(puntos) {
-                console.log(puntos)
+            puntos = puntos[0]
+            if(puntos.puntos_totales != null) {
                 calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
                 .then((total) => { 
-                    console.log(total)
-                    if(total) {
-                        if((puntos - total) > 0) {
-                            if(Number(req.body.pago) <= (puntos - total)) {
+                    total = total[0]
+                    if(total.puntos_totales != null) {
+                        if((puntos.puntos_totales - total.puntos_totales) > 0) {
+                            if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
                                 const body = {...req.body, fecha: Date.now()};
 
                                 insertRecord("pagos", body)
@@ -195,11 +198,19 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                             res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
                         }
                     } else {
-                        res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
+                        const body = {...req.body, fecha: Date.now()};
+
+                        insertRecord("pagos", body)
+                        .then((results) => {
+                            res.send(results)
+                        })
+                        .catch((err) => {
+                            res.status(500).json({ error: err.message });
+                        });
                     }
                 });
             } else {
-                res.status(500).json({ error: "Ha ocurrido un error, si el mismo persiste comuniquese con nosotros." });
+                res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
             }
         })
         .catch((err) => {
