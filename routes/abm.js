@@ -78,7 +78,7 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
 
     delete req.body.password;
 
-    insertRecord("comercio", req.body)
+    insertRecord("comercio", {...req.body, activo: 1})
     .then((results) => {
         bcrypt.genSalt(10).then((salt) => {
             bcrypt.hash(password, salt).then((hashedPassword) => {
