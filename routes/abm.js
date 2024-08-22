@@ -46,18 +46,18 @@ router.get("/comercios/listarByEmail/:email", authenticate, (req,res) => {
 router.get("/comercios/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
 
-    calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
+    calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", id)
     .then((puntos) => {
         if(puntos[0].puntos_totales != null) {
             puntos = puntos[0]
-            calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
+            calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", id)
             .then((total) => { 
                 total = total[0]
                 if(total.puntos_totales != null) {
-                    res.send([{puntos_totales: puntos.puntos_totales}])
-                } else {
-                    const result = total.puntos_totales - puntos.puntos_totales
+                    const result = puntos.puntos_totales - total.puntos_totales
                     res.send([{puntos_totales: result}]);
+                } else {
+                    res.send([{puntos_totales: puntos.puntos_totales}])
                 }
             })
             .catch((err) => {
@@ -180,7 +180,10 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                 .then((total) => { 
                     total = total[0]
                     if(total.puntos_totales != null) {
+                        console.log("1",req.body, puntos.puntos_totales, total.puntos_totales)
+
                         if((puntos.puntos_totales - total.puntos_totales) > 0) {
+                            console.log(req.body, puntos.puntos_totales, total.puntos_totales)
                             if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
                                 const body = {...req.body, fecha: Date.now()};
 
@@ -198,15 +201,19 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                             res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
                         }
                     } else {
-                        const body = {...req.body, fecha: Date.now()};
-
-                        insertRecord("pagos", body)
-                        .then((results) => {
-                            res.send(results)
-                        })
-                        .catch((err) => {
-                            res.status(500).json({ error: err.message });
-                        });
+                        if(Number(req.body.monto_parcial) <= puntos.puntos_totales) {
+                            const body = {...req.body, fecha: Date.now()};
+    
+                            insertRecord("pagos", body)
+                            .then((results) => {
+                                res.send(results)
+                            })
+                            .catch((err) => {
+                                res.status(500).json({ error: err.message });
+                            });
+                        } else {
+                            res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
+                        }
                     }
                 });
             } else {
