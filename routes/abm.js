@@ -101,7 +101,7 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                                 res.status(201).json({ message: "Comercio creado correctamente!" });
                             })
                             .catch((err) => {
-                                res.status(500).json({ message: "No se puedo crear correctamente!" })
+                                res.status(500).json({ error: "No se puedo crear correctamente!" })
                             })
                         }
                     })
@@ -125,7 +125,7 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("comercio", req.body, "ID_Comercio", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -137,7 +137,7 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
     checkRecordExists("comercio", "ID_Comercio", id)
     .then((exist) => {
         if(!exist) {
-            res.status(404).json({ message: "Comercio no encontrado" })
+            res.status(404).json({ error: "Comercio no encontrado" })
         } else {
             checkRecordExists("transacciones", "ID_Comercio", id)
             .then((exist2) => {
@@ -148,14 +148,14 @@ router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
                         .then(() => {
                             deleteRecord("comercio", "ID_Comercio", id)
                             .then((results) => {
-                                res.send(results);
+                                res.status(200).json(results);
                             })
                         })
                     })
                 } else {
                     deleteRecord("comercio", "ID_Comercio", id)
                     .then((results) => {
-                        res.send(results);
+                        res.status(200).json(results);
                     })
                 }
             })
@@ -189,7 +189,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
 
                                 insertRecord("pagos", body)
                                 .then((results) => {
-                                    res.send(results)
+                                    res.status(201).json({ message: "El pago se ha agregado correctamente."})
                                 })
                                 .catch((err) => {
                                     res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -229,7 +229,7 @@ router.put("/comercios/pagos/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("pagos", req.body, "ID_Pagos", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -240,7 +240,7 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("pagos", "ID_Pagos", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -330,10 +330,10 @@ router.post("/clientes/agregar", authenticate, (req,res) => {
                         } else {
                             insertRecord("users", user)
                             .then((insert) => {
-                                res.status(201).json({ message: "Usuario creado correctamente!" });
+                                res.status(201).json({ message: "Cliente creado correctamente!" });
                             })
                             .catch((err) => {
-                                res.status(500).json({ message: "No se puedo crear correctamente!" })
+                                res.status(500).json({ error: "No se puedo crear correctamente!" })
                             })
                         }
                     })
@@ -357,7 +357,7 @@ router.put("/clientes/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("clientes", req.body, "ID_Cliente", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -369,7 +369,7 @@ router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
     checkRecordExists("clientes", "ID_Cliente", id)
     .then((exist) => {
         if(!exist) {
-            res.status(404).json({ message: "Cliente no encontrado" });
+            res.status(404).json({ error: "Cliente no encontrado" });
         } else {
             checkRecordExists("transacciones", "ID_Cliente", id)
             .then((exist2) => {
@@ -380,14 +380,14 @@ router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
                         .then(() => {
                             deleteRecord("clientes", "ID_Cliente", id)
                             .then((results) => {
-                                res.send(results);
+                                res.status(200).json(results);
                             })
                         })
                     })
                 } else {
                     deleteRecord("clientes", "ID_Cliente", id)
                     .then((results) => {
-                        res.send(results);
+                        res.status(200).json(results);
                     })
                 }
             })
@@ -450,7 +450,7 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                 } else {
                     insertRecord("transacciones", body)
                     .then((results) => {
-                        res.send(results)
+                        res.status(201).json({message: "Transaccion creada correctamente."})
                     })
                     .catch((err) => {
                         console.log("entr2", err)
@@ -466,7 +466,7 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
             console.log(body)
             insertRecord("transacciones", body)
             .then((results) => {
-                res.send(results)
+                res.status(201).json({message: "Transaccion creada correctamente."})
             })
             .catch((err) => {
                 res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -483,7 +483,7 @@ router.put("/transacciones/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("transacciones", req.body, "ID_Transaccion", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -494,7 +494,7 @@ router.delete("/transacciones/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("transacciones", "ID_Transaccion", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -525,7 +525,7 @@ router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
 router.post("/asociaciones/agregar", authenticate, (req,res) => {
     insertRecord("asociaciones", req.body)
     .then((results) => {
-        res.send(results);
+        res.status(201).json({message: "Asociacion creada correctamente."});
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -535,7 +535,7 @@ router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("asociaciones", req.body, "ID_asociacion", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -545,7 +545,7 @@ router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("asociaciones", "ID_asociacion", id)
     .then((results) => {
-        res.send(results);
+        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
