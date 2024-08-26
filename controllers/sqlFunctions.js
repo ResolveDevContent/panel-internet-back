@@ -85,6 +85,20 @@ const selectOneRecord = (tableName, column, value) => {
   });
 }
 
+const selectAsociaciones = (tableName, columns, values) => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * FROM ${tableName} WHERE ${columns.first} = ? AND ${columns.second} = ?`;
+
+    conn.query(query, [values.first, values.second], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  });
+}
+
 const deleteRecord = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `DELETE FROM ${tableName} WHERE ${column} = ?`;
@@ -116,7 +130,6 @@ const updateRecord = (tableName, update, column, value) => {
 
 const calculoDePuntos = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
-    // const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales, SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
 
     const query = `SELECT ${column}, 
                   (SELECT SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
@@ -137,7 +150,6 @@ const calculoDePuntos = (tableName, column, value) => {
 
 const calculoDePuntosComercios = (tableName, suma, column, value) => {
   return new Promise((resolve, reject) => {
-    // const query = `SELECT ${column}, SUM(puntos_parciales) AS puntos_totales FROM ${tableName} WHERE ${column} = ?`;
     const query = `SELECT SUM(${suma}) as puntos_totales FROM ${tableName} WHERE ${column} = ?`;
 
     conn.query(query, [value], (err, results) => {
@@ -157,6 +169,7 @@ module.exports = {
   selectTable,
   selectComercio,
   selectOneRecord,
+  selectAsociaciones,
   deleteRecord,
   updateRecord,
   calculoDePuntos,

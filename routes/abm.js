@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -180,10 +180,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                 .then((total) => { 
                     total = total[0]
                     if(total.puntos_totales != null) {
-                        console.log("1",req.body, puntos.puntos_totales, total.puntos_totales)
-
                         if((puntos.puntos_totales - total.puntos_totales) > 0) {
-                            console.log(req.body, puntos.puntos_totales, total.puntos_totales)
                             if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
                                 const body = {...req.body, fecha: Date.now()};
 
@@ -459,11 +456,9 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                 }
             })
             .catch((err) => {
-                console.log("entro1")
                 res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         } else {
-            console.log(body)
             insertRecord("transacciones", body)
             .then((results) => {
                 res.status(201).json({message: "Transaccion creada correctamente."})
@@ -474,7 +469,6 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
         }
     })
     .catch((err) => {
-        console.log("entro3")
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
@@ -523,9 +517,20 @@ router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
     })
 });
 router.post("/asociaciones/agregar", authenticate, (req,res) => {
-    insertRecord("asociaciones", req.body)
+    selectAsociaciones("asociaciones", {first: "ID_Comercio", second: "ID_Cliente"}, {first: req.body.ID_Comercio, second: req.body.ID_Cliente})
     .then((results) => {
-        res.status(201).json({message: "Asociacion creada correctamente."});
+        console.log(results)
+        if(results.lenght > 0) {
+            res.status(500).json({ error: "La asociacion que desea agregar ya se encuentra realizada!" })
+        } else {
+            insertRecord("asociaciones", req.body)
+            .then((results) => {
+                res.status(201).json({message: "Asociacion creada correctamente."});
+            })
+            .catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+            })
+        }
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
