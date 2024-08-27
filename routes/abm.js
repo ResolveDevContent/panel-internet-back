@@ -237,6 +237,16 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
 
 //CRUD: PAGOS -----------
 
+router.get("/comercios/pagos/listar", (req,res) => {
+    selectTable("pagos")
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+});
+
 router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
     calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
         .then((puntos) => {
@@ -615,6 +625,19 @@ router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("asociaciones", "ID_asociacion", id)
+    .then((results) => {
+        res.status(200).json(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+})
+
+// USERS --
+
+router.delete("/users/borrar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    deleteRecord("users", "email", id)
     .then((results) => {
         res.status(200).json(results);
     })
