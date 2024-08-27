@@ -520,7 +520,7 @@ router.post("/asociaciones/agregar", authenticate, (req,res) => {
     selectAsociaciones("asociaciones", {first: "ID_Comercio", second: "ID_Cliente"}, {first: req.body.ID_Comercio, second: req.body.ID_Cliente})
     .then((results) => {
         console.log(results)
-        if(results.lenght > 0) {
+        if(results.length > 0) {
             res.status(500).json({ error: "La asociacion que desea agregar ya se encuentra realizada!" })
         } else {
             insertRecord("asociaciones", req.body)
