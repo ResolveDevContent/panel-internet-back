@@ -8,6 +8,109 @@ const { v4: uuidv4 } = require("uuid");
 
 const router = express.Router();
 
+//CRUD: ADMINS ---------------------------------------------------------------------------------
+
+router.get("/admins/listar", (req,res) => {
+    selectTable("admins")
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
+router.get("/admins/listar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    selectOneRecord("admins", "ID_Admin", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+});
+
+router.post("/admins/agregar", authenticate, (req,res) => {
+    const { email } = req.body;
+    const password = req.body.password;
+
+    delete req.body.password;
+
+    insertRecord("admin", {...req.body, activo: 1})
+    .then((results) => {
+        bcrypt.genSalt(10).then((salt) => {
+            bcrypt.hash(password, salt).then((hashedPassword) => {
+                const user = {
+                    userId: uuidv4(),
+                    email: email,
+                    password: hashedPassword,
+                    role: "admin"
+                };
+                
+                try {
+                    checkRecordExists("users", "email", email)
+                    .then((exist) => {
+                        const userAlreadyExists = exist;
+                        if (userAlreadyExists) {
+                            res.status(409).json({ error: "Email ya existente" });
+                        } else {
+                            insertRecord("users", user)
+                            .then((insert) => {
+                                res.status(201).json({ message: "Admin creado correctamente!" });
+                            })
+                            .catch((err) => {
+                                res.status(500).json({ error: "No se puedo crear correctamente!" })
+                            })
+                        }
+                    })
+                    .catch((err) => {
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                    })
+                } catch (error) {
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                }
+            }).catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
+            })
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+})
+
+router.put("/admins/modificar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    updateRecord("admins", req.body, "ID_Admin", id)
+    .then((results) => {
+        res.status(200).json(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+})
+
+router.delete("/admins/borrar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    checkRecordExists("admins", "ID_Admin", id)
+    .then((exist) => {
+        if(exist) {
+            deleteRecord("comercio", "ID_Comercio", id)
+            .then((results) => {
+                res.status(200).json(results);
+            })
+            .catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+            })
+        } else {
+            res.status(404).json({ error: "Admin no encontrado" })
+        }
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+})
 
 //CRUD: COMERCIOS ---------------------------------------------------------------------------------
 
@@ -126,43 +229,6 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
     updateRecord("comercio", req.body, "ID_Comercio", id)
     .then((results) => {
         res.status(200).json(results);
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
-})
-
-router.delete("/comercios/borrar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    checkRecordExists("comercio", "ID_Comercio", id)
-    .then((exist) => {
-        if(!exist) {
-            res.status(404).json({ error: "Comercio no encontrado" })
-        } else {
-            checkRecordExists("transacciones", "ID_Comercio", id)
-            .then((exist2) => {
-                if(exist2) {
-                    deleteRecord("transacciones", "ID_Comercio", id)
-                    .then(() => {
-                        deleteRecord("asociaciones", "ID_Comercio", id)
-                        .then(() => {
-                            deleteRecord("comercio", "ID_Comercio", id)
-                            .then((results) => {
-                                res.status(200).json(results);
-                            })
-                        })
-                    })
-                } else {
-                    deleteRecord("comercio", "ID_Comercio", id)
-                    .then((results) => {
-                        res.status(200).json(results);
-                    })
-                }
-            })
-            .catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            })
-        }
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
