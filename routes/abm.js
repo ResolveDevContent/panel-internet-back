@@ -42,6 +42,24 @@ router.get("/comercios/listarByEmail/:email", authenticate, (req,res) => {
     })
 });
 
+router.get("/comercios/listar/admin/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectPermisos(email)
+    .then((results) => {
+        console.log(results)
+        selectByAdmin('comercio', 'ID_Comercio', results)
+        .then((results) => {
+            res.send(results)
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
 router.get("/comercios/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
 
@@ -194,6 +212,23 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
         });
 });
 
+router.get("/comercios/pagos/listar/admin/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectPermisos(email)
+    .then((results) => {
+        selectByAdmin('pagos', 'ID_Comercio', results)
+        .then((results) => {
+            res.send(results)
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
 router.put("/comercios/pagos/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     updateRecord("pagos", req.body, "ID_Pagos", id)
@@ -260,6 +295,23 @@ router.get("/clientes/listarByEmail/:email", authenticate, (req,res) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
+
+// router.get("/clientes/listar/admin/:email", authenticate, (req,res) => {
+//     const { email } = req.params;
+//     selectPermisos(email)
+//     .then((results) => {
+//         selectByAdmin('clientes', 'ID_Comercio', results)
+//         .then((results) => {
+//             res.send(results)
+//         })
+//         .catch((err) => {
+//             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+//         })
+//     })
+//     .catch((err) => {
+//         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+//     })
+// });
 
 router.get("/clientes/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
@@ -394,6 +446,23 @@ router.get("/transacciones/listar/:id", authenticate, (req,res) => {
     })
 });
 
+router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectPermisos(email)
+    .then((results) => {
+        selectByAdmin('transacciones', 'ID_Comercio', results)
+        .then((results) => {
+            res.send(results)
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
 router.post("/transacciones/agregar", authenticate, (req,res) => {
     selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
     .then((row) => {
@@ -483,6 +552,22 @@ router.get("/asociaciones/listar/:id", authenticate, (req,res) => {
     selectOneRecord("asociaciones", "ID_asociacion", id)
     .then((results) => {
         res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+router.get("/asociaciones/listar/admin/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectPermisos(email)
+    .then((results) => {
+        selectByAdmin('asociaciones', 'ID_Comercio', results)
+        .then((results) => {
+            res.send(results)
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });

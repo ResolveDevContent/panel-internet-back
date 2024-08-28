@@ -71,6 +71,34 @@ const selectComercio = (value) => {
   })
 }
 
+const selectPermisos = (value) => {
+  return new Promise((resolve, reject) => {
+    query = `SELECT ID_Comercio FROM permisos WHERE ID_Admin = ?;`;
+
+    conn.query(query, [value], (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  })
+}
+
+const selectByAdmin = (tableName, column, values) => {
+  return new Promise((resolve, reject) => {
+    query = `SELECT * FROM ${tableName} WHERE ${column} IN (${values.map(id => `${id}`).join(", ")});`;
+
+    conn.query(query, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  })
+}
+
 const selectOneRecord = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
@@ -168,6 +196,8 @@ module.exports = {
   insertRecord,
   selectTable,
   selectComercio,
+  selectPermisos,
+  selectByAdmin,
   selectOneRecord,
   selectAsociaciones,
   deleteRecord,
