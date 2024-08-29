@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -48,8 +48,8 @@ router.get("/comercios/listar/admin/:email", authenticate, (req,res) => {
     .then((results) => {
         console.log(results)
         selectByAdmin('comercio', 'ID_Comercio', results)
-        .then((results) => {
-            res.send(results)
+        .then((datos) => {
+            res.send(datos)
         })
         .catch((err) => {
             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -94,7 +94,6 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
     const password = req.body.password;
 
     delete req.body.password;
-
     insertRecord("comercio", {...req.body, activo: 1})
     .then((results) => {
         bcrypt.genSalt(10).then((salt) => {
@@ -140,6 +139,7 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
 
 router.put("/comercios/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
+
     updateRecord("comercio", req.body, "ID_Comercio", id)
     .then((results) => {
         res.status(200).json(results);
@@ -217,8 +217,8 @@ router.get("/comercios/pagos/listar/admin/:email", authenticate, (req,res) => {
     selectPermisos(email)
     .then((results) => {
         selectByAdmin('pagos', 'ID_Comercio', results)
-        .then((results) => {
-            res.send(results)
+        .then((datos) => {
+            res.send(datos)
         })
         .catch((err) => {
             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -298,11 +298,14 @@ router.get("/clientes/listarByEmail/:email", authenticate, (req,res) => {
 
 router.get("/clientes/listar/admin/:email", authenticate, (req,res) => {
     const { email } = req.params;
+    console.log(email)
     selectPermisos(email)
     .then((results) => {
+        console.log(results)
         selectByAdminPermisos(results)
-        .then((results) => {
-            res.send(results)
+        .then((datos) => {
+            console.log(datos)
+            res.send(datos)
         })
         .catch((err) => {
             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -402,8 +405,8 @@ router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
     selectPermisos(email)
     .then((results) => {
         selectByAdmin('transacciones', 'ID_Comercio', results)
-        .then((results) => {
-            res.send(results)
+        .then((datos) => {
+            res.send(datos)
         })
         .catch((err) => {
             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -552,9 +555,10 @@ router.get("/asociaciones/listar/admin/:email", authenticate, (req,res) => {
     const { email } = req.params;
     selectPermisos(email)
     .then((results) => {
+        console.log(results)
         selectByAdmin('asociaciones', 'ID_Comercio', results)
-        .then((results) => {
-            res.send(results)
+        .then((datos) => {
+            res.send(datos)
         })
         .catch((err) => {
             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -572,16 +576,16 @@ router.post("/asociaciones/agregar", authenticate, (req,res) => {
             res.status(500).json({ error: "La asociacion que desea agregar ya se encuentra realizada!" })
         } else {
             insertRecord("asociaciones", req.body)
-            .then((results) => {
+            .then((datos) => {
                 res.status(201).json({message: "Asociacion creada correctamente."});
             })
             .catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                res.status(500).json({ error: "AaaSe ha producido un error, intentelo nuevamente." });
             })
         }
     })
     .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        res.status(500).json({ error: "BBbSe ha producido un error, intentelo nuevamente." });
     })
 })
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
@@ -640,17 +644,9 @@ router.post("/admins/agregar", authenticate, (req,res) => {
                     } else {
                         insertRecord("users", user)
                         .then((insert) => {
-                            let finish = false;
-                            for(const comercio of req.body.ID_Comercio) {
-                                insertRecord("permisos", {ID_Comercio: Number(comercio.id), ID_Admin: req.body.email})
-                                .then((permiso) => {
-                                    finish = true
-                                })
-                                .catch((err) => {
-                                    finish = false
-                                })
-                            }
-                            if(finish) {
+                            console.log(req.body)
+                            
+                            if(permisos(req.body.ID_Comercio, req.body.email)) {
                                 res.status(201).json({ message: "Admin creado correctamente!" });
                             } else {
                                 res.status(500).json({ error: "El admin no se puedo crear correctamente!" })
@@ -672,6 +668,22 @@ router.post("/admins/agregar", authenticate, (req,res) => {
         })
     })
 })
+
+async function permisos(datos, email) {
+    const permisos = datos.map(async (row, idx) => {
+        insertRecord("permisos", {ID_Comercio: Number(row.id), ID_Admin: email})
+        .then((permiso) => {
+            return true
+        })
+        .catch((err) => {
+            return null
+        })
+    })
+
+    const resultados = await Promise.all(permisos);
+
+    return resultados
+}
 
 // USERS ------------------------------------------------------------------------------------------
 

@@ -57,9 +57,9 @@ const selectTable = (tableName) => {
 
 const selectComercio = (value) => {
   return new Promise((resolve, reject) => {
-    query = `SELECT * FROM clientes as p
-            JOIN asociaciones as a on p.ID_Cliente = a.ID_Cliente
-            WHERE a.ID_Comercio = ?;`;
+    query = `SELECT DISTINCT clientes.* FROM clientes
+            JOIN asociaciones on clientes.ID_Cliente = asociaciones.ID_Cliente
+            WHERE asociaciones.ID_Comercio = ?;`;
 
     conn.query(query, [value], (err, results) => {
       if (err) {
@@ -87,7 +87,7 @@ const selectPermisos = (value) => {
 
 const selectByAdmin = (tableName, column, values) => {
   return new Promise((resolve, reject) => {
-    query = `SELECT * FROM ${tableName} WHERE ${column} IN (${values.map(id => `${id}`).join(", ")});`;
+    query = `SELECT * FROM ${tableName} WHERE ${column} IN (${values.map(row => `${row.ID_Comercio}`).join(", ")});`;
 
     conn.query(query, (err, results) => {
       if (err) {
@@ -101,9 +101,9 @@ const selectByAdmin = (tableName, column, values) => {
 
 const selectByAdminPermisos = (values) => {
   return new Promise((resolve, reject) => {
-    query = `SELECT * FROM clientes as p
-            JOIN asociaciones as a on p.ID_Cliente = a.ID_Cliente
-            WHERE a.ID_Comercio IN (${values.map(id => `${id}`).join(", ")});`;
+    query = `SELECT DISTINCT clientes.* FROM clientes
+            LEFT OUTER JOIN asociaciones on clientes.ID_Cliente = asociaciones.ID_Cliente
+            WHERE asociaciones.ID_Comercio IN (${values.map(row => `${row.ID_Comercio}`).join(", ")});`;
 
     conn.query(query, (err, results) => {
       if (err) {
@@ -219,5 +219,6 @@ module.exports = {
   deleteRecord,
   updateRecord,
   calculoDePuntos,
-  calculoDePuntosComercios
+  calculoDePuntosComercios,
+  selectByAdminPermisos
 };
