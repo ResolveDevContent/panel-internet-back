@@ -296,22 +296,22 @@ router.get("/clientes/listarByEmail/:email", authenticate, (req,res) => {
     })
 });
 
-// router.get("/clientes/listar/admin/:email", authenticate, (req,res) => {
-//     const { email } = req.params;
-//     selectPermisos(email)
-//     .then((results) => {
-//         selectByAdmin('clientes', 'ID_Comercio', results)
-//         .then((results) => {
-//             res.send(results)
-//         })
-//         .catch((err) => {
-//             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-//         })
-//     })
-//     .catch((err) => {
-//         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-//     })
-// });
+router.get("/clientes/listar/admin/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectPermisos(email)
+    .then((results) => {
+        selectByAdminPermisos(results)
+        .then((results) => {
+            res.send(results)
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
 
 router.get("/clientes/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
@@ -372,55 +372,6 @@ router.post("/clientes/agregar", authenticate, (req,res) => {
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
-})
-
-router.put("/clientes/modificar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    updateRecord("clientes", req.body, "ID_Cliente", id)
-    .then((results) => {
-        res.status(200).json(results);
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
-})
-
-router.delete("/clientes/borrar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    checkRecordExists("clientes", "ID_Cliente", id)
-    .then((exist) => {
-        if(!exist) {
-            res.status(404).json({ error: "Cliente no encontrado" });
-        } else {
-            checkRecordExists("transacciones", "ID_Cliente", id)
-            .then((exist2) => {
-                if(exist2) {
-                    deleteRecord("transacciones", "ID_Cliente", id)
-                    .then(() => {
-                        deleteRecord("asociaciones", "ID_Cliente", id)
-                        .then(() => {
-                            deleteRecord("clientes", "ID_Cliente", id)
-                            .then((results) => {
-                                res.status(200).json(results);
-                            })
-                        })
-                    })
-                } else {
-                    deleteRecord("clientes", "ID_Cliente", id)
-                    .then((results) => {
-                        res.status(200).json(results);
-                    })
-                }
-            })
-            .catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            })
-        }
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
-
 })
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
@@ -516,9 +467,49 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
 
 router.put("/transacciones/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    updateRecord("transacciones", req.body, "ID_Transaccion", id)
-    .then((results) => {
-        res.status(200).json(results);
+    selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
+    .then((row) => {
+        row = row[0];
+
+        if(req.body.puntos_pago == "") {
+            req.body.puntos_pago = 0;
+        }
+
+        const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
+        const puntosFinales = calcularPuntos(row.porcentaje, puntos);
+        delete req.body.puntos_parciales;
+
+        req.body.monto_parcial = Number(req.body.monto_parcial)
+        const body = {...req.body, puntos_parciales: puntosFinales};
+        if(Number(req.body.puntos_pago) > 0) {
+            calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
+            .then((totales) => {
+                totales = totales[0]
+
+                if(req.body.puntos_pago > totales.puntos_totales) {
+                    res.status(500).json({ error: "El cliente no posee esos puntos" });
+                } else {
+                    updateRecord("transacciones", body, "ID_Transaccion", id)
+                    .then((results) => {
+                        res.status(200).json(results);
+                    })
+                    .catch((err) => {
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                    })
+                }
+            })
+            .catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+            })
+        } else {
+            updateRecord("transacciones", body, "ID_Transaccion", id)
+            .then((results) => {
+                res.status(200).json(results);
+            })
+            .catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+            })
+        }
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
@@ -588,16 +579,6 @@ router.post("/asociaciones/agregar", authenticate, (req,res) => {
                 res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         }
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
-})
-router.put("/asociaciones/modificar/:id", authenticate, (req,res) => {
-    const { id } = req.params;
-    updateRecord("asociaciones", req.body, "ID_asociacion", id)
-    .then((results) => {
-        res.status(200).json(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });

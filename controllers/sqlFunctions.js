@@ -99,6 +99,22 @@ const selectByAdmin = (tableName, column, values) => {
   })
 }
 
+const selectByAdminPermisos = (values) => {
+  return new Promise((resolve, reject) => {
+    query = `SELECT * FROM clientes as p
+            JOIN asociaciones as a on p.ID_Cliente = a.ID_Cliente
+            WHERE a.ID_Comercio IN (${values.map(id => `${id}`).join(", ")});`;
+
+    conn.query(query, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    });
+  })
+}
+
 const selectOneRecord = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
