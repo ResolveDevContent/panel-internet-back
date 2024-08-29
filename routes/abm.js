@@ -400,6 +400,17 @@ router.get("/transacciones/listar/:id", authenticate, (req,res) => {
     })
 });
 
+router.get("/transacciones/listar/comercio/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    selectOneRecord("transacciones", "ID_Comercio", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
 router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
     const { email } = req.params;
     selectPermisos(email)
