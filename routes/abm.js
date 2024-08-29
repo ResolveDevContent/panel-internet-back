@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
