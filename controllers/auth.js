@@ -6,11 +6,37 @@ const {
   createTable,
   checkRecordExists,
   insertRecord,
+  selectOneRecord,
+  updateRecord,
 } = require("../controllers/sqlFunctions");
 
 const generateAccessToken = (userId) => {
   return jwt.sign({ userId }, process.env.SECRET_KEY, { expiresIn: "7d" });
 };
+
+const changePassword = async(req) => {
+  try{
+    const newPassword = req.body.password;
+    const email = req.body.email;
+
+    if (!newPassword) {
+      return { error: 'No se pudo cambiar la contraseña correctamente' };
+    }
+  
+    const user = await selectOneRecord("users", "email", email);
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    const update = {password: hashedPassword};
+
+    const response = await updateRecord("users", update, "userId", user[0].userId);
+    
+    return response;
+  } catch(e){
+    return { error: error.message }
+  }
+}
 
 const register = async (req, res) => {
   const { email, password, role } = req.body;
@@ -87,4 +113,5 @@ const login = async (req, res) => {
 module.exports = {
   register,
   login,
+  changePassword
 };

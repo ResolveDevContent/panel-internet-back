@@ -5,6 +5,7 @@ const { calcularPuntos } = require("../utils/calcularPuntos");
 
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
+const { changePassword } = require("../controllers/auth");
 
 const router = express.Router();
 
@@ -139,14 +140,31 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
 
 router.put("/comercios/modificar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-
-    updateRecord("comercio", req.body, "ID_Comercio", id)
-    .then((results) => {
-        res.status(200).json(results);
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
+    if(req.body.password && req.body.password != "") {
+        changePassword(req)
+        .then((response) => {
+            delete req.body.password
+            updateRecord("comercio", req.body, "ID_Comercio", id)
+            .then((results) => {
+                res.status(200).json(results);
+            })
+            .catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+            })
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+    } else {
+        delete req.body.password;
+        updateRecord("comercio", req.body, "ID_Comercio", id)
+        .then((results) => {
+            res.status(200).json(results);
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
+    }
 })
 
 //CRUD: PAGOS -----------
@@ -623,7 +641,7 @@ router.get("/admins/listar", (req,res) => {
 });
 router.get("/admins/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    selectOneRecord("users", "email", id)
+    selectOneRecord("users", "userId", id)
     .then((results) => {
         res.send(results);
     })
@@ -678,6 +696,22 @@ router.post("/admins/agregar", authenticate, (req,res) => {
             res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
         })
     })
+})
+
+router.put("/admins/modificar/:id", authenticate, (req,res) => {
+    const { id } = req.params;
+    if(req.body.password && req.body.password != "") {
+        changePassword(req)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+    } else {
+        res.status(500).json({error: "No se puede actualizar admin sin cambiar contraseña"})
+    }
+
 })
 
 async function permisos(datos, email) {
