@@ -643,15 +643,7 @@ router.get("/admins/listar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     selectOneRecord("users", "userId", id)
     .then((results) => {
-        console.log(results)
-        selectPermisos(results.email)
-        .then((datos) => {
-            console.log(datos)
-            res.send({results: results, datos: datos});
-        })
-        .catch((err) => {
-            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-        })
+        res.send(results);
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
