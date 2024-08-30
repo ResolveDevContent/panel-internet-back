@@ -697,20 +697,15 @@ router.post("/admins/agregar", authenticate, (req,res) => {
     })
 })
 
-router.put("/admins/modificar/:id", authenticate, (req,res) => {
+router.delete("/admins/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
-    if(req.body.password && req.body.password != "") {
-        changePassword(req)
-        .then((response) => {
-            res.status(200).json(response);
-        })
-        .catch((err) => {
-            res.status(500).json(err);
-        })
-    } else {
-        res.status(500).json({error: "No se puede actualizar admin sin cambiar contraseña"})
-    }
-
+    deleteRecord("users", "userId", id)
+    .then((results) => {
+        res.status(200).json(results);
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
 })
 
 async function permisos(datos, email) {
