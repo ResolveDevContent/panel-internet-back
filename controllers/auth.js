@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const {
   createTable,
   checkRecordExists,
+  selectAsociaciones,
   insertRecord,
   selectOneRecord,
   updateRecord,
@@ -110,8 +111,36 @@ const login = async (req, res) => {
   }
 };
 
+const loginCliente = async (req, res) => {
+  const { id, password } = req.body;
+  if (!email || !password) {
+    res
+      .status(400)
+      .json({ error: "Email y/o contraseña no pueden ser vacias!" });
+    return;
+  }
+
+  try {
+    const existingUser = await selectAsociaciones("clientes", {first: "Id", second: "codigo"}, {first: id, second: password});
+
+    if (existingUser) {
+        res.status(200).json({
+          userId: existingUser.ID_Cliente,
+          email: existingUser.nombre_completo,
+          role: 'cliente',
+          token: generateAccessToken(existingUser.ID_Cliente),
+        });
+    } else {
+      res.status(401).json({ error: "Credenciales invalidas" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
+  loginCliente,
   changePassword
 };

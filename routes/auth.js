@@ -1,10 +1,11 @@
 const express = require("express");
-const { register, login } = require("../controllers/auth");
+const { register, login, loginCliente } = require("../controllers/auth");
 const { authenticate } = require("../middlewares/auth");
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
+router.post("/login/cliente", loginCliente);
 
 router.get("/perfil", authenticate, (req, res) => {
     res.json({ message: req.user})
