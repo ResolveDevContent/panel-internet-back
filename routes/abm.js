@@ -47,7 +47,6 @@ router.get("/comercios/listar/admin/:email", authenticate, (req,res) => {
     const { email } = req.params;
     selectPermisos(email)
     .then((results) => {
-        console.log(results)
         selectByAdmin('comercio', 'ID_Comercio', results)
         .then((datos) => {
             res.send(datos)
@@ -316,13 +315,10 @@ router.get("/clientes/listarByEmail/:email", authenticate, (req,res) => {
 
 router.get("/clientes/listar/admin/:email", authenticate, (req,res) => {
     const { email } = req.params;
-    console.log(email)
     selectPermisos(email)
     .then((results) => {
-        console.log(results)
         selectByAdminPermisos(results)
         .then((datos) => {
-            console.log(datos)
             res.send(datos)
         })
         .catch((err) => {
@@ -474,7 +470,6 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                         res.status(201).json({message: "Transaccion creada correctamente."})
                     })
                     .catch((err) => {
-                        console.log("entr2", err)
                         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
                     })
                 }
@@ -584,7 +579,6 @@ router.get("/asociaciones/listar/admin/:email", authenticate, (req,res) => {
     const { email } = req.params;
     selectPermisos(email)
     .then((results) => {
-        console.log(results)
         selectByAdmin('asociaciones', 'ID_Comercio', results)
         .then((datos) => {
             res.send(datos)
@@ -600,7 +594,6 @@ router.get("/asociaciones/listar/admin/:email", authenticate, (req,res) => {
 router.post("/asociaciones/agregar", authenticate, (req,res) => {
     selectAsociaciones("asociaciones", {first: "ID_Comercio", second: "ID_Cliente"}, {first: req.body.ID_Comercio, second: req.body.ID_Cliente})
     .then((results) => {
-        console.log(results)
         if(results.length > 0) {
             res.status(500).json({ error: "La asociacion que desea agregar ya se encuentra realizada!" })
         } else {
@@ -609,12 +602,12 @@ router.post("/asociaciones/agregar", authenticate, (req,res) => {
                 res.status(201).json({message: "Asociacion creada correctamente."});
             })
             .catch((err) => {
-                res.status(500).json({ error: "AaaSe ha producido un error, intentelo nuevamente." });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             })
         }
     })
     .catch((err) => {
-        res.status(500).json({ error: "BBbSe ha producido un error, intentelo nuevamente." });
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
@@ -672,8 +665,6 @@ router.post("/admins/agregar", authenticate, (req,res) => {
                     } else {
                         insertRecord("users", user)
                         .then((insert) => {
-                            console.log(req.body)
-                            
                             if(permisos(req.body.ID_Comercio, req.body.email)) {
                                 res.status(201).json({ message: "Admin creado correctamente!" });
                             } else {
