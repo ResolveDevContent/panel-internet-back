@@ -179,7 +179,6 @@ router.get("/comercios/pagos/listar", (req,res) => {
 });
 
 router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
-    console.log(req.body)
     calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
         .then((puntos) => {
             puntos = puntos[0]
@@ -188,6 +187,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                 .then((total) => { 
                     total = total[0]
                     if(total.puntos_totales != null) {
+                        console.log(puntos.puntos_totales, total.puntos_totales)
                         if((puntos.puntos_totales - total.puntos_totales) > 0) {
                             if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
                                 const body = {...req.body, fecha: Date.now()};
@@ -222,7 +222,7 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                     }
                 });
             } else {
-                res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
             }
         })
         .catch((err) => {
@@ -444,6 +444,7 @@ router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
 });
 
 router.post("/transacciones/agregar", authenticate, (req,res) => {
+    console.log(req.body)
     selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
     .then((row) => {
         row = row[0];

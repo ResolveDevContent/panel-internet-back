@@ -7,7 +7,7 @@ function calcularPuntos(porcentaje, monto) {
 
     puntos = porcentaje * monto
 
-    return puntos
+    return puntos.toFixed(2)
 }
 
 module.exports = { calcularPuntos };
