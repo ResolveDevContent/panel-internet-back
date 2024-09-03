@@ -179,6 +179,7 @@ router.get("/comercios/pagos/listar", (req,res) => {
 });
 
 router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
+    console.log(req.body)
     calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
         .then((puntos) => {
             puntos = puntos[0]
@@ -591,25 +592,20 @@ router.get("/asociaciones/listar/admin/:email", authenticate, (req,res) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 });
-router.post("/asociaciones/agregar", authenticate, (req,res) => {
-    selectAsociaciones("asociaciones", {first: "ID_Comercio", second: "ID_Cliente"}, {first: req.body.ID_Comercio, second: req.body.ID_Cliente})
-    .then((results) => {
-        if(results.length > 0) {
-            res.status(500).json({ error: "La asociacion que desea agregar ya se encuentra realizada!" })
-        } else {
-            insertRecord("asociaciones", req.body)
-            .then((datos) => {
-                res.status(201).json({message: "Asociacion creada correctamente."});
-            })
-            .catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            })
-        }
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
-})
+router.post("/asociaciones/clientes/agregar", authenticate, (req,res) => {
+    if(multipleAsociaciones(req.body.ID_Cliente, req.body.ID_Comercio, true)) {
+        res.status(201).json({ message: "Asociaciones creadas correctamente!" });
+    } else {
+        res.status(500).json({ error: "Las asociaciones no se pudieron crear correctamente!" });
+    }
+});
+router.post("/asociaciones/comercios/agregar", authenticate, (req,res) => {
+    if(multipleAsociaciones(req.body.ID_Comercio, req.body.ID_Cliente, false)) {
+        res.status(201).json({ message: "Asociaciones creadas correctamente!" });
+    } else {
+        res.status(500).json({ error: "Las asociaciones no se pudieron crear correctamente!" });
+    }
+});
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
     const { id } = req.params;
     deleteRecord("asociaciones", "ID_asociacion", id)
@@ -620,6 +616,29 @@ router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
 })
+
+async function multipleAsociaciones(datos, id, comercio) {
+    const insert = datos.map(async (row) => {
+        selectAsociaciones("asociaciones", {first: "ID_Comercio", second: "ID_Cliente"}, {first: (comercio ? id : row), second: (comercio ? row : id)})
+        .then((results) => {
+            if(results.length == 0) {
+                insertRecord("asociaciones", {ID_Comercio: (comercio ? id : row), ID_Cliente: (comercio ? row : id)})
+                .then((datos) => {
+                    return true
+                })
+                .catch((err) => {
+                    return null
+                })
+            } 
+        })
+        .catch((err) => {
+            return null
+        })
+    })
+    const resultados = await Promise.all(insert);
+
+    return resultados
+};
 
 //CRUD: PERMISOS ---------------------------------------------------------------------------------
 
@@ -700,7 +719,7 @@ router.delete("/admins/borrar/:id", authenticate, (req,res) => {
 })
 
 async function permisos(datos, email) {
-    const permisos = datos.map(async (row, idx) => {
+    const permisos = datos.map(async (row) => {
         insertRecord("permisos", {ID_Comercio: Number(row.id), ID_Admin: email})
         .then((permiso) => {
             return true
