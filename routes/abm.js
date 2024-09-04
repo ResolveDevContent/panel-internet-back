@@ -721,7 +721,7 @@ router.delete("/admins/borrar/:id", authenticate, (req,res) => {
 
 async function permisos(datos, email) {
     const permisos = datos.map(async (row) => {
-        insertRecord("permisos", {ID_Comercio: Number(row.id), ID_Admin: email})
+        insertRecord("permisos", {ID_Comercio: Number(row), ID_Admin: email})
         .then((permiso) => {
             return true
         })
