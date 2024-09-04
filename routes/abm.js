@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -344,53 +344,43 @@ router.get("/clientes/puntos/:id", authenticate, (req,res) => {
 })
 
 router.post("/clientes/agregar", authenticate, (req,res) => {
-    const { email } = req.body;
-    const password = req.body.password;
+    if(agregarClientes(req.body)) {
+        res.status(201).json({ message: "Clientes creados/editados correctamente!" });
+    } else {
+        res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
+    }
+})
 
-    delete req.body.password;
-
-    insertRecord("clientes", req.body)
-    .then((results) => {
-        bcrypt.genSalt(10).then((salt) => {
-            bcrypt.hash(password, salt).then((hashedPassword) => {
-                const user = {
-                    userId: uuidv4(),
-                    email: email,
-                    password: hashedPassword,
-                    role: "cliente"
-                };
-                
-                try {
-                    checkRecordExists("users", "email", email)
-                    .then((exist) => {
-                        const userAlreadyExists = exist;
-                        if (userAlreadyExists) {
-                            res.status(409).json({ error: "Email ya existente" });
-                        } else {
-                            insertRecord("users", user)
-                            .then((insert) => {
-                                res.status(201).json({ message: "Cliente creado correctamente!" });
-                            })
-                            .catch((err) => {
-                                res.status(500).json({ error: "No se puedo crear correctamente!" })
-                            })
-                        }
-                    })
-                    .catch((err) => {
-                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                    })
-                } catch (error) {
-                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                }
-            }).catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            })
+async function agregarClientes(datos) {
+    const insert = datos.map(async (row) => {
+        selectAsociaciones("clientes", {first: "id", second: "codigo"}, {first: row.id, second: row.codigo})
+        .then((results) => {
+            if(results.length == 0) {
+                insertRecord("cliente", row)
+                .then((datos) => {
+                    return true
+                })
+                .catch((err) => {
+                    return null
+                })
+            } else {
+                updateRecordCliente('clientes', row, {first: 'id', second: 'codigo'}, {first: row.id, second: row.codigo})
+                .then((datos) => {
+                    return true
+                })
+                .catch((err) => {
+                    return null
+                })
+            }
+        })
+        .catch((err) => {
+            return null
         })
     })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
-})
+    const resultados = await Promise.all(insert);
+
+    return resultados
+};
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
 
@@ -444,7 +434,6 @@ router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
 });
 
 router.post("/transacciones/agregar", authenticate, (req,res) => {
-    console.log(req.body)
     selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
     .then((row) => {
         row = row[0];

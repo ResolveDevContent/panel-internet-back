@@ -113,7 +113,7 @@ const login = async (req, res) => {
 
 const loginCliente = async (req, res) => {
   const { id, password } = req.body;
-  if (!email || !password) {
+  if (!id || !password) {
     res
       .status(400)
       .json({ error: "Email y/o contraseña no pueden ser vacias!" });

@@ -172,6 +172,21 @@ const updateRecord = (tableName, update, column, value) => {
   });
 }
 
+const updateRecordCliente = (tableName, update, column, values) => {
+  return new Promise((resolve, reject) => {
+    const query = `UPDATE ${tableName} SET ${Object.keys(update).map(key => `${key} = ?`).join(", ")} WHERE ${column.first} = ? AND ${column.second} = ?`;
+    const parameters = [...Object.values(update), values.first, values.second];
+
+    conn.query(query, parameters, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({message: "Se edito correctamente"});
+      }
+    });
+  });
+}
+
 const calculoDePuntos = (tableName, column, value) => {
   return new Promise((resolve, reject) => {
 
@@ -218,6 +233,7 @@ module.exports = {
   selectAsociaciones,
   deleteRecord,
   updateRecord,
+  updateRecordCliente,
   calculoDePuntos,
   calculoDePuntosComercios,
   selectByAdminPermisos
