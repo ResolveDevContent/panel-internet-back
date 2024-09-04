@@ -353,29 +353,42 @@ router.post("/clientes/agregar", authenticate, (req,res) => {
 
 async function agregarClientes(datos) {
     const insert = datos.map(async (row) => {
-        selectAsociaciones("clientes", {first: "id", second: "codigo"}, {first: row.id, second: row.codigo})
-        .then((results) => {
-            if(results.length == 0) {
-                insertRecord("cliente", row)
-                .then((datos) => {
-                    return true
-                })
-                .catch((err) => {
-                    return null
-                })
-            } else {
-                updateRecordCliente('clientes', row, {first: 'id', second: 'codigo'}, {first: row.id, second: row.codigo})
-                .then((datos) => {
-                    return true
-                })
-                .catch((err) => {
-                    return null
-                })
-            }
-        })
-        .catch((err) => {
+        if(row.Id && row.Codigo) {
+            row.nombre_completo = row.Nombre || "";
+            row.direccion_principal = row["Direccion Principal"] || "";
+            row.telefono_fijo = row.Telefono || "";
+            row.telefono_movil = row.Telefono || "";
+
+            delete row.Nombre
+            delete row["Direccion Principal"]
+            delete row.Telefono
+
+            selectAsociaciones("clientes", {first: "Id", second: "Codigo"}, {first: row.Id.toString(), second: row.Codigo.toString()})
+            .then((results) => {
+                if(results.length == 0) {
+                    insertRecord("clientes", row)
+                    .then((datos) => {
+                        return true
+                    })
+                    .catch((err) => {
+                        return null
+                    })
+                } else {
+                    updateRecordCliente('clientes', row, {first: 'Id', second: 'Codigo'}, {first: row.Id.toString(), second: row.Codigo.toString()})
+                    .then((datos) => {
+                        return true
+                    })
+                    .catch((err) => {
+                        return null
+                    })
+                }
+            })
+            .catch((err) => {
+                return null
+            })
+        } else {
             return null
-        })
+        }
     })
     const resultados = await Promise.all(insert);
 

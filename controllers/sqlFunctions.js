@@ -33,6 +33,7 @@ const insertRecord = (tableName, record) => {
 
     conn.query(query, Object.values(record), (err, results) => {
       if (err) {
+        console.log(err)
         reject(err);
       } else {
         resolve(results);

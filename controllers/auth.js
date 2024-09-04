@@ -125,10 +125,10 @@ const loginCliente = async (req, res) => {
 
     if (existingUser) {
         res.status(200).json({
-          userId: existingUser.ID_Cliente,
-          email: existingUser.nombre_completo,
+          userId: existingUser[0].ID_Cliente,
+          email: existingUser[0].nombre_completo,
           role: 'cliente',
-          token: generateAccessToken(existingUser.ID_Cliente),
+          token: generateAccessToken(existingUser[0].ID_Cliente),
         });
     } else {
       res.status(401).json({ error: "Credenciales invalidas" });
