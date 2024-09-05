@@ -13,6 +13,7 @@ const authenticate = async (req, res, next) => {
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
         if(decodedToken.userId) {
             let user = await checkRecordExists("users", "userId", decodedToken.userId);
+
             if(!user) {
                 const cliente = await checkRecordExists("clientes", "ID_Cliente", decodedToken.userId);
                 if(!cliente) {
@@ -21,8 +22,6 @@ const authenticate = async (req, res, next) => {
                 cliente.role = "cliente"
                 
                 user = cliente
-            } else {
-                return res.status(404).json({ error: "Usuario no encontrado." })
             }
             
             req.user = user;
