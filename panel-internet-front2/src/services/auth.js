@@ -2,7 +2,7 @@ import Cookies from "js-cookie"
 
 export const LoginAuth = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://localhost:3008/auth/login', {
+        const response = await fetch('http://localhost:3009/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const LoginAuth = async (credentials, setAuth, setState) => {
 
 export const LoginCliente = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://localhost:3008/auth/login/cliente', {
+        const response = await fetch('http://localhost:3009/auth/login/cliente', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export const LoginCliente = async (credentials, setAuth, setState) => {
 
 export const LogoutAuth = async (setAuth, setState) => {
     try {
-        const response = await fetch('http://localhost:3008/auth/logout', {
+        const response = await fetch('http://localhost:3009/auth/logout', {
             method: 'GET',
         });
 
@@ -81,7 +81,7 @@ export const PerfilAuth = () => {
     const token = Cookies.get("token");
 
     return (
-        fetch('http://localhost:3008/auth/perfil', {
+        fetch('http://localhost:3009/auth/perfil', {
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -92,7 +92,7 @@ export const PerfilAuth = () => {
 
 export const RegisterAuth = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://localhost:3008/auth/register', {
+        const response = await fetch('http://localhost:3009/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
