@@ -24,6 +24,7 @@ export const LoginAuth = async (credentials, setAuth, setState) => {
         // Store static values in Cookies
         Cookies.set('token', token, { expires: 5 });
     } catch (err) {
+        console.log(err)
         setState({text: "Error al Logearse." , res: "secondary"})
     }
 };
