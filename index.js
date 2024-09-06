@@ -6,20 +6,23 @@ const cors = require("cors");
 const conn = require("./db/db")
 const auth = require("./routes/auth")
 const abm = require("./routes/abm")
+const path = require("path");
 
 const app = express();
+
+conn.connect(err => {
+  if (err) return console.log("Failed to connect", err);
+  console.log(`Successfully connected to mysql server: `);
+});
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(__dirname + "/panel-internet-front/dist"))
 
-conn.connect(err => {
-    if (err) return console.log("Failed to connect", err);
-    console.log(`Successfully connected to mysql server: `);
-});
 
 app.get("/", async (req,res) => {
-  res.send("Bienvenidos a la API")
+  res.sendFile(path.join(__dirname, "/panel-internet-front/dist", "index.html"))
 });
 
 app.use("/auth", auth);
