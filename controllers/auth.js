@@ -71,6 +71,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  console.log("ENTRA?")
   const { email, password } = req.body;
   if (!email || !password) {
     res
