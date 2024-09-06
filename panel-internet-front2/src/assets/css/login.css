@@ -1,0 +1,154 @@
+.background {
+  background-image: linear-gradient(120deg, var(--color-1) 0%, var(--color-4) 100%); 
+  height: 60%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.login {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.login header div,
+.login section {
+  margin-top: .75em;
+}
+.login div section {
+  display: flex;
+  overflow: hidden;
+}
+.login div section form {
+  min-width: 100%;
+  display: none;
+}
+.login div section #cliente:checked + form,
+.login div section #noCliente:checked + form {
+  display: flex;
+}
+.login header div span {
+  font-weight: 500;
+}
+.login header div span a {
+  margin-left: .25em;
+  color: #fff;
+  font-weight: 600;
+}
+.login header div span a:hover {
+  text-decoration: underline;
+}
+.login section > input {
+  display: none;
+}
+.login > div {
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.551);
+  background-color: #313131;
+  min-width: 25em;
+  width: max-content;
+  height: max-content;
+  border-radius: 1em;
+  margin: auto;
+  z-index: 10;
+  padding: 2em;
+}
+
+.form {
+  margin-top: 1em;
+}
+
+.form li + li {
+  margin-top: 1em;
+}
+
+.form li:first-child input {
+  margin-top: .5em;
+}
+
+.form li input {
+  outline: none;
+  border: none;
+  background-color: #222;
+  padding: 1em;
+  border-radius: .5em;
+}
+
+.form li button {
+  width: max-content;
+  background-color: var(--color-1);
+  cursor: pointer;
+  transition: all 0.5s;
+  padding: .5em 1em;
+  border: none;
+  border-radius: .5em;
+}
+.btn-logincliente a{
+  background-color: var(--color-3);
+  padding: 0.5em;
+  color: white;
+  border-radius: 0.5em;
+}
+.btn-logincliente a:hover {
+  background-color: var(--color-4);
+}
+.form li button:hover {
+  background-color: var(--color-2);
+}
+
+.form .visible-btn {
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+}
+
+.form .visible-btn:hover {
+    background-color: transparent;
+}
+
+.form .visible-btn svg {
+    fill: white;
+}
+
+.form .password-container {
+  min-width: unset;
+  width: 100%;
+  background-color: transparent;
+  box-shadow: unset;
+  position: relative;
+  margin-top: .5em;
+}
+
+.form .password-container input {
+  width: 100%;
+}
+
+.login div footer span {
+  font-size: .625em;
+  text-align: center;
+}
+
+.msg-error {
+  height: 2em;
+  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1em;
+  font-size: .8em;
+}
+
+@media (max-width: 767px) {
+  .login > div {
+    font-size: .8em;
+  }
+  .form .visible-btn svg {
+      width: 1.25em;
+      height: 1.25em;
+  }
+}

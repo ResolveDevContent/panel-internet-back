@@ -1,0 +1,212 @@
+.navbar {
+  width: 100%;
+  align-items: center;
+  justify-content: end;
+  padding:  .5em;
+}
+.navbar label {
+  display: flex;
+}
+.navbar label svg {
+  width: 2em;
+  height: 2em;
+}
+#mobile-bar,
+.menu li input {
+  display: none;
+}
+.sidebar {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-1);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow: auto;
+  color: #fff;
+}
+.user {
+  display: flex;
+  align-items: center;
+  margin: 2em 0 3em .5em;
+  cursor: default;
+}
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  border-radius: 50%;
+  margin-right: .75em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3e3b3b;
+}
+.user-avatar p {
+  color: #fff;
+  font-size: 1.25em;
+  text-transform: uppercase;
+}
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+.user-info span {
+  font-size: 0.8em;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+.totales {
+
+}
+.sidebar .menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar .menu li {
+  display: flex;
+  flex-direction: column;
+}
+.sidebar .menu li input:checked + label {
+  background-color: var(--color-2);
+}
+.sidebar .menu li input:checked ~ ul {
+  display: flex;
+  transition: all 0.3s;
+}
+.sidebar .menu li ul {
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-2);
+  transition: all 0.3s;
+}
+.sidebar .menu li ul li a {
+  padding: 1em .75em;
+  color: #fff;
+}
+.sidebar .menu li ul li a:hover {
+  background-color: var(--color-3);
+}
+.sidebar .menu li label,
+.sidebar .menu li a {
+  display: flex;
+  align-items: center;
+  gap: .625em;
+  cursor: pointer;
+  font-size: 1.125em;
+  font-weight: 500;
+  transition: all 0.3s;
+  padding: 1em .5em;
+}
+
+.sidebar .menu li a {
+  color: white;
+}
+
+.sidebar .menu li svg {
+  fill: white;
+}
+
+.sidebar .menu li label:hover,
+.sidebar .menu li a:hover {
+  background-color: var(--color-2);
+}
+.sidebar .menu.one {
+  flex: 1;
+}
+.sidebar .menu.two button {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  padding: 1em .5em;
+  background-color: var(--color-1);
+  border: none;
+  cursor: pointer;
+}
+.sidebar .menu.two button:hover {
+  background-color: var(--color-2);
+}
+.sidebar .menu.two button span {
+  margin-left: .25em;
+}
+
+.sidebar .menu li a.active {
+  background-color: var(--color-3);
+}
+
+.sidebar .totales {
+  margin-bottom: 1em;
+  width: 100%;
+}
+.sidebar .totales div {
+  width: 100%;
+}
+.sidebar .totales em {
+  font-weight: 600;
+  background-color: var(--color-2);
+  padding: .5em;
+}
+.sidebar .totales span {
+  padding: 0 .5em .5em .5em;
+  background-color: var(--color-2);
+}
+
+.sidebar .totales button {
+  display: flex;
+  height: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--color-2);
+  border: none;
+  width: 30%;
+}
+
+.sidebar .totales button:hover {
+  background-color: var(--color-3);
+}
+
+.sidebar .totales button svg {
+  fill: white;
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar {
+    display: flex;
+  }
+  .sidebar {
+    display: none;
+    position: absolute;
+    transition: all .5s;
+    animation: rightanimation 1s ease-in-out;
+  }
+  input:checked ~ .sidebar {
+    display: flex;
+  }
+}
+
+@keyframes rightanimation {
+  0% {
+    transform: translateX(-100%)
+  }
+  100% {
+    transform: translateX(0%)
+  }
+}

@@ -1,0 +1,117 @@
+.filtros {
+  display: none;
+  flex-direction: column;
+}
+
+.filtros > form {
+  display: flex;
+  flex-direction: column;
+}
+
+.filtros > form > div + div {
+  margin-top: .5em;
+}
+
+.filtros form > button,
+.filtros .fechas p {
+  background-color: var(--color-1);
+  color: #fff;
+  padding: .25em 1em;
+  border-radius: .5em;
+  font-weight: 600;
+  width: 10em;
+  margin-top: 1em;
+  border: none;
+  cursor: pointer;
+}
+
+.filtros .fechas p {
+  width: max-content;
+  font-size: .8em;
+  margin-top: 0;
+  display: flex;
+}
+
+.filtros > button:hover,
+.filtros .fechas a:hover {
+  background-color: var(--color-2);
+}
+
+.filtros em {
+  font-size: .8rem;
+  font-weight: 600;  
+}
+
+.filtros input {
+  outline: none;
+  padding: .5rem;
+}
+
+.filtros .buscador input {
+  border: none;
+  width: 100%;
+}
+
+.filtros .buscador > div {
+  display: flex;
+  gap: 1em;
+}
+
+.filtros .buscador .buscador-field {
+  display: flex;
+  border: 1px solid #ccc;
+  margin-top: .5em;
+  width: 100%;
+}
+
+.filtros .buscador .buscador-field span {
+  display: flex;
+  align-items: center;
+  border: none;
+  outline: none;
+  background-color: white;
+  cursor: default;
+  padding: 0 .25em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.filtros .fechas > div {
+  margin-top: .5em;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.filtros .fechas > div div {
+  display: flex;
+  align-items: center;
+}
+
+.filtros .fechas > div div span {
+  color: gray;
+  font-size: .8em;
+}
+
+.filtros .fechas input {
+  border: 1px solid #ccc;
+  padding: .25em;
+  margin-left: .25em;
+}
+
+@media screen and (min-width: 768px) {
+  .filtros {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .filtros .buscador > div,
+  .filtros .fechas > div{
+    flex-direction: column;
+  }
+
+  .filtros .fechas > div a {
+    margin-right: auto;
+  }
+}

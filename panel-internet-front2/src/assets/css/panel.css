@@ -1,0 +1,160 @@
+.container {
+  padding: 2em;
+}
+
+.container #form {
+  width: 100%;
+  background-color: whitesmoke; 
+  min-height: calc(100vh - 4em);
+}
+
+.container strong {
+  font-size: 1.25em;
+  text-transform: capitalize;
+}
+
+.container #form form {
+  margin-top: 2em;
+}
+
+/* TABLA -------------------------------------------------------------------- */
+
+.d-table {
+  display: table;
+}
+
+.d-table-row {
+  display: table-row;
+}
+
+.d-table-cell {
+  display: table-cell;
+}
+
+.tables {
+  margin-top: 1em;
+}
+
+.tables > ul {
+  background-color: var(--color-1);
+}
+
+.tables > ul > li {
+  padding: 0.5em;
+}
+
+.tables > ul > li span {
+  height: 1.25em;
+  text-transform: capitalize;
+}
+
+.tables > ul > li > ul {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.d-none {
+  display: none;
+}
+
+.notFound img {
+  width: 20em;
+}
+
+.custom-file{
+  border: 1px dashed #000;
+  border-radius: 0.5em;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: inline-block;
+  margin-top: 0.5em;
+}
+
+.custom-file-label {
+  cursor: pointer;
+  display: flex;
+  gap: 0.5em;
+  width: 100%;
+  padding: 1em;
+}
+
+.custom-file input{
+  display: none;
+}
+
+.list-file {
+  margin: 0.5em 0;
+}
+
+.list-file li {
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-file span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 1;
+  height: 1em;
+  overflow-wrap: anywhere;
+}
+
+.agregar-cliente button {
+  background-color: var(--color-1);
+  padding: .75em 2em;
+  border: none;
+  border-radius: .5em;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+    width: calc(100vw - 320px);
+  }
+  .tables > ul > li {
+    width: 12em;
+    min-width: 12em;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding: 0;
+  }
+
+  .container #form,
+  .container > article{
+    height: 100%;
+    padding: 1em;
+  }
+  .tables {
+    display: flex!important;
+    overflow: auto;
+  }
+  .tables > ul {
+    display: flex!important;
+    flex-direction: column!important;   
+    width: 12em;
+    min-width: 12em;
+  }
+  .tables > ul > li {
+    height: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tables > ul > li span {
+    font-size: .8em;
+    height: max-content;
+    -webkit-line-clamp: 4;
+  }
+}

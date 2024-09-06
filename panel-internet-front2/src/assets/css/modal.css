@@ -1,0 +1,44 @@
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: #00000030;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-dialog {
+  background-color: #fff;
+}
+.modal-content {
+  padding: 2em;
+}
+.modal-body {
+  margin-top: 1em;
+}
+.modal-footer button {
+  padding: .5em;
+  border-radius: .25em;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  margin-top: 1em;
+  cursor: pointer;
+}
+.modal-footer button + button {
+  margin-left: 1em;
+}
+.modal-footer button.btn-primary {
+  background-color: green;
+}
+.modal-footer button.btn-secondary {
+  background-color: red;
+}
+.modal-footer button.btn-primary:hover {
+  background-color: rgb(0, 165, 0);
+}
+.modal-footer button.btn-secondary:hover {
+  background-color: rgb(255, 58, 58);
+}

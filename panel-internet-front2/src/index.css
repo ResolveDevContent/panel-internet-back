@@ -1,0 +1,434 @@
+:root {
+    --color-1:  #154c7a;
+    --color-2: #1a4758;
+    --color-3: #1c4242;
+    --color-4: #1f443d;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: "Nanum Gothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+ul {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+textarea {
+  resize: none;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.align-start {
+    align-items: start;
+}
+
+.align-end {
+    align-items: end;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.justify-around {
+    justify-content: space-around;
+}
+
+.justify-end {
+    justify-content: end;
+}
+
+.justify-start {
+    justify-content: start;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.gap-1 {
+    gap: 1em;
+}
+
+.gap-5 {
+    gap: 0.5em;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.mt-1 {
+    margin-top: 1em;
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+  }
+  
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--color-2);  
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-3);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-3); 
+}
+
+main {
+    background-color: whitesmoke;
+}
+
+main > section {
+    flex: 1;
+}
+
+span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+input[type="password"] {
+    font-family: initial;
+}
+
+input[type="password"]::placeholder {
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em;
+    background-color: whitesmoke;
+    padding: 2em;
+}
+.empty-state > svg {
+    width: 4em;
+    height: 4em;
+}
+.empty-state > span {
+    font-weight: bolder;
+}
+
+.notFound {
+    height: 100vh;
+}
+.notFound h1 {
+    font-size: 4em;
+}
+.notFound p {
+    font-size: 1.125em;
+}
+
+/* ---------------------------------- */
+
+#panel {
+    background-image: url('./assets/images/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20em;
+}
+
+#panel .toast {
+    transition: all 0.5s;
+    animation: desvanecer 1s ease-in-out 5s;
+}
+
+/* ---------------------------------- */
+
+#agregar > form > ul > li label {
+    text-transform: capitalize;
+}
+
+/* ---------------------------------- */
+
+.listado-row:nth-child(odd) {
+    background-color: #dedede;
+}
+
+.listado-row:nth-child(even) {
+    background-color: #d1d1d1;
+}
+
+/* ---------------------------------- */
+
+#form .form-loading {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #00000040;
+    z-index: 10;
+}
+#form .card-body > li + li {
+    margin-top: 2em;
+}
+#form .card-body li div {
+    display: flex;
+    flex-direction: column;
+}
+#form .card-body li label {
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 1.05em;
+}
+#form .card-body li div input,
+#form .card-body li div select {
+    margin-top: .25em;
+    padding: 1em;
+    border: none;
+    border: 1px solid gray;
+    border-radius: .5em;
+    outline: none;
+}
+#form .card-body li div select {
+    padding: 1em 1em 1em .75em;
+}
+#form .card-body li div option {
+    font-size: 1.25em;
+}
+#form .card-body > li button {
+    background-color: var(--color-1);
+    padding: .75em 2em;
+    border: none;
+    border-radius: .5em;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+}
+#form .card-body > li button:hover {
+    background-color: var(--color-2);
+}
+#form .card-body .list-template .dropdown-list {
+    padding: 1em;
+    background-color: #fff;
+    border-left: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    max-height: 10em;
+    overflow: auto;
+    position: relative;
+}
+#form .card-body .list-template .dropdown-list label {
+    display: flex;
+    align-items: center;
+    font-size: .9em;
+    padding: .25em 0;
+    cursor: pointer;
+}
+#form .card-body .list-template .dropdown-list input {
+    margin: 0;
+}
+#form .card-body .list-template .dropdown-list span {
+    margin-left: .25em;
+    font-size: .9em;
+}
+#form .dropdown-list label + ul {
+    margin-top: .5em;
+}
+#form .dropdown-list ul {   
+    display: flex;
+    flex-direction: column;
+}
+#form .dropdown-list ul li {   
+    display: flex;
+    margin-top: .25em;
+}
+.array-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.array-list li {
+    width: max-content;
+    padding: .5em;
+    background-color: var(--color-1);
+    color: #fff;
+    border-radius: 2em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.array-list li:hover {
+    background-color: var(--color-2);
+}
+.array-list li button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.array-list li button svg {
+    fill: #fff!important;
+}
+.navbar-filter {
+    display: none;
+    align-items: center;
+    background-color: var(--color-1);
+    padding: .5em 1em; 
+}
+.navbar-filter label {
+    color: #fff;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+.navbar-filter label svg {
+    margin-left: .5em;
+}
+input#filtros {
+    display: none;
+}
+.background-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.248);
+    display: none;
+}
+.list-loading-container,
+.loading-container {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.248);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loading-container {
+    position: fixed;
+}
+.list-loading-container {
+    position: absolute;
+}
+.list-loading,
+.loading {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 4px solid black;
+    animation:
+      l20-1 0.8s infinite linear alternate,
+      l20-2 1.6s infinite linear;
+}
+.list-loading {
+    width: unset;
+}
+@keyframes l20-1 {
+    0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+    12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+    25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+    50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+    62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+    75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+    100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+}
+@keyframes l20-2 { 
+    0%    {transform:scaleY(1)  rotate(0deg)}
+    49.99%{transform:scaleY(1)  rotate(135deg)}
+    50%   {transform:scaleY(-1) rotate(0deg)}
+    100%  {transform:scaleY(-1) rotate(-135deg)}
+}
+
+@media (max-width: 767px) {
+    body {
+        height: 100vh;
+    }
+    #root {
+        height: 100%;
+    }
+    main {
+        flex-direction: column;
+        height: 100%;
+    }
+    .empty-state-card {
+        height: 100%;
+        background-color: whitesmoke;    
+    }
+    .navbar-filter {
+        display: flex;
+    }
+    .filtros {
+        padding: 1em;
+        background-color: whitesmoke;
+        display: none;
+        position: absolute;
+        transition: all .5s;
+        animation: downanimation 1s ease-in-out;
+        right: 0;
+        left: 0;
+    }
+    .filtros > form {
+        flex-direction: column;
+        align-items: start;
+    }
+    .filtros .buscador{
+        width: 100%;
+    }
+    .filtros .fechas input {
+        font-size: 1em;
+    }
+    input:checked ~ .filtros,
+    input:checked + .background-menu {
+        display: flex;
+    }
+}
+
+@keyframes downanimation {
+  0% {
+    transform: translatey(-100%)
+  }
+  100% {
+    transform: translatey(0%)
+  }
+}
