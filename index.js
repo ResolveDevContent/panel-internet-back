@@ -18,11 +18,11 @@ conn.connect(err => {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(__dirname + "/panel-internet-front/dist"))
+app.use(express.static(__dirname + "/panel-internet-front2/dist"))
 
 
 app.get("/", async (req,res) => {
-  res.sendFile(path.join(__dirname, "/panel-internet-front/dist", "index.html"))
+  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist", "index.html"))
 });
 
 app.use("/auth", auth);
