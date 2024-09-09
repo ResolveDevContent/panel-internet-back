@@ -18,6 +18,7 @@ import { ImportCsv } from './components/ImportCsv.jsx'
 function App() {
   const [auth, setAuth] = useState(false);
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false)
 
   const readCookie = () => {
     const user = Cookies.get("token");
@@ -29,10 +30,12 @@ function App() {
   }
 
   useEffect(() => {
+    setLoading(true)
     readCookie();
     PerfilAuth().then((result) => {
-      console.log(result.message)
       setUser(result.message)
+    }).finally((res) => {
+      setLoading(false)
     })
   }, [auth])
 
@@ -62,15 +65,19 @@ function App() {
                 <Route path="asociaciones/agregarclientes/agregar" element={<Form elementos={ELEMENTOS.asociacionesClientes} titulo={'asociaciones/clientes'} user={user}/>} />
                 <Route path="asociaciones/agregarcomercios/agregar" element={<Form elementos={ELEMENTOS.asociacionesComercios} titulo={'asociaciones/comercios'} user={user}/>} />
               </Route>
-              <Route element={<PrivateRoutes user={user} roles={['admin', 'comercio', 'superadmin']}/>}>
-                <Route path="clientes/listar" element={<Listado titulo={"clientes"}/>} />
-                <Route path="transacciones/listar" element={<Listado titulo={"transacciones"}/>} />
-                <Route path="transacciones/agregar" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'} user={user} />}  />
-                <Route path="transacciones/editar/:id" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'}/>} user={user} />
-              </Route>
-              <Route element={<PrivateRoutes user={user} roles={['cliente', 'superadmin']}/>}>
-                <Route path='cliente' element={<User />} />
-              </Route>
+              {!loading ? (
+                <Route element={<PrivateRoutes user={user} roles={['admin', 'comercio', 'superadmin']}/>}>
+                  <Route path="clientes/listar" element={<Listado titulo={"clientes"}/>} />
+                  <Route path="transacciones/listar" element={<Listado titulo={"transacciones"}/>} />
+                  <Route path="transacciones/agregar" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'} user={user} />}  />
+                  <Route path="transacciones/editar/:id" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'}/>} user={user} />
+                </Route>
+              ) : null}
+              {!loading ? (
+                <Route element={<PrivateRoutes user={user} roles={['cliente', 'superadmin']}/>}>
+                  <Route path='cliente' element={<User />} />
+                </Route>
+              ) : null}
             </Route>
             <Route path='*' element={<Component404 />}/>
           </Routes>

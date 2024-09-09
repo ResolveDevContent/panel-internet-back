@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { LoginAuth } from '../services/auth'
 import AuthContext from '../context/Auth'
 import { Show, Hidden } from '../assets/icons/icons'
+import { PerfilAuth } from '../services/auth.js'
 
 export const Login = () => {
     const [dataLogin, setDataLogin] = useState({})
@@ -47,9 +48,15 @@ export const Login = () => {
     }
 
     useEffect(() => {
-        if(auth) {
-            navigate("/panel")
-        }
+        PerfilAuth().then((result) => {
+            if(auth && result.message.role == "comercio") {
+                navigate("/transacciones/agregar")
+            } else if(auth) {
+                navigate("/")
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
 
         if(visible) {
             password.current.type = "text"

@@ -19,7 +19,7 @@ export const Sidebar = ({user}) => {
 
   const logout = () => {
     LogoutAuth(setAuth, setState)
-    navigate("/panel/login")
+    navigate("/login")
 
     setTimeout(() => {
       setState({
