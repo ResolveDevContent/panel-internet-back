@@ -21,10 +21,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/panel-internet-front2/dist"))
 
 
-app.get("/", async (req,res) => {
-  console.log("entra al get/?")
-  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist", "index.html"))
-});
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist", "index.html"), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
 
 app.use("/auth", auth);
 app.use("/abm", abm);
