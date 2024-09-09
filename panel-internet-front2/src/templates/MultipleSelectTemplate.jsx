@@ -52,10 +52,17 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             setLoading(true)
             listarByComercio("clientes", dato)
             .then(datos => {
-                if(!datos || datos.length == 0 || datos.error) {
+                if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
                     setotherOpciones([])
                     return;
+                }
+
+                if(datos.error) {
+                    setState({
+                      text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                      res: "danger"
+                    })
                 }
                 
                 datos.forEach((row) => {
@@ -81,10 +88,17 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
         if(user && user.role == "superadmin") {
             listar('comercios')
             .then(datos => {
-                if(!datos || datos.length == 0 || datos.error) {
+                if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
                     setotherOpciones([])
                     return;
+                }
+
+                if(datos.error) {
+                    setState({
+                      text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                      res: "danger"
+                    })
                 }
 
                 originalOpciones.current = datos;

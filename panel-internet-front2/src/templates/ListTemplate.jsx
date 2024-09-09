@@ -81,14 +81,17 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       } else if(user && user.role == "superadmin") {
           listar(placeholder)
           .then(datos => {
-              if(!datos || datos.length == 0 || datos.error) {
-                  setState({
-                      text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                      res: "danger"
-                  })
+              if(!datos || datos.length == 0) {
                   setSortedListado([])
                   originalListado.current = [];
                   return;
+              }
+
+              if(datos.error) {
+                setState({
+                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                  res: "danger"
+                })
               }
 
               setSortedListado(datos)
@@ -104,14 +107,17 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       } else {
           listarByAdmin(placeholder, user.email)
           .then(datos => {
-              if(!datos || datos.length == 0 || datos.error) {
-                  setState({
-                      text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                      res: "secondary"
-                  })
+              if(!datos || datos.length == 0) {
                   setSortedListado([])
                   originalListado.current = [];
                   return;
+              }
+
+              if(datos.error) {
+                setState({
+                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                  res: "danger"
+                })
               }
 
               setSortedListado(datos)
