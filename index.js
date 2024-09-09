@@ -20,12 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/panel-internet-front2/dist"))
 
-app.get("/", async (req,res) => {
-  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist/index.html"))
-});
 
 app.use("/auth", auth);
 app.use("/abm", abm);
+
+app.get("/*", async (req,res) => {
+  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist/index.html"))
+});
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
