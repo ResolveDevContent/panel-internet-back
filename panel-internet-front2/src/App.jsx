@@ -40,9 +40,9 @@ function App() {
     <AuthContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/panel/login" element={<Login />} />
-            <Route path="/panel/login/cliente" element={<LoginClienteForm />} />
-            <Route path="/panel/" element={
+            <Route path="/login" element={<Login />} />
+            <Route path="/login/cliente" element={<LoginClienteForm />} />
+            <Route path="/" element={
               <Panel user={user}/>
             }>
               <Route element={<PrivateRoutes user={user} roles={['superadmin']}/>}>
