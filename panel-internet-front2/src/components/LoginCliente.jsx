@@ -48,7 +48,7 @@ export const LoginClienteForm = () => {
 
     useEffect(() => {
         if(auth) {
-            navigate("/")
+            navigate("/panel")
         }
 
         if(visible) {

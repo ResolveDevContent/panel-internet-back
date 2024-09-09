@@ -10,7 +10,7 @@ export const Panel = ({user}) => {
 
     useEffect(() => {
         if(!auth) {
-            navigate("/login")
+            navigate("/panel/login")
         }
     }, [auth])
 

@@ -48,7 +48,7 @@ export const Login = () => {
 
     useEffect(() => {
         if(auth) {
-            navigate("/")
+            navigate("/panel")
         }
 
         if(visible) {

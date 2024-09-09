@@ -20,14 +20,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/panel-internet-front2/dist"))
 
-
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist", "index.html"), function(err) {
-    if (err) {
-      res.status(500).send(err)
-    }
-  })
-})
+app.get("/panel/*", async (req,res) => {
+  console.log("entra al get/?")
+  res.sendFile(path.join(__dirname, "/panel-internet-front2/dist/index.html"))
+});
 
 app.use("/auth", auth);
 app.use("/abm", abm);
