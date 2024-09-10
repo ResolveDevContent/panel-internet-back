@@ -361,41 +361,7 @@ router.post("/clientes/agregar", authenticate, (req,res) => {
     delete req.body.password;
     insertRecord("clientes", {...req.body})
     .then((results) => {
-        bcrypt.genSalt(10).then((salt) => {
-            bcrypt.hash(password, salt).then((hashedPassword) => {
-                const user = {
-                    userId: uuidv4(),
-                    email: email,
-                    password: hashedPassword,
-                    role: "cliente"
-                };
-                
-                try {
-                    checkRecordExists("users", "email", email)
-                    .then((exist) => {
-                        const userAlreadyExists = exist;
-                        if (userAlreadyExists) {
-                            res.status(409).json({ error: "Email ya existente" });
-                        } else {
-                            insertRecord("users", user)
-                            .then((insert) => {
-                                res.status(201).json({ message: "Cliente creado correctamente!" });
-                            })
-                            .catch((err) => {
-                                res.status(500).json({ error: "No se puedo crear correctamente!" })
-                            })
-                        }
-                    })
-                    .catch((err) => {
-                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                    })
-                } catch (error) {
-                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                }
-            }).catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
-            })
-        })
+        res.status(201).json({ message: "Cliente creado correctamente!" });
     })
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
