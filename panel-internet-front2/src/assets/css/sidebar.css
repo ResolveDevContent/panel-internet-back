@@ -33,6 +33,16 @@
   align-items: center;
   margin: 2em 0 3em .5em;
   cursor: default;
+  flex-direction: column;
+}
+.user > a {
+  margin-top: 0.5em;
+  color: white;
+  background-color: var(--color-2);
+  padding: 0.5em;
+}
+.user > a:hover {
+  background-color: var(--color-3);
 }
 .user-avatar {
   width: 50px;

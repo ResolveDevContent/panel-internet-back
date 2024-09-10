@@ -2,12 +2,17 @@ import { Hidden, Show } from "../assets/icons/icons"
 import { useState, useEffect, useContext, useRef } from "react"
 import { PerfilAuth, CambiarContraseña } from "../services/auth"
 import AuthContext from "../context/Auth"
+import { Toast } from "./Toast"
 
 export const ChangePassword = () => {
     const [dataLogin, setDataLogin] = useState({})
     const [error, setError] = useState('')
     const [visible, setVisible] = useState(false)
     const [user, setUser] = useState({})
+    const [ state, setState ] = useState({
+        text: "",
+        res: ""
+    }) 
 
     const password = useRef()
     const { auth, setAuth } = useContext(AuthContext)
@@ -33,6 +38,7 @@ export const ChangePassword = () => {
         }
 
         CambiarContraseña(dataLogin, setAuth, setError)
+        setState({text: "Contraseña cambiada correctamente", res: "primary"})
 
         setTimeout(() => {
             setError('')
@@ -103,6 +109,7 @@ export const ChangePassword = () => {
             <span className='fs-6 msg-error'>
                 {error.text}
             </span>
+            { state.text ? <Toast texto={state.text} res={state.res}/> : null }
         </>
     )
 }
