@@ -179,54 +179,58 @@ router.get("/comercios/pagos/listar", (req,res) => {
 });
 
 router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
-    calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
-        .then((puntos) => {
-            puntos = puntos[0]
-            if(puntos.puntos_totales != null) {
-                calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
-                .then((total) => { 
-                    total = total[0]
-                    if(total.puntos_totales != null) {
-                        if((puntos.puntos_totales - total.puntos_totales) > 0) {
-                            if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
+    if(req.body.ID_Comercio.length == 0) {
+        res.status(500).json({ error: "No se puede realizar un pago sin completar un comercio." });
+    } else {
+        calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio)
+            .then((puntos) => {
+                puntos = puntos[0]
+                if(puntos.puntos_totales != null) {
+                    calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio)
+                    .then((total) => { 
+                        total = total[0]
+                        if(total.puntos_totales != null) {
+                            if((puntos.puntos_totales - total.puntos_totales) > 0) {
+                                if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
+                                    const body = {...req.body, fecha: Date.now()};
+    
+                                    insertRecord("pagos", body)
+                                    .then((results) => {
+                                        res.status(201).json({ message: "El pago se ha agregado correctamente."})
+                                    })
+                                    .catch((err) => {
+                                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                                    });
+                                } else {
+                                    res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
+                                }
+                            } else {
+                                res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
+                            }
+                        } else {
+                            if(Number(req.body.monto_parcial) <= puntos.puntos_totales) {
                                 const body = {...req.body, fecha: Date.now()};
-
+        
                                 insertRecord("pagos", body)
                                 .then((results) => {
-                                    res.status(201).json({ message: "El pago se ha agregado correctamente."})
+                                    res.send(results)
                                 })
                                 .catch((err) => {
-                                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                                    res.status(500).json({ error:"Se ha producido un error, intentelo nuevamente." });
                                 });
                             } else {
                                 res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
                             }
-                        } else {
-                            res.status(500).json({ error: "El comercio que selecciono tiene su deuda saldada" });
                         }
-                    } else {
-                        if(Number(req.body.monto_parcial) <= puntos.puntos_totales) {
-                            const body = {...req.body, fecha: Date.now()};
-    
-                            insertRecord("pagos", body)
-                            .then((results) => {
-                                res.send(results)
-                            })
-                            .catch((err) => {
-                                res.status(500).json({ error:"Se ha producido un error, intentelo nuevamente." });
-                            });
-                        } else {
-                            res.status(500).json({ error: "El monto ingresado es mayor al adeudado por el comercio" });
-                        }
-                    }
-                });
-            } else {
+                    });
+                } else {
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                }
+            })
+            .catch((err) => {
                 res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            }
-        })
-        .catch((err) => {
-            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-        });
+            });
+    }
 });
 
 router.get("/comercios/pagos/listar/admin/:email", authenticate, (req,res) => {
@@ -446,54 +450,58 @@ router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
 });
 
 router.post("/transacciones/agregar", authenticate, (req,res) => {
-    selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
-    .then((row) => {
-        row = row[0];
-        
-        if(req.body.puntos_pago == "") {
-            req.body.puntos_pago = 0;
-        }
-
-        const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
-        const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
-
-        delete req.body.puntos_parciales;
-
-        req.body.monto_parcial = Number(req.body.monto_parcial)
-        const body = {...req.body, puntos_parciales: puntosFinales, fecha: Date.now().toString()};
-        if(Number(req.body.puntos_pago) > 0) {
-            calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
-            .then((totales) => {
-                totales = totales[0]
-
-                if(req.body.puntos_pago > totales.puntos_totales) {
-                    res.status(500).json({ error: "El cliente no posee esos puntos" });
-                } else {
-                    insertRecord("transacciones", body)
-                    .then((results) => {
-                        res.status(201).json({message: "Transaccion creada correctamente."})
-                    })
-                    .catch((err) => {
-                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                    })
-                }
-            })
-            .catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            })
-        } else {
-            insertRecord("transacciones", body)
-            .then((results) => {
-                res.status(201).json({message: "Transaccion creada correctamente."})
-            })
-            .catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            })
-        }
-    })
-    .catch((err) => {
-        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
+    if(req.body.ID_Comercio.length == 0 || req.body.ID_Cliente.length == 0) {
+        res.status(500).json({ error: "No se puede realizar una transaccion sin completar todos los datos." });
+    } else {
+        selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
+        .then((row) => {
+            row = row[0];
+            
+            if(req.body.puntos_pago == "") {
+                req.body.puntos_pago = 0;
+            }
+    
+            const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
+            const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
+    
+            delete req.body.puntos_parciales;
+    
+            req.body.monto_parcial = Number(req.body.monto_parcial)
+            const body = {...req.body, puntos_parciales: puntosFinales, fecha: Date.now().toString()};
+            if(Number(req.body.puntos_pago) > 0) {
+                calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
+                .then((totales) => {
+                    totales = totales[0]
+    
+                    if(req.body.puntos_pago > totales.puntos_totales) {
+                        res.status(500).json({ error: "El cliente no posee esos puntos" });
+                    } else {
+                        insertRecord("transacciones", body)
+                        .then((results) => {
+                            res.status(201).json({message: "Transaccion creada correctamente."})
+                        })
+                        .catch((err) => {
+                            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                        })
+                    }
+                })
+                .catch((err) => {
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                })
+            } else {
+                insertRecord("transacciones", body)
+                .then((results) => {
+                    res.status(201).json({message: "Transaccion creada correctamente."})
+                })
+                .catch((err) => {
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                })
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+        })
+    }
 })
 
 router.put("/transacciones/modificar/:id", authenticate, (req,res) => {
@@ -596,17 +604,26 @@ router.get("/asociaciones/listar/admin/:email", authenticate, (req,res) => {
     })
 });
 router.post("/asociaciones/clientes/agregar", authenticate, (req,res) => {
-    if(multipleAsociaciones(req.body.ID_Cliente, req.body.ID_Comercio, true)) {
-        res.status(201).json({ message: "Asociaciones creadas correctamente!" });
+    if(req.body.ID_Cliente.length == 0 || req.body.ID_Comercio.length == 0) {
+        res.status(500).json({ error: "No se puede realizar una asociacion sin completar todos los datos." });
     } else {
-        res.status(500).json({ error: "Las asociaciones no se pudieron crear correctamente!" });
+        if(multipleAsociaciones(req.body.ID_Cliente, req.body.ID_Comercio, true)) {
+            res.status(201).json({ message: "Asociaciones creadas correctamente!" });
+        } else {
+            res.status(500).json({ error: "Las asociaciones no se pudieron crear correctamente!" });
+        }
     }
+
 });
 router.post("/asociaciones/comercios/agregar", authenticate, (req,res) => {
-    if(multipleAsociaciones(req.body.ID_Comercio, req.body.ID_Cliente, false)) {
-        res.status(201).json({ message: "Asociaciones creadas correctamente!" });
+    if(req.body.ID_Cliente.length == 0 || req.body.ID_Comercio.length == 0) {
+        res.status(500).json({ error: "No se puede realizar una asociacion sin completar todos los datos." });
     } else {
-        res.status(500).json({ error: "Las asociaciones no se pudieron crear correctamente!" });
+        if(multipleAsociaciones(req.body.ID_Comercio, req.body.ID_Cliente, false)) {
+            res.status(201).json({ message: "Asociaciones creadas correctamente!" });
+        } else {
+            res.status(500).json({ error: "Las asociaciones no se pudieron crear correctamente!" });
+        }
     }
 });
 router.delete("/asociaciones/borrar/:id", authenticate, (req,res) => {
@@ -668,46 +685,50 @@ router.post("/admins/agregar", authenticate, (req,res) => {
     const { email } = req.body;
     const password = req.body.password;
 
-    delete req.body.password;
-    bcrypt.genSalt(10).then((salt) => {
-        bcrypt.hash(password, salt).then((hashedPassword) => {
-            const user = {
-                userId: uuidv4(),
-                email: email,
-                password: hashedPassword,
-                role: "admin"
-            };
-            
-            try {
-                checkRecordExists("users", "email", email)
-                .then((exist) => {
-                    const userAlreadyExists = exist;
-                    if (userAlreadyExists) {
-                        res.status(409).json({ error: "Email ya existente" });
-                    } else {
-                        insertRecord("users", user)
-                        .then((insert) => {
-                            if(permisos(req.body.ID_Comercio, req.body.email)) {
-                                res.status(201).json({ message: "Admin creado correctamente!" });
-                            } else {
-                                res.status(500).json({ error: "El admin no se puedo crear correctamente!" })
-                            }
-                        })
-                        .catch((err) => {
-                            res.status(500).json({ error: "No se puedo crear correctamente!" })
-                        })
-                    }
-                })
-                .catch((err) => {
+    if(req.body.ID_Comercio.length == 0) {
+        res.status(500).json({error: "No se puede agregar un admin sin comercios adheridos."})
+    } else {
+        delete req.body.password;
+        bcrypt.genSalt(10).then((salt) => {
+            bcrypt.hash(password, salt).then((hashedPassword) => {
+                const user = {
+                    userId: uuidv4(),
+                    email: email,
+                    password: hashedPassword,
+                    role: "admin"
+                };
+                
+                try {
+                    checkRecordExists("users", "email", email)
+                    .then((exist) => {
+                        const userAlreadyExists = exist;
+                        if (userAlreadyExists) {
+                            res.status(409).json({ error: "Email ya existente" });
+                        } else {
+                            insertRecord("users", user)
+                            .then((insert) => {
+                                if(permisos(req.body.ID_Comercio, req.body.email)) {
+                                    res.status(201).json({ message: "Admin creado correctamente!" });
+                                } else {
+                                    res.status(500).json({ error: "El admin no se puedo crear correctamente!" })
+                                }
+                            })
+                            .catch((err) => {
+                                res.status(500).json({ error: "No se puedo crear correctamente!" })
+                            })
+                        }
+                    })
+                    .catch((err) => {
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                    })
+                } catch (error) {
                     res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                })
-            } catch (error) {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-            }
-        }).catch((err) => {
-            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
+                }
+            }).catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
+            })
         })
-    })
+    }
 })
 
 router.delete("/admins/borrar/:id", authenticate, (req,res) => {
