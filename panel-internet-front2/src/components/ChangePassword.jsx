@@ -70,6 +70,7 @@ export const ChangePassword = () => {
                             id="user" 
                             onChange={handleChange}
                             defaultValue={user.email}
+                            value={user.email}
                             disabled
                             className='p-3 fs-6 rounded-2 border-0 text-white disabled'
                         />
