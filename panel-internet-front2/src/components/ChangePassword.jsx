@@ -47,6 +47,7 @@ export const ChangePassword = () => {
     useEffect(() => {
         PerfilAuth().then((result) => {
             setUser(result.message)
+            setDataLogin({ ...dataLogin, "email": result.message.email })
         }).catch((err) => {
             console.log(err)
         })
@@ -68,7 +69,6 @@ export const ChangePassword = () => {
                         <input type="text" 
                             name="email" 
                             id="user" 
-                            onChange={() => {setDataLogin({ ...dataLogin, "email": user.email })}}
                             defaultValue={user.email}
                             value={user.email}
                             disabled
