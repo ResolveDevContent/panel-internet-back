@@ -64,12 +64,6 @@ export const ELEMENTOS = {
     },
     {
         element: 'input',
-        tipo: 'password',
-        nombre: 'password',
-        placeholder: 'Contraseña'
-    },
-    {
-        element: 'input',
         tipo: 'text',
         nombre: 'Id',
         placeholder: 'Id'

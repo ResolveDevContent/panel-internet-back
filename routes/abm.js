@@ -355,10 +355,6 @@ router.post("/clientes/importarcsv", authenticate, (req,res) => {
 })
 
 router.post("/clientes/agregar", authenticate, (req,res) => {
-    const { email } = req.body;
-    const password = req.body.password;
-
-    delete req.body.password;
     insertRecord("clientes", {...req.body})
     .then((results) => {
         res.status(201).json({ message: "Cliente creado correctamente!" });
