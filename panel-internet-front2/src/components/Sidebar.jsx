@@ -115,9 +115,14 @@ export const Sidebar = ({user}) => {
                   <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/listar">Listar</NavLink>
                 </li>
                 {user.role == "superadmin" ? (
-                  <li>
-                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/agregar">Agregar</NavLink>
-                  </li>
+                  <>
+                    <li>
+                      <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/importarcsv">Importar CSV</NavLink>
+                    </li>
+                    <li>
+                      <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/agregar">Agregar</NavLink>
+                    </li>
+                  </>
                 ) : null}
               </ul>
             </li>
