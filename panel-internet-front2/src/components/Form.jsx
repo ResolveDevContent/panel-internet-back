@@ -73,6 +73,12 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             if(dataObj.listCliente) {
                 delete dataObj.listCliente
             }
+
+            if(titulo == "clientes") {
+                dataObj.monto_total = 0
+                dataObj.puntos_totales = 0
+            }
+
             agregar(titulo, dataObj)
             .then(data => {
                 if(data.error) {

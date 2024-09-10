@@ -64,18 +64,6 @@ export const ELEMENTOS = {
     },
     {
         element: 'input',
-        tipo: 'number',
-        nombre: 'monto_total',
-        placeholder: 'Monto total'
-    },
-    {
-        element: 'input',
-        tipo: 'number',
-        nombre: 'puntos_totales',
-        placeholder: 'Puntos totales'
-    },
-    {
-        element: 'input',
         tipo: 'password',
         nombre: 'password',
         placeholder: 'Contraseña'
