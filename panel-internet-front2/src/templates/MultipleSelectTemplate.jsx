@@ -48,7 +48,6 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     }, [nombreComercio])
 
     useEffect(() => {
-        console.log(dato)
         if(dato.length > 0) {
             setLoading(true)
             listarByComercio("clientes", dato)
@@ -138,8 +137,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
                     setotherOpciones([])
                     return;
                 }
-                console.log(datos)
-                setDato(datos[0].ID_Comercio)
+                setDato([datos[0].ID_Comercio])
             }).catch(err => {
                 setState({
                     text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 

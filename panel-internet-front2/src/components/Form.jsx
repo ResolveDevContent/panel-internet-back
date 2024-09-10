@@ -75,7 +75,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             }
             agregar(titulo, dataObj)
             .then(data => {
-                console.log(data)
                 if(data.error) {
                     setState({text: data.error, res: "secondary"})
                     setLoading(false)
