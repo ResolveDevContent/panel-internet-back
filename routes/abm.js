@@ -451,6 +451,7 @@ router.get("/transacciones/listar/admin/:email", authenticate, (req,res) => {
 
 router.post("/transacciones/agregar", authenticate, (req,res) => {
     if(req.body.ID_Comercio.length == 0 || req.body.ID_Cliente.length == 0) {
+        console.log("enrearnar")
         res.status(500).json({ error: "No se puede realizar una transaccion sin completar todos los datos." });
     } else {
         selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio)
