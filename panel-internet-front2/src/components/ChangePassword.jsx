@@ -3,6 +3,7 @@ import { useState, useEffect, useContext, useRef } from "react"
 import { PerfilAuth, CambiarContraseña } from "../services/auth"
 import AuthContext from "../context/Auth"
 import { Toast } from "./Toast"
+import { useNavigate } from "react-router-dom"
 
 export const ChangePassword = () => {
     const [dataLogin, setDataLogin] = useState({})
@@ -13,6 +14,7 @@ export const ChangePassword = () => {
         text: "",
         res: ""
     }) 
+    const navigate = useNavigate()
 
     const password = useRef()
     const { auth, setAuth } = useContext(AuthContext)
@@ -39,6 +41,9 @@ export const ChangePassword = () => {
 
         CambiarContraseña(dataLogin, setAuth, setError)
         setState({text: "Contraseña cambiada correctamente", res: "primary"})
+        setTimeout(() => {
+            navigate("/")
+        }, 2000)
 
         setTimeout(() => {
             setError('')
