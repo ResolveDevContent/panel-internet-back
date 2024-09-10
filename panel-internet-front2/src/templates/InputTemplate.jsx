@@ -1,6 +1,5 @@
 export const InputTemplate = ({data, disabledEmail, values = {}}) => { 
     const { nombre, tipo, placeholder } = data
-    console.log(disabledEmail)
     return(
         <li>
             <div className="mb-3">

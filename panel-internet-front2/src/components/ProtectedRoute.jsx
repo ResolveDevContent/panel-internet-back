@@ -5,7 +5,6 @@ import { useContext } from 'react';
 
 export const PrivateRoutes = ({user, roles}) => {
   const { auth, setAuth } = useContext(AuthContext)
-  console.log(user)
 
   return auth && roles.includes(user.role) ? <Outlet /> : <Navigate to="/" />;
 };

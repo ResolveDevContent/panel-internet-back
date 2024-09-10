@@ -141,12 +141,10 @@ export const Listado = ({titulo}) => {
 
     async function formatToNombres(data) {
         let resultados = []
-        console.log(data)
         const actualizaciones = data.map(async (row, idx) => {
             try {
                 if(row.ID_Comercio) {
                     const comercio = await listarUno("comercios", row.ID_Comercio);
-                    console.log(comercio)
                     if(comercio.length <= 0) {
                         return null;
                     }

@@ -30,7 +30,6 @@ export const User = () => {
             })
             return;
           }
-          console.log(cliente)
           puntosTotales(cliente[0].ID_Cliente)
           .then(datos => {
             if(datos.error) {

@@ -43,7 +43,6 @@ export const ImportCsv = ({titulo}) => {
             }
 
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Direccion Principal', 'Telefono');
-            console.log(filteredData)
             agregar(titulo, filteredData)
             .then(data => {
                 if(data.error) {

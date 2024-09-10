@@ -31,7 +31,6 @@ export const Sidebar = ({user}) => {
 
   const getMonto = () => {
     PerfilAuth().then((result) => {
-      console.log(result)
       if(result && result.message.role == "comercio") {
         listarByEmail("comercios", result.message.email)
         .then((comercio) => {

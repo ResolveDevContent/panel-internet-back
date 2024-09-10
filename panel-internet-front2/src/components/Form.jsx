@@ -37,7 +37,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             titulo == "asociaciones/comercios" ||
             titulo == "comercios/pagos" || 
             titulo == "transacciones") { 
-                console.log(value)
                 value = JSON.parse(value)    
             }
 
@@ -74,7 +73,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             if(dataObj.listCliente) {
                 delete dataObj.listCliente
             }
-            console.log(dataObj)
             agregar(titulo, dataObj)
             .then(data => {
                 if(data.error) {

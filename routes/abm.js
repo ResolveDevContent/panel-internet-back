@@ -187,7 +187,6 @@ router.post("/comercios/pagos/agregar", authenticate, (req,res) => {
                 .then((total) => { 
                     total = total[0]
                     if(total.puntos_totales != null) {
-                        console.log(puntos.puntos_totales, total.puntos_totales)
                         if((puntos.puntos_totales - total.puntos_totales) > 0) {
                             if(Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
                                 const body = {...req.body, fecha: Date.now()};
@@ -457,13 +456,11 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
 
         const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
         const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
-        console.log(puntosFinales)
 
         delete req.body.puntos_parciales;
 
         req.body.monto_parcial = Number(req.body.monto_parcial)
         const body = {...req.body, puntos_parciales: puntosFinales, fecha: Date.now().toString()};
-        console.log(body)
         if(Number(req.body.puntos_pago) > 0) {
             calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente)
             .then((totales) => {
@@ -474,7 +471,6 @@ router.post("/transacciones/agregar", authenticate, (req,res) => {
                 } else {
                     insertRecord("transacciones", body)
                     .then((results) => {
-                        console.log(results)
                         res.status(201).json({message: "Transaccion creada correctamente."})
                     })
                     .catch((err) => {
