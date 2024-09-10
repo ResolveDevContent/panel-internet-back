@@ -346,12 +346,60 @@ router.get("/clientes/puntos/:id", authenticate, (req,res) => {
     })
 })
 
-router.post("/clientes/agregar", authenticate, (req,res) => {
+router.post("/clientes/importarcsv", authenticate, (req,res) => {
     if(agregarClientes(req.body)) {
         res.status(201).json({ message: "Clientes creados/editados correctamente!" });
     } else {
         res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
     }
+})
+
+router.post("/clientes/agregar", authenticate, (req,res) => {
+    const { email } = req.body;
+    const password = req.body.password;
+
+    delete req.body.password;
+    insertRecord("clientes", {...req.body})
+    .then((results) => {
+        bcrypt.genSalt(10).then((salt) => {
+            bcrypt.hash(password, salt).then((hashedPassword) => {
+                const user = {
+                    userId: uuidv4(),
+                    email: email,
+                    password: hashedPassword,
+                    role: "cliente"
+                };
+                
+                try {
+                    checkRecordExists("users", "email", email)
+                    .then((exist) => {
+                        const userAlreadyExists = exist;
+                        if (userAlreadyExists) {
+                            res.status(409).json({ error: "Email ya existente" });
+                        } else {
+                            insertRecord("users", user)
+                            .then((insert) => {
+                                res.status(201).json({ message: "Cliente creado correctamente!" });
+                            })
+                            .catch((err) => {
+                                res.status(500).json({ error: "No se puedo crear correctamente!" })
+                            })
+                        }
+                    })
+                    .catch((err) => {
+                        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                    })
+                } catch (error) {
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                }
+            }).catch((err) => {
+                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
+            })
+        })
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
 })
 
 async function agregarClientes(datos) {

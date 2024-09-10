@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import { agregar } from "../services/abm"
+import { importarCSV } from "../services/abm"
 import { useNavigate } from "react-router-dom"
 
 export const ImportCsv = ({titulo}) => {
@@ -43,7 +43,7 @@ export const ImportCsv = ({titulo}) => {
             }
 
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Direccion Principal', 'Telefono');
-            agregar(titulo, filteredData)
+            importarCSV(titulo, filteredData)
             .then(data => {
                 if(data.error) {
                     setState({text: data.error, res: "secondary"})

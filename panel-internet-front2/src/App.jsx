@@ -51,7 +51,8 @@ function App() {
             }>
               <Route element={<PrivateRoutes user={user} roles={['superadmin']}/>}>
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
-                <Route path="clientes/agregar" element={<ImportCsv titulo={"clientes"} />} />
+                <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} />} />
+                <Route path="clientes/agregar" element={<Form elementos={ELEMENTOS.clientes} user={user} titulo={"clientes"} />} />
                 <Route path="admins/listar" element={<Listado titulo={"admins"}/>} />
                 <Route path="admins/agregar" element={<Form elementos={ELEMENTOS.admins} user={user} titulo={'admins'}/>} />
                 <Route path="admins/editar/:id" element={<Form elementos={ELEMENTOS.admins} titulo={'admins'}/>} />

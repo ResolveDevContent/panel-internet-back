@@ -84,6 +84,22 @@ export const listarByEmail = (model, email) => {
     )
 }
 
+export const importarCSV = (model, body) => {
+    const token = Cookies.get("token");
+    return (
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/importarcsv`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify(body)
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    )
+}
+
 export const agregar = (model, body) => {
     const token = Cookies.get("token");
     return (
