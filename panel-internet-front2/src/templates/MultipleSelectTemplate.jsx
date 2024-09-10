@@ -48,6 +48,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     }, [nombreComercio])
 
     useEffect(() => {
+        console.log(dato)
         if(dato.length > 0) {
             setLoading(true)
             listarByComercio("clientes", dato)
