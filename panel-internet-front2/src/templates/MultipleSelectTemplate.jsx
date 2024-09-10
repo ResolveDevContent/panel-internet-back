@@ -137,7 +137,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
                     setotherOpciones([])
                     return;
                 }
-
+                console.log(datos)
                 setDato(datos[0].ID_Comercio)
             }).catch(err => {
                 setState({
