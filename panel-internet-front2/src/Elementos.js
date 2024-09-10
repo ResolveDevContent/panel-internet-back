@@ -68,6 +68,18 @@ export const ELEMENTOS = {
         nombre: 'password',
         placeholder: 'Contraseña'
     },
+    {
+        element: 'input',
+        tipo: 'text',
+        nombre: 'Id',
+        placeholder: 'Id'
+    },
+    {
+        element: 'input',
+        tipo: 'text',
+        nombre: 'Codigo',
+        placeholder: 'Codigo'
+    },
   ],
   comercios: [
     {
