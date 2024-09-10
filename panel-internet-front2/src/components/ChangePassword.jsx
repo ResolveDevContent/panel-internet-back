@@ -68,7 +68,7 @@ export const ChangePassword = () => {
                         <input type="text" 
                             name="email" 
                             id="user" 
-                            onChange={handleChange}
+                            onChange={() => {setDataLogin({ ...dataLogin, "email": user.email })}}
                             defaultValue={user.email}
                             value={user.email}
                             disabled
