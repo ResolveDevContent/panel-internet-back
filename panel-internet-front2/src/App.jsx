@@ -14,6 +14,7 @@ import Cookies from 'js-cookie'
 import PrivateRoutes from './components/ProtectedRoute.jsx'
 import { PerfilAuth } from './services/auth.js'
 import { ImportCsv } from './components/ImportCsv.jsx'
+import { ChangePassword } from './components/ChangePassword.jsx'
 
 function App() {
   const [auth, setAuth] = useState(false);
@@ -49,6 +50,7 @@ function App() {
               <Panel user={user}/>
             }>
               <Route element={<PrivateRoutes user={user} roles={['superadmin']}/>}>
+                <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
                 <Route path="clientes/agregar" element={<ImportCsv titulo={"clientes"} />} />
                 <Route path="admins/listar" element={<Listado titulo={"admins"}/>} />
                 <Route path="admins/agregar" element={<Form elementos={ELEMENTOS.admins} user={user} titulo={'admins'}/>} />

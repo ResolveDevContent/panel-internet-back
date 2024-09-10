@@ -85,6 +85,9 @@ export const Sidebar = ({user}) => {
           <div className="user-info">
             <span>{user ? (user.email ? user.email : user.nombre_completo ? user.nombre_completo : "Usuario") : "Usuario"}</span>
           </div>
+          {user && user.role == "superadmin" ? (
+            <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cambiarcontraseña">Cambiar contraseña</NavLink>
+          ) : null}
         </div>
         {user && user.role == "comercio" ? (
           <div className="totales d-flex align-center">

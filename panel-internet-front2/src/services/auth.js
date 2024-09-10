@@ -118,3 +118,32 @@ export const RegisterAuth = async (credentials, setAuth, setState) => {
         setState({text: "Error al Logearse" , res: "secondary"})
     }
 }
+
+export const CambiarContraseña = async (credentials, setAuth, setState) => {
+    try {
+        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/changepassword', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            setState({text: data.error, res: "secondary"})
+            return
+        }
+
+        const token = data.token;
+
+        setAuth(true);
+
+        // Store static values in Cookies
+        Cookies.set('token', token, { expires: 5 });
+    } catch (err) {
+        console.log(err)
+        setState({text: "Error al Logearse." , res: "secondary"})
+    }
+};
