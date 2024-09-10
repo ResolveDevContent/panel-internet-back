@@ -9,7 +9,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     const [ nombreComercio, setNombreComercio ] = useState(null);
     const [ state, setState ] = useState({text: "", res: ""})
     const [ loading, setLoading] = useState(false)
-    const [ dato, setDato ] = useState(null)
+    const [ dato, setDato ] = useState([])
     const [ otherDato, setOtherDato ] = useState([])
 
     const originalOpciones = useRef([])
@@ -48,7 +48,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     }, [nombreComercio])
 
     useEffect(() => {
-        if(dato != null) {
+        if(dato.length > 0) {
             setLoading(true)
             listarByComercio("clientes", dato)
             .then(datos => {
