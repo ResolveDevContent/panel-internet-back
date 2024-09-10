@@ -1,6 +1,5 @@
 import { Hidden, Show } from "../assets/icons/icons"
 import { useState, useEffect, useContext, useRef } from "react"
-import { useNavigate } from "react-router-dom"
 import { PerfilAuth, CambiarContraseña } from "../services/auth"
 import AuthContext from "../context/Auth"
 
@@ -11,7 +10,6 @@ export const ChangePassword = () => {
     const [user, setUser] = useState({})
 
     const password = useRef()
-    const navigate = useNavigate()
     const { auth, setAuth } = useContext(AuthContext)
 
     const handleChange = (e) => {
@@ -49,9 +47,6 @@ export const ChangePassword = () => {
     useEffect(() => {
         PerfilAuth().then((result) => {
             setUser(result.message)
-            if(auth) {
-                navigate("/")
-            }
         }).catch((err) => {
             console.log(err)
         })
