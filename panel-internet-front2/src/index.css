@@ -333,6 +333,7 @@ input#filtros {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.248);
     display: none;
+    z-index: 6;
 }
 .list-loading-container,
 .loading-container {
