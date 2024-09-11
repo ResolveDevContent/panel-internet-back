@@ -27,6 +27,7 @@
   bottom: 0;
   overflow: auto;
   color: #fff;
+  z-index: 8;
 }
 .user {
   display: flex;
