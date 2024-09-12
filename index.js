@@ -3,16 +3,15 @@ require("dotenv").config();
 
 const port = process.env.PORT;
 const cors = require("cors");
-const conn = require("./db/db")
+const pool = require('./db/db');
 const auth = require("./routes/auth")
 const abm = require("./routes/abm")
 const path = require("path");
 
 const app = express();
 
-conn.connect(err => {
-  if (err) return console.log("Failed to connect", err);
-  console.log(`Successfully connected to mysql server: `);
+pool.on('error', (err) => {
+  console.error('Database pool error:', err);
 });
 
 app.use(cors());
