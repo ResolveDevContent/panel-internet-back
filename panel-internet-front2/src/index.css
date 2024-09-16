@@ -102,13 +102,8 @@ textarea {
   
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--color-3);
+  background: #000;
   border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-3); 
 }
 
 main {
