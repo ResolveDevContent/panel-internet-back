@@ -3,7 +3,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import react from '@vitejs/plugin-react';
 
 const manifestForPlugin = {
-  registerType: "prompt",
+  registerType: "autoUpdate",
   includesAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
   manifest: {
     "name": "WI-NET - Servicio de Internet",
@@ -464,10 +464,6 @@ const manifestForPlugin = {
     "theme_color": "#ffffff",
     "background_color": "#154c7a",
     "orientation": "portrait"
-  },
-  devOptions: {
-    enabled: true,
-    type: 'module'
   }
 }
 
