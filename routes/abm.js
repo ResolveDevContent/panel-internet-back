@@ -482,6 +482,9 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 
         req.body.puntos_parciales = puntosFinales;
         req.body.monto_parcial = Number(req.body.monto_parcial);
+
+        // SACAR CUANDO SE HAGA LA VERSION 2
+        req.body.puntos_pago = 0;
         const body = { ...req.body, fecha: Date.now().toString() };
 
         if (Number(req.body.puntos_pago) > 0) {

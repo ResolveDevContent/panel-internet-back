@@ -139,12 +139,12 @@ export const ELEMENTOS = {
         nombre: 'monto_parcial',
         placeholder: 'Monto'
     },
-    {
-        element: 'input',
-        tipo: 'number',
-        nombre: 'puntos_pago',
-        placeholder: 'Pago con puntos'
-    },    
+    // {
+    //     element: 'input',
+    //     tipo: 'number',
+    //     nombre: 'puntos_pago',
+    //     placeholder: 'Pago con puntos'
+    // },    
   ],
   pagos: [
     {
