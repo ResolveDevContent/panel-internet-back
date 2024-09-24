@@ -229,12 +229,15 @@ router.get("/comercios/pagos/listar/admin/:email", authenticate, async (req, res
         let [permisos] = await selectPermisos(email);
 
         if(!Array.isArray(permisos)) {
-            permisos = [permisos]
+            permisos = [permisos];
         }
         
         // Obtener pagos basados en los permisos
-        const [datos] = await selectByAdmin('pagos', 'ID_Comercio', permisos);
-        console.log("datos", datos)
+        let [datos] = await selectByAdmin('pagos', 'ID_Comercio', permisos);
+
+        if(!Array.isArray(datos)) {
+            datos = [datos];
+        }
 
         res.send(datos);
             

@@ -141,7 +141,6 @@ export const Listado = ({titulo}) => {
 
     async function formatToNombres(data) {
         let resultados = []
-        console.log(data)
         const actualizaciones = data.map(async (row, idx) => {
             try {
                 if(row.ID_Comercio) {
