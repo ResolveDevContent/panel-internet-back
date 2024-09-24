@@ -225,18 +225,15 @@ router.get("/comercios/pagos/listar/admin/:email", authenticate, async (req, res
     const { email } = req.params;
   
     try {
-      // Obtener permisos del admin
-      const [permisos] = await selectPermisos(email);
+        // Obtener permisos del admin
+        const [permisos] = await selectPermisos(email);
+        console.log("permisos", permisos)
+        // Obtener pagos basados en los permisos
+        const [datos] = await selectByAdmin('pagos', 'ID_Comercio', permisos);
+        console.log("datos", datos)
 
-        if(permisos) {
-            // Obtener pagos basados en los permisos
-            const [datos] = await selectByAdmin('pagos', 'ID_Comercio', permisos);
-            console.log(permisos, datos)
-
-            res.send(datos);
-        } else {
-            res.send([])
-        }
+        res.send(datos);
+            
     } catch (err) {
       console.error('Error retrieving payments:', err);
       res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
