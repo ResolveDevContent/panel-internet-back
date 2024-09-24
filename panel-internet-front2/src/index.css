@@ -403,6 +403,7 @@ input#filtros {
         animation: downanimation 1s ease-in-out;
         right: 0;
         left: 0;
+        z-index: 10;
     }
     .filtros > form {
         flex-direction: column;
