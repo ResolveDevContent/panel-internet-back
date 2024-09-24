@@ -227,11 +227,16 @@ router.get("/comercios/pagos/listar/admin/:email", authenticate, async (req, res
     try {
       // Obtener permisos del admin
       const [permisos] = await selectPermisos(email);
-  
-      // Obtener pagos basados en los permisos
-      const [datos] = await selectByAdmin('pagos', 'ID_Comercio', permisos);
-  
-      res.send(datos);
+
+        if(permisos.length > 0) {
+            // Obtener pagos basados en los permisos
+            const [datos] = await selectByAdmin('pagos', 'ID_Comercio', permisos);
+            console.log(permisos, datos)
+
+            res.send(datos);
+        } else {
+            res.send([])
+        }
     } catch (err) {
       console.error('Error retrieving payments:', err);
       res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
