@@ -209,9 +209,9 @@ export const Listado = ({titulo}) => {
                 acc['monto_total'] = 0;
             }
 
-            acc['puntos_totales'] += row.puntos_parciales;
-            acc['puntos_pagos'] += row.puntos_pago;
-            acc['monto_total'] += row.monto_parcial;
+            acc['puntos_totales'] += Number(row.puntos_parciales);
+            acc['puntos_pagos'] += Number(row.puntos_pago);
+            acc['monto_total'] += Number(row.monto_parcial);
 
             return acc;
         }, {});
