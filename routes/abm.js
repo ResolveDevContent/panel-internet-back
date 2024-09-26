@@ -544,7 +544,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 
         const results = await insertRecord("transacciones", body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Transacción creada correctamente." });
     } catch (err) {
@@ -577,7 +577,7 @@ router.put("/transacciones/modificar/:id", authenticate, async (req, res) => {
         }
 
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
-        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         const results = await updateRecord("transacciones", body, "ID_Transaccion", id);
         res.status(200).json(results);
@@ -601,7 +601,7 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
     try {
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
-        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
@@ -649,7 +649,7 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
     try {
         const results = await insertRecord("asociaciones", req.body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Asociación creada correctamente." });
     } catch (err) {
@@ -669,7 +669,7 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
         const resultados = await multipleAsociaciones(ID_Cliente, ID_Comercio, true);
 
         if (resultados.every(result => result)) {
-            const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+            const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
             await insertRecord('historial', {message: "Se agregaron asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
@@ -709,7 +709,7 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
     try {
         const results = await updateRecord("asociaciones", req.body, "ID_asociacion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
@@ -723,7 +723,7 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
     try {
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
