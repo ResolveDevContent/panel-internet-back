@@ -18,7 +18,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         setLoading(true)
         const newArr = nombreCliente != null && nombreCliente.length > 0
             ? originalListado.current.filter(row => {
-                return row.nombre_completo.toLowerCase().includes(nombreCliente.toLowerCase())
+                return row.nombre.toLowerCase().includes(nombreCliente.toLowerCase())
             })
             : originalListado.current
 
@@ -165,7 +165,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                           <li key={idx}>
                             <label>
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                              <span>{placeholder == "clientes" ? row.nombre_completo : row.nombre_comercio}</span>
+                              <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
                         )

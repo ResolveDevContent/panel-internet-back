@@ -26,7 +26,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
         setLoading(true)
         const newArr = nombreCliente != null && nombreCliente.length > 0
             ? originalOtherOpciones.current.filter(row => {
-                return row.nombre_completo.toLowerCase().includes(nombreCliente.toLowerCase())
+                return row.nombre.toLowerCase().includes(nombreCliente.toLowerCase())
             })
             : originalOtherOpciones.current
 
@@ -203,7 +203,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
                                     <li key={idx}>
                                         <label>
                                         <input type='radio' id={row.ID_Cliente} value={row.ID_Cliente} name="listCliente" onChange={e => setOtherDato(e.target.value)}/>
-                                        <span>{row.nombre_completo}</span>
+                                        <span>{row.nombre}</span>
                                         </label>
                                     </li>
                                     )

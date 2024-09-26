@@ -30,7 +30,7 @@ export const Listado = ({titulo}) => {
         if(titulo != "asociaciones" && titulo != "transacciones") {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
-                    return row.nombre_completo.toLowerCase().includes(nombre.toLowerCase())
+                    return row.nombre.toLowerCase().includes(nombre.toLowerCase())
                 })
                 : []
         } else {
@@ -173,7 +173,7 @@ export const Listado = ({titulo}) => {
                         return null;
                     }
 
-                    row.ID_Cliente = cliente[0].nombre_completo
+                    row.ID_Cliente = cliente[0].nombre
                 }
 
                 return row;
@@ -400,7 +400,7 @@ export const Listado = ({titulo}) => {
                                                 </span>
                                             </div>
                                         : null}
-                                        {titulo != "clientes" 
+                                        {titulo != "clientes" && titulo != "historial"
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setnombreComercio(e.target.value)
@@ -423,7 +423,7 @@ export const Listado = ({titulo}) => {
                                     </div>
                                 </div>
                             : null}
-                            {titulo == "transacciones" || titulo == 'comercios/pagos'
+                            {titulo == "transacciones" || titulo == 'comercios/pagos' || titulo == "historial"
                                 ? <div className='fechas'>
                                         <em>B&uacute;squeda por fecha</em>
                                         <div>

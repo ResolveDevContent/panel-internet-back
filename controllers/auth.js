@@ -126,7 +126,7 @@ const loginCliente = async (req, res) => {
     if (existingUser) {
         res.status(200).json({
           userId: existingUser[0].ID_Cliente,
-          email: existingUser[0].nombre_completo,
+          email: existingUser[0].nombre,
           role: 'cliente',
           token: generateAccessToken(existingUser[0].ID_Cliente),
         });
