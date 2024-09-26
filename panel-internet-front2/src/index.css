@@ -202,7 +202,7 @@ input[type="password"]::placeholder {
 #form .card-body > li + li {
     margin-top: 2em;
 }
-#form .card-body li div {
+#form .card-body > li > div {
     display: flex;
     flex-direction: column;
 }
@@ -211,8 +211,8 @@ input[type="password"]::placeholder {
     text-transform: capitalize;
     font-size: 1.05em;
 }
-#form .card-body li div input,
-#form .card-body li div select {
+#form .card-body > li > div input,
+#form .card-body > li > div select {
     margin-top: .25em;
     padding: 1em;
     border: none;

@@ -31,10 +31,10 @@ export const ELEMENTOS = {
         },
         {
             element: "input",
-            tipo: "password",
+            tipo: "password", 
             nombre: "password",
             placeholder: "Contraseña"
-        }
+        },
   ],
   clientes: [
     {

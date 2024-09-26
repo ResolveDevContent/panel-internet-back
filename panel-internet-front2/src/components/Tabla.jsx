@@ -39,7 +39,7 @@ const formatearDatos = (datos) => {
     const rows = datos.map((data) => {
         if((titulo == 'transacciones' || titulo == 'comercios/pagos') && !data["fecha"].includes("/")) {
             let date = new Date(Number(data['fecha']));
-            fecha = fecha.toISOString();
+            const fecha = date.toISOString();
             const hora = (fecha.split('T')[1]).split(':');
             const fechaHora = fecha.split('T')[0] + ' ' + hora[0] + ':' + hora[1];
 
@@ -143,12 +143,14 @@ const borrarDatos = (e, id, email) => {
 
 useEffect(() => {
     formatearDatos(datos)
-    if(user && user.message.role == 'admin') {
-        listarByEmail('admins', user.email)
-        .then(result => {
-            setAdmin(result);
-        })
-    }
+    PerfilAuth().then(user => {
+        if(user && user.message.role == 'admin') {
+            listarByEmail('admins', user.email)
+            .then(result => {
+                setAdmin(result);
+            })
+        }
+    })
 }, [datos])
 
 return (
