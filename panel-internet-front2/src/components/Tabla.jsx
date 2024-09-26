@@ -37,7 +37,8 @@ const formatearDatos = (datos) => {
     const columns = Object.keys(datos[0]).slice(1, Object.keys(datos[0]).length)
 
     const rows = datos.map((data) => {
-        if((titulo == 'transacciones' || titulo == 'comercios/pagos') && !data["fecha"].includes("/")) {
+        if((titulo == 'historial' || titulo == 'transacciones' || titulo == 'comercios/pagos') && !data["fecha"].includes("/")) {
+            console.log("FECHA A LA VUELTA",Number(data['fecha']))
             let date = new Date(Number(data['fecha']));
             const fecha = date.toISOString();
             const hora = (fecha.split('T')[1]).split(':');
