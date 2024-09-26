@@ -7,6 +7,7 @@ import { InputTemplate } from '../templates/InputTemplate'
 import { MultipleSelectTemplate } from '../templates/MultipleSelectTemplate'
 import { ListTemplate } from "../templates/ListTemplate"
 import { Loading } from "./Loading"
+import { PermisosTemplate } from "../templates/permisosTemplate";
 
 export const Form = ({elementos = [], titulo = '', user = {}}) => {
     const [ data, setData ] = useState({})
@@ -147,7 +148,8 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                 {elementos.map((row, idx) => {
                                     if(row.element == 'input') { return <InputTemplate key={idx} data={row} disabledEmail={titulo == "comercios" || titulo == "admins"} values={data.length > 0 && id ? data[0] : {}}/> }
                                     if(row.element == 'multiple') { return <MultipleSelectTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}}/> }
-                                    if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} />}
+                                    if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
+                                    if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                 })}
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success">Confirmar</button>

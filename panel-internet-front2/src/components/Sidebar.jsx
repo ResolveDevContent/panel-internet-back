@@ -103,6 +103,20 @@ export const Sidebar = ({user}) => {
           </div>
         ) : null}
         <ul className="menu one">
+          {user && user.role == "superadmin" ? (
+            <li>
+              <input type="radio" id="historial" name="solapa"/>
+              <label htmlFor="historial">
+                <User />
+                <span>Historial</span>
+              </label>
+              <ul>
+                <li>
+                  <NavLink className={({isActive}) => isActive ? 'active' : ''} to="historial/listar">Ver</NavLink>
+                </li>
+              </ul>
+            </li>
+          ) : null}
           {user && (user.role == "admin" || user.role == "comercio" || user.role == "superadmin") ? (
             <li>
               <input type="radio" id="clientes" name="solapa"/>

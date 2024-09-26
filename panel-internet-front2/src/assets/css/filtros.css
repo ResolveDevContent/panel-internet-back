@@ -99,6 +99,20 @@
   margin-left: .25em;
 }
 
+.filtros .fechas ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.filtros .fechas ul li span {
+  font-weight: 500;
+}
+
+.filtros .fechas ul li span span {
+  font-weight: 300;
+}
+
+
 @media screen and (min-width: 768px) {
   .filtros {
     display: flex;

@@ -21,6 +21,7 @@ export const Listado = ({titulo}) => {
     const [ rubro, setRubro ] = useState(null);
     const [ nombreComercio, setnombreComercio ] = useState(null);
     const [ date, setDate ] = useState({first: "", second: ""});
+    const [ calculosTotales, setcalculosTotales ] = useState(null);
 
     const originalListado = useRef([])
 
@@ -31,7 +32,7 @@ export const Listado = ({titulo}) => {
                 ? listado.filter(row => {
                     return row.nombre_completo.toLowerCase().includes(nombre.toLowerCase())
                 })
-                : listado
+                : []
         } else {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
@@ -85,14 +86,28 @@ export const Listado = ({titulo}) => {
         }
 
         const newArr = listado.filter(row => {
-            const fecha = new Date(row.fecha.split("/").reverse().join("/")).getTime();
+            console.log(row)
+            const dateString = row.fecha.split(" ").join("T");
+            console.log(dateString, dateString + ':00')
+            const fecha = new Date(dateString + ':00').getTime();
             let firstDate = new Date(date.first.replace(/-/g, '\/'));
             firstDate = firstDate.setHours(0,0,0,0);
             let secondDate = new Date(date.second.replace(/-/g, '\/'));
             secondDate = secondDate.setHours(23,59,59,99);
 
+            // const fecha = new Date(row.fecha.split("/").reverse().join("/")).getTime();
+            // let firstDate = new Date(date.first.replace(/-/g, '\/'));
+            // firstDate = firstDate.setHours(0,0,0,0);
+            // let secondDate = new Date(date.second.replace(/-/g, '\/'));
+            // secondDate = secondDate.setHours(23,59,59,99);
+
             return Number(fecha) >= firstDate && Number(fecha) <= secondDate;
         })
+
+        if(titulo == 'transacciones') {
+            calculoDeTotales(newArr);
+        }
+
         setSortedListado(newArr)
     }
 
@@ -182,6 +197,28 @@ export const Listado = ({titulo}) => {
         originalListado.current = datosActualizados;
     }
 
+    const calculoDeTotales = newArr => {
+        const result = newArr.reduce((acc, row) => {
+            if(!acc.hasOwnProperty('puntos_totales')) {
+                acc['puntos_totales'] = 0;
+            }
+            if(!acc.hasOwnProperty('puntos_pagos')) {
+                acc['puntos_pagos'] = 0;
+            }
+            if(!acc.hasOwnProperty('monto_total')) {
+                acc['monto_total'] = 0;
+            }
+
+            acc['puntos_totales'] += row.puntos_parciales;
+            acc['puntos_pagos'] += row.puntos_pago;
+            acc['monto_total'] += row.monto_parcial;
+
+            return acc;
+        }, {});
+
+        setcalculosTotales(result);
+    }
+
     useEffect(() => {
         setLoading(true)
 
@@ -193,38 +230,63 @@ export const Listado = ({titulo}) => {
 
         PerfilAuth().then(user => {
             if(user.message.role == "superadmin" || user.message.role == "cliente") {
-                listar(titulo).then(datos => {
-                    if(datos.error) {
-                        setLoading(false);
-                        setState({
-                            text: datos.error,
-                            res: "secondary"
-                        })
-                        setTimeout(() => {
-                            setState({text: "", res: ""})
-                        }, 4000)
-                        return;
-                    }
+                if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
+                    listarUno(titulo, id).then(datos => {
+                        if(datos.error) {
+                            setLoading(false);
+                            setState({
+                                text: datos.error,
+                                res: "secondary"
+                            })
+                            setTimeout(() => {
+                                setState({text: "", res: ""})
+                            }, 4000)
+                            return;
+                        }
 
-                    if(!datos || datos.length == 0) {
-                        setLoading(false);
-                        setListado([])
-                        originalListado.current = [];
-                        return;
-                    }
+                        if(!datos || datos.length == 0) {
+                            setLoading(false);
+                            setListado([])
+                            originalListado.current = [];
+                            return;
+                        }
 
-                    if(titulo == "comercios") {
-                        totales(datos)
-                    } else if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
-                        formatToNombres(datos)
-                    } else {
                         setLoading(false);
                         setListado(datos)
                         originalListado.current = datos;
-                    }
+                    })
+                } else {
+                    listar(titulo).then(datos => {
+                        if(datos.error) {
+                            setLoading(false);
+                            setState({
+                                text: datos.error,
+                                res: "secondary"
+                            })
+                            setTimeout(() => {
+                                setState({text: "", res: ""})
+                            }, 4000)
+                            return;
+                        }
 
+                        if(!datos || datos.length == 0) {
+                            setLoading(false);
+                            setListado([])
+                            originalListado.current = [];
+                            return;
+                        }
 
-                })
+                        if(titulo == "comercios") {
+                            totales(datos)
+                        } else if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
+                            formatToNombres(datos)
+                        } else {
+                            setLoading(false);
+                            setListado(datos)
+                            originalListado.current = datos;
+                        }
+                    })
+                }
             }
 
             if (user.message.role == "admin") {
@@ -379,6 +441,19 @@ export const Listado = ({titulo}) => {
                                             </div>
                                             <p onClick={handleDates}>Buscar</p>
                                         </div>
+                                        {calculosTotales != null
+                                            ? <ul>
+                                                    <li>
+                                                        <span>Puntos totales: <span>{calculosTotales.puntos_totales}</span></span>
+                                                    </li>
+                                                    <li>
+                                                        <span>Puntos utilizados: <span>{calculosTotales.puntos_pagos}</span></span>
+                                                    </li>
+                                                    <li>
+                                                        <span>Monto total: <span>{calculosTotales.monto_total}</span></span>
+                                                    </li>
+                                                </ul>
+                                            : null}
                                     </div>
                                 : null}
                         <button onClick={cleanFilters}>Limpiar filtros</button>

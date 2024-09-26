@@ -3,6 +3,18 @@ export const ELEMENTOS = {
         {
             element: 'input',
             tipo: 'text',
+            nombre: 'nombre',
+            placeholder: 'Nombre'
+        },
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'apellido',
+            placeholder: 'Apellido'
+        },
+        {
+            element: 'input',
+            tipo: 'text',
             nombre: 'email',
             placeholder: 'Email'
         },
@@ -11,6 +23,11 @@ export const ELEMENTOS = {
             nombre: 'ID_Comercio',
             placeholder: "comercios",
             tipo: 'checkbox'
+        },
+        {
+            element: 'permisos',
+            nombre: 'permisos',
+            placeholder: "Permisos",
         },
         {
             element: "input",
@@ -29,32 +46,20 @@ export const ELEMENTOS = {
     {
         element: 'input',
         tipo: 'text',
-        nombre: 'nombre_completo',
-        placeholder: 'Nombre y apellido'
+        nombre: 'nombre',
+        placeholder: 'Nombre'
+    },
+    {
+        element: 'input',
+        tipo: 'text',
+        nombre: 'apellido',
+        placeholder: 'Apellido'
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'direccion_principal',
         placeholder: 'Direccion'
-    },
-    {
-        element: 'input',
-        tipo: 'text',
-        nombre: 'ubicacion',
-        placeholder: 'Ubicacion'
-    },
-    {
-        element: 'input',
-        tipo: 'number',
-        nombre: 'telefono_fijo',
-        placeholder: 'Telefono fijo'
-    },
-    {
-        element: 'input',
-        tipo: 'number',
-        nombre: 'telefono_movil',
-        placeholder: 'Telefono movil'
     },
     {
         element: 'input',
@@ -71,7 +76,7 @@ export const ELEMENTOS = {
     {
         element: 'input',
         tipo: 'text',
-        nombre: 'Codigo',
+        nombre: 'codigo',
         placeholder: 'Codigo'
     },
   ],

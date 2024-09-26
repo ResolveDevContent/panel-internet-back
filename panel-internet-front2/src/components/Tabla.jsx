@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { EmptyState } from './EmptyState'
 import { Modal } from './Modal'
 import { Delete, Edit } from '../assets/icons/icons'
-import { modificar, borrar } from '../services/abm'
+import { modificar, borrar, listarUno, listarByEmail } from '../services/abm'
 import { useNavigate } from 'react-router-dom'
 import { Toast } from './Toast'
 import { PerfilAuth } from '../services/auth'
@@ -21,6 +21,7 @@ export const Tabla = ({titulo, datos}) => {
             text: "",
             res: ""
         });
+    const [ admin, setAdmin ] = useState(null)
 
 const navigate = useNavigate();
 
@@ -37,10 +38,15 @@ const formatearDatos = (datos) => {
 
     const rows = datos.map((data) => {
         if((titulo == 'transacciones' || titulo == 'comercios/pagos') && !data["fecha"].includes("/")) {
-            let date = new Date(Number(data['fecha']))
-            date = date.toLocaleDateString();
+            let date = new Date(Number(data['fecha']));
+            fecha = fecha.toISOString();
+            const hora = (fecha.split('T')[1]).split(':');
+            const fechaHora = fecha.split('T')[0] + ' ' + hora[0] + ':' + hora[1];
 
-            data.fecha = date
+            console.log(fechaHora);
+            // date = date.toLocaleDateString();
+
+            data.fecha = fechaHora;
         }
 
         if(titulo == 'comercios') {
@@ -137,6 +143,12 @@ const borrarDatos = (e, id, email) => {
 
 useEffect(() => {
     formatearDatos(datos)
+    if(user && user.message.role == 'admin') {
+        listarByEmail('admins', user.email)
+        .then(result => {
+            setAdmin(result);
+        })
+    }
 }, [datos])
 
 return (
@@ -165,13 +177,13 @@ return (
 
                                 <li className='px-3 py-1 d-flex justify-center'>
                                     <ul className='d-flex gap-2 align-center'>
-                                        {titulo == 'comercios'
+                                        {(admin == null || admin.permisos) && titulo == 'comercios' || titulo == 'transacciones' || titulo == 'clientes' || titulo == 'admins' 
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>
                                             : null
                                         }
-                                        {titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones'
+                                        {(admin == null || admin.permisos) && titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones'
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>

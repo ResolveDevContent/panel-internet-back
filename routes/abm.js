@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calculoDeTotales } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -9,7 +9,19 @@ const { changePassword } = require("../controllers/auth");
 
 const router = express.Router();
 
-//CRUD: COMERCIOS ---------------------------------------------------------------------------------
+//CRUD: HISTORIAL ---------------------------------------------------------------------------------
+
+router.get("/historial/listar", (req,res) => {
+    selectTable("historial")
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+});
+
+//COMERCIOS ---------------------------------------------------------------------------------
 
 router.get("/comercios/listar", (req,res) => {
     selectOneRecord("comercio", "activo", 1)
@@ -90,7 +102,7 @@ router.get("/comercios/puntos/:id", authenticate, (req,res) => {
 })
 
 router.post("/comercios/agregar", authenticate, (req,res) => {
-    const { email } = req.body;
+    const { email, nombre_comercio } = req.body;
     const password = req.body.password;
 
     delete req.body.password;
@@ -113,7 +125,8 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                             res.status(409).json({ error: "Email ya existente" });
                         } else {
                             insertRecord("users", user)
-                            .then((insert) => {
+                            .then( async (insert) => {
+                                await insertRecord('historial', {message: "Se agrego el comercio " + nombre_comercio, fecha: Date.now()});
                                 res.status(201).json({ message: "Comercio creado correctamente!" });
                             })
                             .catch((err) => {
@@ -144,7 +157,8 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
         .then((response) => {
             delete req.body.password
             updateRecord("comercio", req.body, "ID_Comercio", id)
-            .then((results) => {
+            .then(async (results) => {
+                await insertRecord('historial', {message: "Se modifico el comercio " + req.body.nombre_comercio, fecha: Date.now()});
                 res.status(200).json(results);
             })
             .catch((err) => {
@@ -195,9 +209,10 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
       const [total] = await calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio);
       if (!total || total.puntos_totales == null) {
         if (Number(req.body.monto_parcial) <= puntos.puntos_totales) {
-          const body = { ...req.body, fecha: Date.now() };
-          const result = await insertRecord("pagos", body);
-          return res.status(201).json({ message: "El pago se ha agregado correctamente." });
+            const body = { ...req.body, fecha: Date.now() };
+            const result = await insertRecord("pagos", body);
+            await insertRecord('historial', {message: "Se agrego un pago del comercio " + req.body.ID_Comercio, fecha: Date.now()});
+            return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
           return res.status(400).json({ error: "El monto ingresado es mayor al adeudado por el comercio." });
         }
@@ -207,6 +222,7 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
         if (Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
           const body = { ...req.body, fecha: Date.now() };
           await insertRecord("pagos", body);
+          await insertRecord('historial', {message: "Se agrego un pago del comercio " + req.body.ID_Comercio, fecha: Date.now()});
           return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
           return res.status(400).json({ error: "El monto ingresado es mayor al adeudado por el comercio." });
@@ -253,6 +269,8 @@ router.put("/comercios/pagos/modificar/:id", authenticate, async (req, res) => {
     try {
       // Actualizar el registro
       const results = await updateRecord("pagos", req.body, "ID_Pagos", id);
+      const comercio = await selectOneRecord('comercios', 'ID_Comercio', id)
+      await insertRecord('historial', {message: "Se modifico un pago del comercio " + comercio.nombre_comercio, fecha: Date.now()});
       res.status(200).json(results);
     } catch (err) {
       console.error('Error updating payment record:', err);
@@ -266,6 +284,7 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
     try {
       // Borrar el registro
       const result = await deleteRecord("pagos", "ID_Pagos", id);
+      await insertRecord('historial', {message: "Se borro un pago del comercio " + id, fecha: Date.now()});
       res.status(200).json(result);
     } catch (err) {
       console.error('Error deleting payment record:', err);
@@ -355,6 +374,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
     try {
         const result = await agregarClientes(req.body);
         if (result.every(r => r !== null)) {
+            await insertRecord('historial', {message: "Se agregaron clientes a traves de un archivo csv", fecha: Date.now()});
             res.status(201).json({ message: "Clientes creados/editados correctamente!" });
         } else {
             res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
@@ -368,7 +388,19 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 router.post("/clientes/agregar", authenticate, async (req, res) => {
     try {
         const results = await insertRecord("clientes", req.body);
+        await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: Date.now()});
         res.status(201).json({ message: "Cliente creado correctamente!" });
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const results = await updateRecord("clientes", req.body, "ID_Cliente", id);
+        await insertRecord('historial', {message: "Se modifico el cliente " + req.body.nombre, fecha: Date.now()});
+        res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
@@ -380,17 +412,13 @@ async function agregarClientes(datos) {
         if (row.Id && row.Codigo) {
             // Preparar el objeto cliente con valores predeterminados
             const cliente = {
-                ...row,
-                nombre_completo: row.Nombre || "",
+                id: row.Id,
+                codigo: row.Codigo,
+                nombre: row.Nombre || "",
+                apellido: row.apellido || "",
+                dni: row.dni || "",
                 direccion_principal: row["Direccion Principal"] || "",
-                telefono_fijo: row.Telefono || "",
-                telefono_movil: row.Telefono || ""
             };
-
-            // Eliminar campos innecesarios
-            delete cliente.Nombre;
-            delete cliente["Direccion Principal"];
-            delete cliente.Telefono;
 
             try {
                 // Verificar si el cliente ya existe
@@ -473,6 +501,16 @@ router.get("/transacciones/listar/admin/:email", authenticate, async (req, res) 
     }
 });
 
+router.get("/historial/transacciones/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const transacciones = await selectOneRecord("transacciones", "ID_Cliente", id);
+        res.send(transacciones);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 // Agregar transacción
 router.post("/transacciones/agregar", authenticate, async (req, res) => {
     if (req.body.ID_Comercio.length === 0 || req.body.ID_Cliente.length === 0) {
@@ -495,7 +533,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         req.body.monto_parcial = Number(req.body.monto_parcial);
 
         // SACAR CUANDO SE HAGA LA VERSION 2
-        const body = { ...req.body, fecha: Date.now().toString() };
+        const body = { ...req.body, fecha: Date.now() };
 
         if (Number(req.body.puntos_pago) > 0) {
             const totales = await calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente);
@@ -505,6 +543,9 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         }
 
         const results = await insertRecord("transacciones", body);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Transacción creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -535,7 +576,19 @@ router.put("/transacciones/modificar/:id", authenticate, async (req, res) => {
             }
         }
 
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
+        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
         const results = await updateRecord("transacciones", body, "ID_Transaccion", id);
+        res.status(200).json(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.delete("/transacciones/totales", authenticate, async (req, res) => {
+    try {
+        const results = await calculoDeTotales();
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -547,6 +600,9 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
+        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -592,6 +648,9 @@ router.get("/asociaciones/listar/admin/:email", authenticate, async (req, res) =
 router.post("/asociaciones/agregar", authenticate, async (req, res) => {
     try {
         const results = await insertRecord("asociaciones", req.body);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+        const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        await insertRecord('historial', {message: "Se agrego una asociacion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Asociación creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -610,6 +669,8 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
         const resultados = await multipleAsociaciones(ID_Cliente, ID_Comercio, true);
 
         if (resultados.every(result => result)) {
+            const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+            await insertRecord('historial', {message: "Se agregaron asociaciones de clientes al comercio " + comercio.nombre_comercio, fecha: Date.now()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
             return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
@@ -631,6 +692,8 @@ router.post("/asociaciones/comercios/agregar", authenticate, async (req, res) =>
         const resultados = await multipleAsociaciones(ID_Comercio, ID_Cliente, false);
 
         if (resultados.every(result => result)) {
+            const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+            await insertRecord('historial', {message: "Se agregaron asociaciones de comercios al cliente " + cliente.nombre, fecha: Date.now()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
             return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
@@ -645,6 +708,9 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const results = await updateRecord("asociaciones", req.body, "ID_asociacion", id);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+        const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        await insertRecord('historial', {message: "Se modifico la asociaciones del cliente " + cliente.nombre + " con el comercio " + comercio.nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -656,6 +722,9 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+        const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
+        await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente.nombre + " con el comercio " + comercio.nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -700,7 +769,7 @@ async function multipleAsociaciones(datos, id, comercio) {
 // Obtener todos los administradores
 router.get("/admins/listar", async (req, res) => {
     try {
-        const results = await selectOneRecord("users", "role", "admin");
+        const results = await selectTable("admins");
         res.send(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -711,23 +780,34 @@ router.get("/admins/listar", async (req, res) => {
 router.get("/admins/listar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
-        const results = await selectOneRecord("users", "userId", id);
+        const results = await selectOneRecord("admins", "ID_Admin", id);
         res.send(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
 });
 
+router.get("/admins/listarByEmail/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectOneRecord("admins", "email", email)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
 // Agregar administrador
 router.post("/admins/agregar", authenticate, async (req, res) => {
-    const { email, password, ID_Comercio } = req.body;
+    const { email, password, ID_Comercio, nombre, apellido } = req.body;
 
     if (!ID_Comercio || ID_Comercio.length === 0) {
         return res.status(500).json({ error: "No se puede agregar un admin sin comercios adheridos." });
     }
 
     try {
-        const existingUser = await checkRecordExists("users", "email", email);
+        const existingUser = await checkRecordExists("admins", "email", email);
         if (existingUser) {
             return res.status(409).json({ error: "Email ya existente" });
         }
@@ -743,12 +823,25 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
         };
 
         const result = await insertRecord("users", user);
+        const result2 = await insertRecord("admins", {nombre, apellido, email});
 
         if (await permisos(ID_Comercio, email)) {
+            await insertRecord('historial', {message: "Se agrego el admin " + nombre, fecha: Date.now()});
             res.status(201).json({ message: "Admin creado correctamente!" });
         } else {
             res.status(500).json({ error: "El admin no se pudo crear correctamente!" });
         }
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.put("/admins/modificar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const results = await updateRecord("admins", req.body, "ID_Admin", id);
+        await insertRecord('historial', {message: "Se agrego el admin " + req.body.nombre, fecha: Date.now()});
+        res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
@@ -759,6 +852,8 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const result = await deleteRecord("users", "userId", id);
+        const admins = await selectOneRecord("admins", 'ID_Admin', id);
+        await insertRecord('historial', {message: "Se borro el admin " + admins.nombre, fecha: Date.now()});
         res.status(200).json(result);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });

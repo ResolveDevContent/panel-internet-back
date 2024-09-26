@@ -50,6 +50,7 @@ function App() {
               <Panel user={user}/>
             }>
               <Route element={<PrivateRoutes user={user} roles={['superadmin']}/>}>
+                <Route path="historial/listar" element={<Listado titulo={"historial"}/>} />
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
                 <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} />} />
                 <Route path="clientes/agregar" element={<Form elementos={ELEMENTOS.clientes} user={user} titulo={"clientes"} />} />
@@ -79,6 +80,7 @@ function App() {
               {!loading ? (
                 <Route element={<PrivateRoutes user={user} roles={['cliente', 'superadmin']}/>}>
                   <Route path='cliente' element={<User />} />
+                  <Route path='historial/transacciones/listar' element={<Listado />} titulo={'historial/transacciones'} />
                 </Route>
               ) : null}
             </Route>
