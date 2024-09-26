@@ -42,7 +42,7 @@ export const ImportCsv = ({titulo}) => {
                 result.push(obj);
             }
 
-            const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Direccion Principal', 'Telefono');
+            const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Apellido', 'Direccion Principal', 'Email');
             importarCSV(titulo, filteredData)
             .then(data => {
                 if(data.error) {

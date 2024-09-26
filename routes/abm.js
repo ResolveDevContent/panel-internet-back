@@ -270,7 +270,7 @@ router.put("/comercios/pagos/modificar/:id", authenticate, async (req, res) => {
       // Actualizar el registro
       const results = await updateRecord("pagos", req.body, "ID_Pagos", id);
       const comercio = await selectOneRecord('comercios', 'ID_Comercio', id)
-      await insertRecord('historial', {message: "Se modifico un pago del comercio " + comercio.nombre_comercio, fecha: Date.now()});
+      await insertRecord('historial', {message: "Se modifico un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
       res.status(200).json(results);
     } catch (err) {
       console.error('Error updating payment record:', err);
@@ -545,7 +545,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         const results = await insertRecord("transacciones", body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Transacción creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -578,7 +578,7 @@ router.put("/transacciones/modificar/:id", authenticate, async (req, res) => {
 
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
         const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         const results = await updateRecord("transacciones", body, "ID_Transaccion", id);
         res.status(200).json(results);
     } catch (err) {
@@ -602,7 +602,7 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
         const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -650,7 +650,7 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
         const results = await insertRecord("asociaciones", req.body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercioNombre = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se agrego una asociacion del cliente " + cliente.nombre + " en el comercio " + comercioNombre.nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Asociación creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -670,7 +670,7 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
 
         if (resultados.every(result => result)) {
             const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-            await insertRecord('historial', {message: "Se agregaron asociaciones de clientes al comercio " + comercio.nombre_comercio, fecha: Date.now()});
+            await insertRecord('historial', {message: "Se agregaron asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
             return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
@@ -693,7 +693,7 @@ router.post("/asociaciones/comercios/agregar", authenticate, async (req, res) =>
 
         if (resultados.every(result => result)) {
             const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-            await insertRecord('historial', {message: "Se agregaron asociaciones de comercios al cliente " + cliente.nombre, fecha: Date.now()});
+            await insertRecord('historial', {message: "Se agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: Date.now()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
             return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
@@ -710,7 +710,7 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
         const results = await updateRecord("asociaciones", req.body, "ID_asociacion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se modifico la asociaciones del cliente " + cliente.nombre + " con el comercio " + comercio.nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -724,7 +724,7 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercio = await selectOneRecord("comercios", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente.nombre + " con el comercio " + comercio.nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -853,7 +853,7 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
     try {
         const result = await deleteRecord("users", "userId", id);
         const admins = await selectOneRecord("admins", 'ID_Admin', id);
-        await insertRecord('historial', {message: "Se borro el admin " + admins.nombre, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se borro el admin " + admins[0].nombre, fecha: Date.now()});
         res.status(200).json(result);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
