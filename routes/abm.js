@@ -187,8 +187,7 @@ router.get("/comercios/pagos/listar", async (req,res) => {
         const results = await selectTable("pagos");
         res.send(results);
     } catch (err) {
-        console.error('Error retrieving payments:', err);
-        res.status(500).send({ error: 'An error occurred while retrieving payments' });
+        res.status(500).send({ error: 'Se ha producido un error, intentelo nuevamente.' });
     }
 });
 
