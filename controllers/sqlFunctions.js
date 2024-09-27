@@ -98,8 +98,46 @@ const selectByAdminPermisos = async (values) => {
   }
 }
 
+const calcularPuntosClientes = async (values) => {
+  const query = `SELECT DISTINCT SUM(puntos) AS puntos_totales FROM clientes
+            LEFT OUTER JOIN asociaciones on clientes.ID_Cliente = asociaciones.ID_Cliente
+            WHERE asociaciones.ID_Comercio IN (${values.map(row => `${row.ID_Comercio}`).join(", ")});`;
+
+  try {
+    const [results] = await pool.query(query);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+}
+
+const calcularPuntosComercios = async (value) => {
+  const query = `SELECT SUM(monto_parcial) AS monto_total FROM pagos WHERE ID_Comercio = ?`;
+
+  try {
+    const [results] = await pool.query(query, [value]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+}
+
 const selectOneRecord = async (tableName, column, value) => {
   const query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
+
+  try {
+    const [results] = await pool.query(query, [value]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+}
+
+const selectOneDato = async (tableName, column, value, dato) => {
+  const query = `SELECT ${dato} FROM ${tableName} WHERE ${column} = ?`;
 
   try {
     const [results] = await pool.query(query, [value]);
@@ -161,35 +199,6 @@ const updateRecordCliente = async (tableName, update, column, values) => {
   }
 }
 
-const calculoDePuntos = async (tableName, column, value) => {
-  const query = `SELECT ${column}, 
-                  (SELECT SUM(puntos_parciales) FROM ${tableName} WHERE ${column} = ?)
-                  -
-                  (SELECT SUM(puntos_pago) FROM ${tableName} WHERE ${column} = ?) 
-                  as puntos_totales, 
-                  SUM(monto_parcial) AS monto_total FROM ${tableName} WHERE ${column} = ?`;
-
-  try {
-    const [results] = await pool.query(query, [value, value, value]);
-    return results;
-  } catch (err) {
-    console.error('Error executing query:', err); // Manejo de errores
-    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
-  }
-}
-
-const calculoDePuntosComercios = async (tableName, suma, column, value) => {
-  const query = `SELECT SUM(${suma}) as puntos_totales FROM ${tableName} WHERE ${column} = ?`;
-
-  try {
-    const [results] = await pool.query(query, [value]);
-    return results;
-  } catch (err) {
-    console.error('Error executing query:', err); // Manejo de errores
-    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
-  }
-}
-
 module.exports = {
   createTable,
   checkRecordExists,
@@ -203,7 +212,8 @@ module.exports = {
   deleteRecord,
   updateRecord,
   updateRecordCliente,
-  calculoDePuntos,
-  calculoDePuntosComercios,
+  calcularPuntosClientes,
+  calcularPuntosComercios,
+  selectOneDato,
   selectByAdminPermisos
 };

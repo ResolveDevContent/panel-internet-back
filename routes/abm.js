@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, calculoDePuntos, calculoDePuntosComercios, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calculoDeTotales } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, selectOneDato } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -75,15 +75,15 @@ router.get("/comercios/listar/admin/:email", authenticate, (req,res) => {
 router.get("/comercios/puntos/:id", authenticate, (req,res) => {
     const { id } = req.params;
 
-    calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", id)
+    calculoDePuntosClientes([{ID_Comercio: id}])
     .then((puntos) => {
         if(puntos[0].puntos_totales != null) {
             puntos = puntos[0]
-            calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", id)
+            calculoDePuntosComercios(id)
             .then((total) => { 
                 total = total[0]
-                if(total.puntos_totales != null) {
-                    const result = puntos.puntos_totales - total.puntos_totales
+                if(total.monto_total != null) {
+                    const result = puntos.puntos_totales - total.monto_total
                     res.send([{puntos_totales: result}]);
                 } else {
                     res.send([{puntos_totales: puntos.puntos_totales}])
@@ -200,18 +200,19 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
   
     try {
       // Calcular puntos parciales
-      const [puntos] = await calculoDePuntosComercios("transacciones", "puntos_parciales", "ID_Comercio", req.body.ID_Comercio);
-      if (!puntos || puntos.puntos_totales == null) {
+      const [puntos] = await calculoDePuntosClientes([{ID_Comercio: req.body.ID_Comercio}]);
+      if (!puntos || puntos.puntos_totales == null || Number(puntos.puntos_totales) == 0) {
         return res.status(400).json({ error: "El comercio seleccionado no tiene puntos acumulados." });
       }
   
       // Calcular puntos totales
-      const [total] = await calculoDePuntosComercios("pagos", "monto_parcial", "ID_Comercio", req.body.ID_Comercio);
+      const [total] = await calculoDePuntosComercios(req.body.ID_Comercio);
       if (!total || total.puntos_totales == null) {
         if (Number(req.body.monto_parcial) <= puntos.puntos_totales) {
             const body = { ...req.body, fecha: Date.now() };
             const result = await insertRecord("pagos", body);
-            await insertRecord('historial', {message: "Se agrego un pago del comercio " + req.body.ID_Comercio, fecha: Date.now()});
+            const comercio = await selectOneRecord('comercio', 'ID_Comercio', req.body.ID_Comercio)
+            await insertRecord('historial', {message: "Se agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
             return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
           return res.status(400).json({ error: "El monto ingresado es mayor al adeudado por el comercio." });
@@ -222,7 +223,8 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
         if (Number(req.body.monto_parcial) <= (puntos.puntos_totales - total.puntos_totales)) {
           const body = { ...req.body, fecha: Date.now() };
           await insertRecord("pagos", body);
-          await insertRecord('historial', {message: "Se agrego un pago del comercio " + req.body.ID_Comercio, fecha: Date.now()});
+          const comercio = await selectOneRecord('comercio', 'ID_Comercio', req.body.ID_Comercio);
+          await insertRecord('historial', {message: "Se agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
           return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
           return res.status(400).json({ error: "El monto ingresado es mayor al adeudado por el comercio." });
@@ -362,8 +364,8 @@ router.get("/clientes/listar/admin/:email", authenticate, async (req, res) => {
 router.get("/clientes/puntos/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
-        const transacciones = await calculoDePuntos("transacciones", "ID_Cliente", id);
-        res.send(transacciones);
+        const puntos = await selectOneDato("clientes", "ID_Cliente", id, 'puntos');
+        res.send(puntos);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
@@ -387,9 +389,12 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 // Agregar cliente
 router.post("/clientes/agregar", authenticate, async (req, res) => {
     try {
-        const results = await insertRecord("clientes", req.body);
-        await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: Date.now()});
-        res.status(201).json({ message: "Cliente creado correctamente!" });
+        const result = await agregarClientes([req.body]);
+        if (result.every(r => r !== null)) {
+            // const results = await insertRecord("clientes", req.body);
+            await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: Date.now()});
+            res.status(201).json({ message: "Cliente creado correctamente!" });
+        }
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
@@ -418,6 +423,7 @@ async function agregarClientes(datos) {
                 apellido: row.apellido || "",
                 dni: row.dni || "",
                 direccion_principal: row["Direccion Principal"] || "",
+                puntos: row.puntos || "",
             };
 
             try {
@@ -501,7 +507,7 @@ router.get("/transacciones/listar/admin/:email", authenticate, async (req, res) 
     }
 });
 
-router.get("/historial/transacciones/:id", authenticate, async (req, res) => {
+router.get("/historial/transacciones/listar/:id", authenticate, async (req, res) => { 
     const { id } = req.params;
     try {
         const transacciones = await selectOneRecord("transacciones", "ID_Cliente", id);
@@ -518,7 +524,9 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
     }
 
     try {
-        req.body.puntos_pago = 0;
+        if(!req.body.puntos_pago || req.body.puntos_pago == '') {
+            req.body.puntos_pago = 0;
+        }
 
         const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
         if (comercio.length === 0) {
@@ -536,7 +544,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         const body = { ...req.body, fecha: Date.now() };
 
         if (Number(req.body.puntos_pago) > 0) {
-            const totales = await calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente);
+            const totales = await selectOneDato("clientes", "ID_Cliente", id, 'puntos');
             if (Number(req.body.puntos_pago) > totales[0].puntos_totales) {
                 return res.status(500).json({ error: "El cliente no posee esos puntos." });
             }
@@ -545,6 +553,11 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         const results = await insertRecord("transacciones", body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
+
+        const puntosTotales = (cliente[0].puntos - Number(req.body.puntos_pago)) + puntosFinales;
+
+        await updateRecord("clientes", {puntos: puntosTotales}, "ID_Cliente", req.body.ID_Cliente);
+
         await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Transacción creada correctamente." });
     } catch (err) {
@@ -553,38 +566,38 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 });
 
 // Modificar transacción
-router.put("/transacciones/modificar/:id", authenticate, async (req, res) => {
-    const { id } = req.params;
-    try {
-        const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
-        if (comercio.length === 0) {
-            return res.status(500).json({ error: "Comercio no encontrado." });
-        }
+// router.put("/transacciones/modificar/:id", authenticate, async (req, res) => {
+//     const { id } = req.params;
+//     try {
+//         const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
+//         if (comercio.length === 0) {
+//             return res.status(500).json({ error: "Comercio no encontrado." });
+//         }
 
-        const row = comercio[0];
-        const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
-        const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
+//         const row = comercio[0];
+//         const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
+//         const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
 
-        req.body.puntos_parciales = puntosFinales;
-        req.body.monto_parcial = Number(req.body.monto_parcial);
-        const body = { ...req.body };
+//         req.body.puntos_parciales = puntosFinales;
+//         req.body.monto_parcial = Number(req.body.monto_parcial);
+//         const body = { ...req.body };
 
-        if (Number(req.body.puntos_pago) > 0) {
-            const totales = await calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente);
-            if (Number(req.body.puntos_pago) > totales[0].puntos_totales) {
-                return res.status(500).json({ error: "El cliente no posee esos puntos." });
-            }
-        }
+//         if (Number(req.body.puntos_pago) > 0) {
+//             const totales = await calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente);
+//             if (Number(req.body.puntos_pago) > totales[0].puntos_totales) {
+//                 return res.status(500).json({ error: "El cliente no posee esos puntos." });
+//             }
+//         }
 
-        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
-        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
-        const results = await updateRecord("transacciones", body, "ID_Transaccion", id);
-        res.status(200).json(results);
-    } catch (err) {
-        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
-    }
-});
+//         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
+//         const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
+//         await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
+//         const results = await updateRecord("transacciones", body, "ID_Transaccion", id);
+//         res.status(200).json(results);
+//     } catch (err) {
+//         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+//     }
+// });
 
 router.delete("/transacciones/totales", authenticate, async (req, res) => {
     try {
@@ -599,8 +612,14 @@ router.delete("/transacciones/totales", authenticate, async (req, res) => {
 router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
+        const transaccion = await selectOneRecord("transacciones", "ID_Transaccion", id);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', transaccion[0].ID_Cliento);
+
+        const puntosTotales = cliente[0].puntos - Number(transaccion[0].puntos_parciales);
+
+        await updateRecord("clientes", {puntos: puntosTotales}, "ID_Cliente", cliente[0].ID_Cliente);
+
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
-        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
         const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
         await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
@@ -722,8 +741,8 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
-        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', results[0].ID_Cliente);
+        const comercio = await selectOneRecord("comercio", 'ID_Comercio', results[0].ID_Comercio);
         await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {

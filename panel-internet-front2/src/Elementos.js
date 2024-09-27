@@ -4,19 +4,22 @@ export const ELEMENTOS = {
             element: 'input',
             tipo: 'text',
             nombre: 'nombre',
-            placeholder: 'Nombre'
+            placeholder: 'Nombre',
+            valor: ''
         },
         {
             element: 'input',
             tipo: 'text',
             nombre: 'apellido',
-            placeholder: 'Apellido'
+            placeholder: 'Apellido',
+            valor: ''
         },
         {
             element: 'input',
             tipo: 'text',
             nombre: 'email',
-            placeholder: 'Email'
+            placeholder: 'Email',
+            valor: ''
         },
         {
             element: 'list',
@@ -33,7 +36,8 @@ export const ELEMENTOS = {
             element: "input",
             tipo: "password", 
             nombre: "password",
-            placeholder: "Contraseña"
+            placeholder: "Contraseña",
+            valor: ''
         },
   ],
   clientes: [
@@ -41,93 +45,115 @@ export const ELEMENTOS = {
         element: 'input',
         tipo: 'number',
         nombre: 'dni',
-        placeholder: 'Nº DNI'
+        placeholder: 'Nº DNI',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'nombre',
-        placeholder: 'Nombre'
+        placeholder: 'Nombre',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'apellido',
-        placeholder: 'Apellido'
+        placeholder: 'Apellido',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'direccion_principal',
-        placeholder: 'Direccion'
+        placeholder: 'Direccion',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'email',
-        placeholder: 'Email'
+        placeholder: 'Email',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'Id',
-        placeholder: 'Id'
+        placeholder: 'Id',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'codigo',
-        placeholder: 'Codigo'
+        placeholder: 'Codigo',
+        valor: ''
     },
+    {
+        element: 'input',
+        tipo: 'hidden',
+        nombre: 'puntos',
+        placeholder: '',
+        valor: '0'
+    }
   ],
   comercios: [
     {
         element: 'input',
         tipo: 'text',
         nombre: 'nombre_comercio',
-        placeholder: 'Nombre comercio'
+        placeholder: 'Nombre comercio',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'nombre_completo',
-        placeholder: 'Nombre y apellido'
+        placeholder: 'Nombre y apellido',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'rubro',
-        placeholder: 'Rubro'
+        placeholder: 'Rubro',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'number',
         nombre: 'telefono',
-        placeholder: 'Telefono'
+        placeholder: 'Telefono',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'email',
-        placeholder: 'Email'
+        placeholder: 'Email',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'text',
         nombre: 'ubicacion',
-        placeholder: 'Ubicacion'
+        placeholder: 'Ubicacion',
+        valor: ''
     },
     {
         element: 'input',
         tipo: 'number',
         nombre: 'porcentaje',
-        placeholder: 'Porcentaje'
+        placeholder: 'Porcentaje',
+        valor: ''
     },
     {
         element: "input",
         tipo: "password",
         nombre: "password",
-        placeholder: "Cambiar Contraseña"
+        placeholder: "Cambiar Contraseña",
+        valor: ''
     }
   ],
   transacciones: [
@@ -142,7 +168,8 @@ export const ELEMENTOS = {
         element: 'input',
         tipo: 'number',
         nombre: 'monto_parcial',
-        placeholder: 'Monto'
+        placeholder: 'Monto',
+        valor: ''
     },
     // {
     //     element: 'input',
@@ -162,7 +189,8 @@ export const ELEMENTOS = {
         element: 'input',
         tipo: 'number',
         nombre: 'monto_parcial',
-        placeholder: 'Monto pagado'
+        placeholder: 'Monto pagado',
+        valor: ''
     },
   ],
   asociacionesClientes: [

@@ -226,12 +226,14 @@ export const Listado = ({titulo}) => {
         setNombre(null);
         setnombreComercio(null);
         setDate({first: "", second: ""});
-        originalListado.current = []
+        setcalculosTotales(null);
+        originalListado.current = [];
 
         PerfilAuth().then(user => {
             if(user.message.role == "superadmin" || user.message.role == "cliente") {
                 if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
-                    listarUno(titulo, id).then(datos => {
+                    listarByEmail('clientes', user.message.email)
+                    .then(datos => {
                         if(datos.error) {
                             setLoading(false);
                             setState({
@@ -244,16 +246,31 @@ export const Listado = ({titulo}) => {
                             return;
                         }
 
-                        if(!datos || datos.length == 0) {
-                            setLoading(false);
-                            setListado([])
-                            originalListado.current = [];
-                            return;
-                        }
+                        listarUno(titulo, datos[0].ID_Cliente)
+                        .then(result => {
+                            if(result.error) {
+                                setLoading(false);
+                                setState({
+                                    text: result.error,
+                                    res: "secondary"
+                                })
+                                setTimeout(() => {
+                                    setState({text: "", res: ""})
+                                }, 4000)
+                                return;
+                            }
 
-                        setLoading(false);
-                        setListado(datos)
-                        originalListado.current = datos;
+                            if(!result || result.length == 0) {
+                                setLoading(false);
+                                setListado([])
+                                originalListado.current = [];
+                                return;
+                            }
+
+                            setLoading(false);
+                            setListado(result)
+                            originalListado.current = result;
+                        })
                     })
                 } else {
                     listar(titulo).then(datos => {
