@@ -529,7 +529,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 
         if(puntosFinales > 0) {
             await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: puntosFinales, fecha: currentDate});
-            await updateRecord("comercio", {puntos: Number(comercio[0].puntos_totales) + Number(puntosFinales)}, "ID_Comercio", comercio[0].ID_comercio);
+            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) + Number(puntosFinales)}, "ID_Comercio", comercio[0].ID_comercio);
         }
 
         const results = await insertRecord("transacciones", body);
