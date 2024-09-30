@@ -178,7 +178,7 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
         if (Number(req.body.monto_parcial) <= Number(comercio[0].puntos_totales)) {
             const body = { ...req.body, fecha: Date.now() };
             await insertRecord("pagos", body);
-            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(req.body.monto_parcial)}, "ID_Comercio", comercio[0].ID_Comercio);
+            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(req.body.monto_parcial)}, "ID_Comercio", req.body.ID_Comercio);
             await insertRecord('historial', {message: "Se agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
             return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
@@ -595,15 +595,15 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
         const transaccion = await selectOneRecord("transacciones", "ID_Transaccion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', transaccion[0].ID_Cliente);
         const puntos = await selectAsociaciones("puntos", {first: "ID_Cliente", second: "fecha"}, {first: cliente[0].ID_Cliente, second: transaccion[0].fecha});
-
+        const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
+        console.log(comercio)
         if(puntos && puntos.length > 0) {
             await deleteRecord("puntos", 'ID_Puntos', transaccion[0].ID_Puntos);
             await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(puntos.puntos_totales)}, "ID_Comercio", comercio[0].ID_comercio);
         }
 
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
-        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
