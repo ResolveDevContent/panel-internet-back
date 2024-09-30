@@ -54,19 +54,10 @@ const formatearDatos = (datos) => {
             data.puntos_totales = new Intl.NumberFormat('es-ES').format(Number(data.puntos_totales))
         }
 
-        if(titulo == "admins") {
-            delete data.password
-        }
-
         const newArr = Object.values(data)
 
         return newArr
     })
-    
-    if(titulo == "admins") {
-        const idx = columns.findIndex(column => column == "password");
-        columns.splice(idx, 1);
-    }
 
     if(titulo == "transacciones" || titulo == "asociaciones" || titulo == "comercios/pagos") {
         const idxComercio = columns.findIndex(column => column == "ID_Comercio");

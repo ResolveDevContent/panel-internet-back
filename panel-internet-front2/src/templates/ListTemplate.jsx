@@ -30,7 +30,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         setLoading(true)
         const newArr = nombreComercio != null && nombreComercio.length > 0
         ? originalListado.current.filter(row => {
-            return row.nombre_completo.toLowerCase().includes(nombreComercio.toLowerCase())
+            return row.nombre_comercio.toLowerCase().includes(nombreComercio.toLowerCase())
         })
         : originalListado.current
 
