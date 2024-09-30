@@ -897,27 +897,27 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 
 // CADUCAR PUNTOS ------------------------------------------------------------------------------------------
 
-function runAtSpecificTimeOfDay(date, func) {
-  const now = new Date();
-  let eta_ms = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime() - now;
-  setTimeout(function() {
-    func();
-  }, eta_ms);
-}
+// function runAtSpecificTimeOfDay(date, func) {
+//   const now = new Date();
+//   let eta_ms = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime() - now;
+//   setTimeout(function() {
+//     func();
+//   }, eta_ms);
+// }
 
-async function caducarPuntos() {
-    try {
-        const result = await selectFechaLimit("puntos", "fecha", 12345678);
+// async function caducarPuntos() {
+//     try {
+//         const result = await selectFechaLimit("puntos", "fecha", 12345678);
 
-        if(result.length > 0) {
+//         if(result.length > 0) {
 
-            res.status(200).json(result);
-        }
-    } catch (err) {
-        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
-    }
-}
+//             res.status(200).json(result);
+//         }
+//     } catch (err) {
+//         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+//     }
+// }
 
-runAtSpecificTimeOfDay(date, caducarPuntos);
+// runAtSpecificTimeOfDay(date, caducarPuntos);
 
 module.exports = router;
