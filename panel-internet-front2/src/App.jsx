@@ -15,6 +15,7 @@ import PrivateRoutes from './components/ProtectedRoute.jsx'
 import { PerfilAuth } from './services/auth.js'
 import { ImportCsv } from './components/ImportCsv.jsx'
 import { ChangePassword } from './components/ChangePassword.jsx'
+import { PuntosFecha } from './components/PuntosFecha.jsx'
 
 function App() {
   const [auth, setAuth] = useState(false);
