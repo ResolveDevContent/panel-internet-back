@@ -98,22 +98,8 @@ const selectByAdminPermisos = async (values) => {
   }
 }
 
-const calcularPuntosClientes = async (values) => {
-  const query = `SELECT DISTINCT SUM(puntos) AS puntos_totales FROM clientes
-            LEFT OUTER JOIN asociaciones on clientes.ID_Cliente = asociaciones.ID_Cliente
-            WHERE asociaciones.ID_Comercio IN (${values.map(row => `${row.ID_Comercio}`).join(", ")});`;
-
-  try {
-    const [results] = await pool.query(query);
-    return results;
-  } catch (err) {
-    console.error('Error executing query:', err); // Manejo de errores
-    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
-  }
-}
-
-const calcularPuntosComercios = async (value) => {
-  const query = `SELECT SUM(monto_parcial) AS monto_total FROM pagos WHERE ID_Comercio = ?`;
+const calcularPuntosTotales = async (tableName, column, sum, value) => {
+  const query = `SELECT SUM(${sum}) AS total FROM ${tableName} WHERE ${column} = ?`;
 
   try {
     const [results] = await pool.query(query, [value]);
@@ -158,7 +144,18 @@ const selectAsociaciones = async (tableName, columns, values) => {
     console.error('Error executing query:', err); // Manejo de errores
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }
+}
 
+const selectFechaLimit = async (tableName, column, value) => {
+  const query = `SELECT * FROM ${tableName} WHERE ${column} <= FROM_UNIXTIME(${value})`;
+
+  try {
+    const [results] = await pool.query(query, [value]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
 }
 
 const deleteRecord = async (tableName, column, value) => {
@@ -209,11 +206,11 @@ module.exports = {
   selectByAdmin,
   selectOneRecord,
   selectAsociaciones,
+  selectFechaLimit,
   deleteRecord,
   updateRecord,
   updateRecordCliente,
-  calcularPuntosClientes,
-  calcularPuntosComercios,
+  calcularPuntosTotales,
   selectOneDato,
   selectByAdminPermisos
 };

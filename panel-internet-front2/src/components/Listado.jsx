@@ -95,12 +95,6 @@ export const Listado = ({titulo}) => {
             let secondDate = new Date(date.second.replace(/-/g, '\/'));
             secondDate = secondDate.setHours(23,59,59,99);
 
-            // const fecha = new Date(row.fecha.split("/").reverse().join("/")).getTime();
-            // let firstDate = new Date(date.first.replace(/-/g, '\/'));
-            // firstDate = firstDate.setHours(0,0,0,0);
-            // let secondDate = new Date(date.second.replace(/-/g, '\/'));
-            // secondDate = secondDate.setHours(23,59,59,99);
-
             return Number(fecha) >= firstDate && Number(fecha) <= secondDate;
         })
 

@@ -50,6 +50,7 @@ function App() {
               <Panel user={user}/>
             }>
               <Route element={<PrivateRoutes user={user} roles={['superadmin']}/>}>
+                <Route path="puntos/fecha" element={<PuntosFecha titulo={"puntos/fecha"}/>} />
                 <Route path="historial/listar" element={<Listado titulo={"historial"}/>} />
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
                 <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} />} />

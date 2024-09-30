@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { EmptyState } from './EmptyState'
 import { Modal } from './Modal'
 import { Delete, Edit } from '../assets/icons/icons'
-import { modificar, borrar, listarUno, listarByEmail } from '../services/abm'
+import { modificar, borrar, listarByEmail } from '../services/abm'
 import { useNavigate } from 'react-router-dom'
 import { Toast } from './Toast'
 import { PerfilAuth } from '../services/auth'
@@ -179,7 +179,7 @@ return (
 
                                 <li className='px-3 py-1 d-flex justify-center'>
                                     <ul className='d-flex gap-2 align-center'>
-                                        {(admin == null || admin.permisos) && titulo == 'comercios' || titulo == 'transacciones' || titulo == 'clientes' || titulo == 'admins' 
+                                        {(admin == null || admin.permisos) && titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' 
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>

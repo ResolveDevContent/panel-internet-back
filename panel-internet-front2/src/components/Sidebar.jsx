@@ -4,7 +4,6 @@ import { LogoutAuth } from "../services/auth";
 import AuthContext from "../context/Auth";
 import { Admin, HamburgerMenu, LogOut, Money, Notepad, Shop, User, Wallet } from "../assets/icons/icons";
 import { useContext, useState, useEffect } from "react";
-import { comercioTotales } from "../services/totales";
 import { Toast } from "./Toast";
 import { PerfilAuth } from "../services/auth";
 import { listarByEmail } from "../services/abm";
@@ -41,22 +40,13 @@ export const Sidebar = ({user}) => {
             })
             return;
           }
-          comercioTotales(comercio[0].ID_Comercio)
-          .then(datos => {
-            if(datos.error) {
-              setState({
-                  text: datos.error,
-                  res: "secondary"
-              })
-              return;
-            }
-            setTotal(datos[0])
-          })
-          .catch(err => {
-            setState({
-              text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-              res: "secondary"
-            })
+
+          setTotal(comercio[0].puntos);
+        })
+        .catch(err => {
+          setState({
+            text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+            res: "secondary"
           })
         })
       }
