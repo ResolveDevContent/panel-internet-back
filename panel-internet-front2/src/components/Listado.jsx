@@ -7,7 +7,6 @@ import { listar, listarByAdmin, listarByComercio, listarByEmail, listarUno } fro
 import { PerfilAuth } from '../services/auth'
 import { Filter, Search } from '../assets/icons/icons'
 import { Tabla } from './Tabla'
-import { comercioTotales } from '../services/totales'
 
 export const Listado = ({titulo}) => {
     const [ state, setState ] = useState({
@@ -114,38 +113,6 @@ export const Listado = ({titulo}) => {
 
     const cleanFilters = () => {
         setSortedListado(originalListado.current)
-    }
-
-    async function totales(datos) {
-        const actualizaciones = datos.map(async (row, idx) => {
-            try {
-                const total = await comercioTotales(row.ID_Comercio);
-                
-                if (total.error) {
-                    throw new Error(total.error); // Maneja el error lanzando una excepción
-                }
-
-                row.puntos_totales = total[0].puntos_totales;
-                return row;
-            } catch (error) {
-                // Maneja el error aquí
-                setState({
-                    text: error.message,
-                    res: "secondary"
-                });
-                return null;
-            }
-        })
-
-        const resultados = await Promise.all(actualizaciones);
-
-        // Filtra los resultados nulos (en caso de errores)
-        const datosActualizados = resultados.filter(row => row !== null);
-
-        // Actualiza el estado después de que todos los datos se han procesado
-        setLoading(false);
-        setListado(datosActualizados);
-        originalListado.current = datosActualizados;
     }
 
     async function formatToNombres(data) {
@@ -287,9 +254,7 @@ export const Listado = ({titulo}) => {
                             return;
                         }
 
-                        if(titulo == "comercios") {
-                            totales(datos)
-                        } else if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
+                        if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
@@ -322,9 +287,7 @@ export const Listado = ({titulo}) => {
                         return;
                     }
 
-                    if(titulo == "comercios") {
-                        totales(datos)
-                    } else if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
+                    if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
                         formatToNombres(datos)
                     } else {
                         setLoading(false);
