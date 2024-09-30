@@ -178,7 +178,7 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
         if (Number(req.body.monto_parcial) <= Number(comercio[0].puntos)) {
             const body = { ...req.body, fecha: Date.now() };
             await insertRecord("pagos", body);
-            await updateRecord("comercio", {puntos: Number(comercio[0].puntos) - Number(req.body.monto_parcial)}, "ID_Comercio", comercio[0].ID_Comercio);
+            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos) - Number(req.body.monto_parcial)}, "ID_Comercio", comercio[0].ID_Comercio);
             await insertRecord('historial', {message: "Se agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
             return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
@@ -527,12 +527,12 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         }
 
         await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: req.body.monto_parcial, fecha: currentDate});
+        await updateRecord("comercio", {puntos: Number(comercio[0].puntos_totales) + Number(puntosFinales)}, "ID_Comercio", comercio[0].ID_comercio);
 
         const results = await insertRecord("transacciones", body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
 
-        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
+        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(201).json({ message: "Transacción creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
