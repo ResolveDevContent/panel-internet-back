@@ -801,7 +801,7 @@ router.get("/admins/listarByEmail/:email", authenticate, (req,res) => {
 
 // Agregar administrador
 router.post("/admins/agregar", authenticate, async (req, res) => {
-    const { email, password, ID_Comercio, nombre, apellido } = req.body;
+    const { email, password, ID_Comercio, nombre, apellido, permisos } = req.body;
 
     if (!ID_Comercio || ID_Comercio.length === 0) {
         return res.status(500).json({ error: "No se puede agregar un admin sin comercios adheridos." });
@@ -824,7 +824,7 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
         };
 
         const result = await insertRecord("users", user);
-        const result2 = await insertRecord("admins", {nombre, apellido, email});
+        const result2 = await insertRecord("admins", {nombre, apellido, email, permisos});
 
         if (await permisos(ID_Comercio, email)) {
             await insertRecord('historial', {message: "Se agrego el admin " + nombre, fecha: Date.now()});
