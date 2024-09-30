@@ -175,13 +175,13 @@ return (
 
                                 <li className='px-3 py-1 d-flex justify-center'>
                                     <ul className='d-flex gap-2 align-center'>
-                                        {(admin == null || admin.permisos) && titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' 
+                                        {(admin == null || admin.permisos == 1) && titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' 
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>
                                             : null
                                         }
-                                        {(admin == null || admin.permisos) && titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones'
+                                        {(admin == null || admin.permisos == 1) && titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones'
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>
