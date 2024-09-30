@@ -89,13 +89,6 @@ export const ELEMENTOS = {
         nombre: 'codigo',
         placeholder: 'Codigo',
         valor: ''
-    },
-    {
-        element: 'input',
-        tipo: 'hidden',
-        nombre: 'puntos',
-        placeholder: '',
-        valor: '0'
     }
   ],
   comercios: [

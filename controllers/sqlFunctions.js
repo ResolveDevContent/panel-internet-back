@@ -158,6 +158,18 @@ const selectFechaLimit = async (tableName, column, value) => {
   }
 }
 
+const selectOrderByASC = async (tableName, column, field, value) => {
+  const query = `SELECT * FROM ${tableName} WHERE ${column} = ? ORDER BY ${field} ASC`;
+
+  try {
+    const [results] = await pool.query(query, [value]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+}
+
 const deleteRecord = async (tableName, column, value) => {
   const query = `DELETE FROM ${tableName} WHERE ${column} = ?`;
 
@@ -207,6 +219,7 @@ module.exports = {
   selectOneRecord,
   selectAsociaciones,
   selectFechaLimit,
+  selectOrderByASC,
   deleteRecord,
   updateRecord,
   updateRecordCliente,
