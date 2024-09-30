@@ -475,11 +475,11 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
     if (req.body.ID_Comercio.length === 0 || req.body.ID_Cliente.length === 0) {
         return res.status(500).json({ error: "No se puede realizar una transacción sin completar todos los datos." });
     }
-
+    console.log(req.body)
     try {
-        if(!req.body.puntos_pago || req.body.puntos_pago == '') {
-            req.body.puntos_pago = 0;
-        }
+        // if(!req.body.puntos_pago || req.body.puntos_pago == '') {
+        //     req.body.puntos_pago = 0;
+        // }
 
         const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
         if (comercio.length === 0) {
@@ -487,44 +487,45 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         }
 
         const row = comercio[0];
-        const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
+        // const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
+        const puntos = Number(req.body.monto_parcial);
         const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
 
         req.body.puntos_parciales = puntosFinales;
         req.body.monto_parcial = Number(req.body.monto_parcial);
 
-        const currentPay = Number(req.body.puntos_pago);
+        // const currentPay = Number(req.body.puntos_pago);
         const currentDate = Date.now(); 
 
         // SACAR CUANDO SE HAGA LA VERSION 2
         const body = { ...req.body, fecha: currentDate};
 
-        if (Number(req.body.puntos_pago) > 0) {
-            const totales = await calcularPuntosTotales('puntos', 'ID_Cliente', 'puntos', req.body.ID_Cliente);
-            if (Number(req.body.puntos_pago) > totales[0].total) {
-                return res.status(500).json({ error: "El cliente no posee esos puntos." });
-            } else {
-                const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
+        // if (Number(req.body.puntos_pago) > 0) {
+        //     const totales = await calcularPuntosTotales('puntos', 'ID_Cliente', 'puntos', req.body.ID_Cliente);
+        //     if (Number(req.body.puntos_pago) > totales[0].total) {
+        //         return res.status(500).json({ error: "El cliente no posee esos puntos." });
+        //     } else {
+        //         const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
 
-                let result = 0;
-                let flag = false;
-                puntos.forEach(async row => {
-                    result = currentPay - Number(row.puntos);
-                    if(!flag) {
-                        if(result >= 0) {
-                            if(result == 0) {
-                                flag = true;
-                            }
-                            await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
-                            currentPay -= Number(row.puntos);
-                        } else {
-                            await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
-                            flag = true;
-                        }
-                    }
-                });
-            }
-        }
+        //         let result = 0;
+        //         let flag = false;
+        //         puntos.forEach(async row => {
+        //             result = currentPay - Number(row.puntos);
+        //             if(!flag) {
+        //                 if(result >= 0) {
+        //                     if(result == 0) {
+        //                         flag = true;
+        //                     }
+        //                     await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+        //                     currentPay -= Number(row.puntos);
+        //                 } else {
+        //                     await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
+        //                     flag = true;
+        //                 }
+        //             }
+        //         });
+        //     }
+        // }
 
         if(puntosFinales > 0) {
             await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: puntosFinales, fecha: currentDate});

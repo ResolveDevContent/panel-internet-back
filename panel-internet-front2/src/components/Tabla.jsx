@@ -64,7 +64,7 @@ const formatearDatos = (datos) => {
 
     if(titulo == "comercios") {
         const idx = columns.findIndex(column => column == "puntos_totales");
-        columns[idx] = "deudas"
+        columns[idx] = "deuda"
     }
     
     if(titulo == "admins") {
