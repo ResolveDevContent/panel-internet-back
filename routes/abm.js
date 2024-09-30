@@ -487,6 +487,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         }
 
         const row = comercio[0];
+        console.log(row)
         // const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
         const puntos = Number(req.body.monto_parcial);
         const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
@@ -531,8 +532,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
             const sumaPuntos = Number(comercio[0].puntos_totales) + Number(puntosFinales);
             console.log(sumaPuntos)
             await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: puntosFinales, fecha: currentDate});
-            const puto = await updateRecord("comercio", {puntos_totales: sumaPuntos}, "ID_Comercio", comercio[0].ID_comercio);
-            console.log(puto)
+            await updateRecord("comercio", {puntos_totales: sumaPuntos}, "ID_Comercio", req.body.ID_Comercio);
         }
 
         const results = await insertRecord("transacciones", body);
