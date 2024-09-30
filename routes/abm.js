@@ -345,7 +345,7 @@ router.post("/clientes/agregar", authenticate, async (req, res) => {
     try {
         const result = await agregarClientes([req.body]);
         if (result.every(r => r !== null)) {
-            // const results = await insertRecord("clientes", req.body);
+            const results = await insertRecord("clientes", req.body);
             await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: Date.now()});
             res.status(201).json({ message: "Cliente creado correctamente!" });
         }
