@@ -802,7 +802,7 @@ router.get("/admins/listarByEmail/:email", authenticate, (req,res) => {
 // Agregar administrador
 router.post("/admins/agregar", authenticate, async (req, res) => {
     const { email, password, ID_Comercio, nombre, apellido, permisos } = req.body;
-
+    console.log(req.body)
     if (!ID_Comercio || ID_Comercio.length === 0) {
         return res.status(500).json({ error: "No se puede agregar un admin sin comercios adheridos." });
     }
