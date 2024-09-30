@@ -171,7 +171,7 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
     try {
       // Calcular puntos parciales
         const comercio = await selectOneRecord('comercio', 'ID_Comercio', req.body.ID_Comercio);
-        if (!comercio || comercio.length > 0 || Number(comercio[0].puntos_totales) == 0) {
+        if (!comercio || comercio.length == 0 || Number(comercio[0].puntos_totales) == 0) {
             return res.status(400).json({ error: "El comercio seleccionado no tiene puntos acumulados." });
         }
 
