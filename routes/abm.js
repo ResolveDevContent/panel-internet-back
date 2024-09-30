@@ -827,7 +827,7 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
         const result = await insertRecord("users", user);
         const result2 = await insertRecord("admins", {nombre, apellido, email, permisos});
 
-        if (await permisos(ID_Comercio, email)) {
+        if (await addPermisos(ID_Comercio, email)) {
             await insertRecord('historial', {message: "Se agrego el admin " + nombre, fecha: Date.now()});
             res.status(201).json({ message: "Admin creado correctamente!" });
         } else {
@@ -862,7 +862,7 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
     }
 });
 
-async function permisos(datos, email) {
+async function addPermisos(datos, email) {
     try {
         // Mapea los datos a promesas de inserción
         const permisosPromises = datos.map(async (row) => {
