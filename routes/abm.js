@@ -528,8 +528,10 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         // }
 
         if(puntosFinales > 0) {
+            const sumaPuntos = Number(comercio[0].puntos_totales) + Number(puntosFinales);
+            console.log(sumaPuntos)
             await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: puntosFinales, fecha: currentDate});
-            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) + Number(puntosFinales)}, "ID_Comercio", comercio[0].ID_comercio);
+            await updateRecord("comercio", {puntos_totales: sumaPuntos}, "ID_Comercio", comercio[0].ID_comercio);
         }
 
         const results = await insertRecord("transacciones", body);
@@ -595,7 +597,7 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
 
         if(puntos && puntos.length > 0) {
             await deleteRecord("puntos", 'ID_Puntos', transaccion[0].ID_Puntos);
-            await updateRecord("comercio", {puntos: Number(comercio[0].puntos_totales) - Number(puntos.puntos_totales)}, "ID_Comercio", comercio[0].ID_comercio);
+            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(puntos.puntos_totales)}, "ID_Comercio", comercio[0].ID_comercio);
         }
 
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
