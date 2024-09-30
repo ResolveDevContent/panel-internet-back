@@ -51,7 +51,7 @@ const formatearDatos = (datos) => {
         }
 
         if(titulo == 'comercios') {
-            data.puntos_totales = new Intl.NumberFormat('es-ES').format(data.puntos_totales)
+            data.puntos_totales = new Intl.NumberFormat('es-ES').format(Number(data.puntos_totales))
         }
 
         if(titulo == "admins") {
@@ -62,11 +62,6 @@ const formatearDatos = (datos) => {
 
         return newArr
     })
-
-    if(titulo == "comercios") {
-        const idx = columns.findIndex(column => column == "puntos_totales");
-        columns[idx] = "deuda"
-    }
     
     if(titulo == "admins") {
         const idx = columns.findIndex(column => column == "password");
