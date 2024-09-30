@@ -531,7 +531,8 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
             const sumaPuntos = Number(comercio[0].puntos_totales) + Number(puntosFinales);
             console.log(sumaPuntos)
             await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: puntosFinales, fecha: currentDate});
-            await updateRecord("comercio", {puntos_totales: sumaPuntos}, "ID_Comercio", comercio[0].ID_comercio);
+            const puto = await updateRecord("comercio", {puntos_totales: sumaPuntos}, "ID_Comercio", comercio[0].ID_comercio);
+            console.log(puto)
         }
 
         const results = await insertRecord("transacciones", body);
