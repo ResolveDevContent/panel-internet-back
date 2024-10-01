@@ -6,9 +6,10 @@ const { calcularPuntos } = require("../utils/calcularPuntos");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const { changePassword } = require("../controllers/auth");
-const { listarUno } = require("../panel-internet-front2/src/services/abm");
 
 const router = express.Router();
+
+const cron = require('node-cron');
 
 //CRUD: HISTORIAL ---------------------------------------------------------------------------------
 
@@ -915,20 +916,22 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
 router.post("/puntos/fecha/listar", authenticate, async (req, res) => {
     try {
         const fecha = await selectTable("fecha");
-        res.status(200).json(fecha);
+
+        if(!fecha || fecha.length == 0 || fecha[0].fecha < Date.now()) {
+            res.status(200).json([]);
+        } else {
+            setDate(fecha)
+            res.status(200).json(fecha);
+        }
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
 });
 
-function runAtSpecificTimeOfDay(date, func) {
-  const now = new Date(),
-  fecha = new Date(date),
-  remaining = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), 0, 0, 0, 0).getTime() - now;
-
-  setTimeout(function() {
-    func();
-  }, remaining);
+function setDate(date) {
+    cron.schedule(`0 0 ${date.getDate()} ${date.getMonth()} *`, () => {
+        caducarPuntos();
+    });
 }
 
 async function caducarPuntos() {
@@ -959,7 +962,5 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 });
 
 // ------------------------------------------------------------------------------------------
-
-
 
 module.exports = router;

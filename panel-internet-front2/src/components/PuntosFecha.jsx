@@ -60,15 +60,9 @@ export const PuntosFecha = (titulo) => {
             return;
         }
 
-        if(!datos || datos.length == 0) {
-            setLoading(false);
-            return;
-        }
-
-        const now = Date.now();
         let fechaHora = '';
         
-        if(now <= datos[0].fecha) {
+        if(datos.length > 0) {
           const date = new Date(datos[0].fecha);
           date = date.setHours(0,0,0,0);
           const fecha = date.toISOString();
