@@ -904,10 +904,10 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 
 // function runAtSpecificTimeOfDay(date, func) {
 //   const now = new Date();
-//   let eta_ms = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime() - now;
+//   let remaining = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0).getTime() - now;
 //   setTimeout(function() {
 //     func();
-//   }, eta_ms);
+//   }, remaining);
 // }
 
 // async function caducarPuntos() {
@@ -915,8 +915,10 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 //         const result = await selectFechaLimit("puntos", "fecha", 12345678);
 
 //         if(result.length > 0) {
-
-//             res.status(200).json(result);
+//             result.forEach(async row => {
+//                 await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+//             })
+//             res.status(200).json({message: 'Realizado con éxito'});
 //         }
 //     } catch (err) {
 //         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
