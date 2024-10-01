@@ -966,21 +966,21 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 
 router.post('/backup', (req, res) => {
     backupDatabase();
-    res.send('Backup en proceso...');
+    res.status(200).json({ message: 'Backup en proceso...'});
 });
 
 router.post('/restore', (req, res) => {
     const { file } = req.body;
     if (!file) {
-        return res.status(400).send('Se requiere el nombre del archivo de backup.');
+        return res.status(400).json({ error: 'Se requiere el nombre del archivo de backup.'});
     }
     restoreDatabase(file);
-    res.send('Restauración en proceso...');
+    res.status(200).json({ message: 'Restauracion en proceso...'});
 });
 
 router.get('/backups', (req, res) => {
     listBackups();
-    res.send('Lista de archivos de backup generada en la consola.');
+    res.status(200).send(listBackups());
 });
 
 

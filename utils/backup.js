@@ -62,6 +62,7 @@ function listBackups() {
         const backups = files.filter(file => file.startsWith('backup_') && file.endsWith('.sql'));
         console.log('Archivos de backup encontrados:');
         backups.forEach(file => console.log(file));
+        return backups
     });
 }
 
