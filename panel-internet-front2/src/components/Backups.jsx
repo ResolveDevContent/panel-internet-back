@@ -41,7 +41,7 @@ export const Backups = () => {
             setLoading(false);
             setBackups(datos);
         })
-    }, [backups])
+    }, [])
 
     return (
         <div>
@@ -49,7 +49,7 @@ export const Backups = () => {
             <ul>
                 {backups.map((backup, idx) => (
                     <li key={idx}>
-                        {/* {backup} */}
+                        <span>{backup}</span>
                         <button onClick={restaurarBackup}>Restaurar</button>
                     </li>
                 ))}
