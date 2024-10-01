@@ -982,8 +982,7 @@ router.post('/restore', (req, res) => {
 
 router.get('/backups', (req, res) => {
     // listBackups();
-    console.log("DIRNAME", __dirname)
-    const backupDir = "../utils"; // Directorio donde se guardan los backups
+    const backupDir = "/var/www/panel-internet-back/utils"; // Directorio donde se guardan los backups
 
     fs.readdir(backupDir, (err, files) => {
         if (err) {
