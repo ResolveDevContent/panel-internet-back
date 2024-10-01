@@ -94,18 +94,44 @@ export const Sidebar = ({user}) => {
         ) : null}
         <ul className="menu one">
           {user && user.role == "superadmin" ? (
-            <li>
-              <input type="radio" id="historial" name="solapa"/>
-              <label htmlFor="historial">
-                <User />
-                <span>Historial</span>
-              </label>
-              <ul>
-                <li>
-                  <NavLink className={({isActive}) => isActive ? 'active' : ''} to="historial/listar">Ver</NavLink>
-                </li>
-              </ul>
-            </li>
+            <>
+              <li>
+                <input type="radio" id="backups" name="solapa"/>
+                <label htmlFor="backups">
+                  <User />
+                  <span>Backups</span>
+                </label>
+                <ul>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="backups">Ver</NavLink>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <input type="radio" id="puntos" name="solapa"/>
+                <label htmlFor="puntos">
+                  <User />
+                  <span>Puntos</span>
+                </label>
+                <ul>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="puntos/fecha">Ver</NavLink>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <input type="radio" id="historial" name="solapa"/>
+                <label htmlFor="historial">
+                  <User />
+                  <span>Historial</span>
+                </label>
+                <ul>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="historial/listar">Ver</NavLink>
+                  </li>
+                </ul>
+              </li>
+            </>
           ) : null}
           {user && (user.role == "admin" || user.role == "comercio" || user.role == "superadmin") ? (
             <li>
