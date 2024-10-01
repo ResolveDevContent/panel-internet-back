@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const { changePassword } = require("../controllers/auth");
 
-const { backupDatabase, restoreDatabase } = require('../utils/backup');
+const { backupDatabase, restoreDatabase, listBackups } = require('../utils/backup');
 
 const router = express.Router();
 
