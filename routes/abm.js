@@ -9,6 +9,8 @@ const { changePassword } = require("../controllers/auth");
 
 const { backupDatabase, restoreDatabase, listBackups } = require('../utils/backup');
 
+const fs = require('fs');
+
 const router = express.Router();
 
 const cron = require('node-cron');
@@ -979,10 +981,23 @@ router.post('/restore', (req, res) => {
 });
 
 router.get('/backups', (req, res) => {
-    listBackups();
-    console.log("PRIMER",listBackups)
-    console.log("second",listBackups())
-    res.status(200).send(listBackups());
+    // listBackups();
+
+    const backupDir = "../utils"; // Directorio donde se guardan los backups
+
+    fs.readdir(backupDir, (err, files) => {
+        if (err) {
+            console.error('Error al leer el directorio:', err);
+            return;
+        }
+
+        const backups = files.filter(file => file.startsWith('backup_') && file.endsWith('.sql'));
+        console.log('Archivos de backup encontrados:');
+        // backups.forEach(file => console.log(file));
+        console.log("BACKUPS", backups)
+        res.status(200).send(backups);
+    });
+
 });
 
 

@@ -50,7 +50,7 @@ function restoreDatabase(backupFile) {
 }
 
 // Función para listar archivos de backup
-function listBackups() {
+async function listBackups() {
     const backupDir = __dirname; // Directorio donde se guardan los backups
 
     fs.readdir(backupDir, (err, files) => {
