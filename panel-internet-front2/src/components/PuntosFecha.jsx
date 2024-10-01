@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Toast } from "./Toast";
+import { agregar, listar } from "../services/abm";
 
 export const PuntosFecha = (titulo) => { 
   const [ date, setDate ] = useState(null);
@@ -7,6 +8,8 @@ export const PuntosFecha = (titulo) => {
           text: "",
           res: ""
       })
+  const [ result, setResult ] = useState(null);
+  const [ update, setUpdate ] = useState(null);
 
   const handleDates = () => {
     if(date == null) {
@@ -20,12 +23,62 @@ export const PuntosFecha = (titulo) => {
         return
     }
 
-    // guardar fechas nuevas
+    setLoading(true);
+
+    agregar(titulo, {fecha: date})
+    .then(data => {
+        if(data.error) {
+            setState({text: data.error, res: "secondary"})
+            setLoading(false)
+            return
+        }
+        setLoading(false)
+
+        setUpdate('actualizado');
+        setState({text: data.message, res: "primary"})
+    });
+
+    setTimeout(() => {
+        setState({text: "", res: ""})
+    }, 4000)
   }
 
   useEffect(() => {
-    // fechas de la base de datos
-  }, [])
+    setLoading(true);
+
+    listar(titulo)
+    .then(datos => {
+        if(datos.error) {
+            setLoading(false);
+            setState({
+                text: datos.error,
+                res: "secondary"
+            })
+            setTimeout(() => {
+                setState({text: "", res: ""})
+            }, 4000)
+            return;
+        }
+
+        if(!datos || datos.length == 0) {
+            setLoading(false);
+            return;
+        }
+
+        const now = Date.now();
+        let fechaHora = '';
+        
+        if(now <= datos[0].fecha) {
+          const date = new Date(datos[0].fecha);
+          date = date.setHours(0,0,0,0);
+          const fecha = date.toISOString();
+          fechaHora = fecha.split('T')[0] + ' 00:00';
+        }
+
+        setLoading(false);
+        setResult(fechaHora);
+    })
+  }, [update])
 
   return(
     <>
@@ -45,12 +98,12 @@ export const PuntosFecha = (titulo) => {
           </div>
         </div>
 
-        {true 
+        {result != null && result != ''
           ? <div className="d-flex flex-column">
               <em>las fechas actuales: </em> 
               <div className="d-flex align-center">
                 <div>
-                    <span>Fecha desde: <span>Fecha</span></span>
+                    <span>Fecha desde: <span>{result}</span></span>
                 </div>
               </div>
           </div>

@@ -146,7 +146,7 @@ const selectAsociaciones = async (tableName, columns, values) => {
   }
 }
 
-const selectFechaLimit = async (tableName, column, value) => {
+const selectFechaLimite = async (tableName, column, value) => {
   const query = `SELECT * FROM ${tableName} WHERE ${column} <= FROM_UNIXTIME(${value})`;
 
   try {
@@ -218,7 +218,7 @@ module.exports = {
   selectByAdmin,
   selectOneRecord,
   selectAsociaciones,
-  selectFechaLimit,
+  selectFechaLimite,
   selectOrderByASC,
   deleteRecord,
   updateRecord,

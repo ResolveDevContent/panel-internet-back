@@ -1,11 +1,12 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, selectOneDato, calcularPuntosTotales, selectOrderByASC } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const { changePassword } = require("../controllers/auth");
+const { listarUno } = require("../panel-internet-front2/src/services/abm");
 
 const router = express.Router();
 
@@ -888,6 +889,63 @@ async function addPermisos(datos, email) {
     }
 }
 
+// FECHA PUNTOS ------------------------------------------------------------------------------------------
+
+router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
+    if (!req.body.fecha || req.body.fecha === '') {
+        return res.status(500).json({ error: "No hay una fecha establecida." });
+    }
+
+    try {
+        const fecha = await selectTable("fecha");
+        const result = await updateRecord("fecha", req.body, 'ID_Fecha', fecha[0].ID_Fecha);
+
+        if (result) {
+            await insertRecord('historial', {message: "Se actualiazo la fecha de caducación de los puntos", fecha: Date.now()});
+            runAtSpecificTimeOfDay(date, caducarPuntos);
+            res.status(201).json({ message: "fecha actualizada correctamente!" });
+        } else {
+            res.status(500).json({ error: "La fecha actualizar correctamente!" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.post("/puntos/fecha/listar", authenticate, async (req, res) => {
+    try {
+        const fecha = await selectTable("fecha");
+        res.status(200).json(fecha);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+function runAtSpecificTimeOfDay(date, func) {
+  const now = new Date(),
+  fecha = new Date(date),
+  remaining = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), 0, 0, 0, 0).getTime() - now;
+
+  setTimeout(function() {
+    func();
+  }, remaining);
+}
+
+async function caducarPuntos() {
+    try {
+        const result = await selectFechaLimite("puntos", "fecha", 12345678);
+
+        if(result.length > 0) {
+            result.forEach(async row => {
+                await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+            })
+            res.status(200).json({message: 'Realizado con éxito'});
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+}
+
 // USERS ------------------------------------------------------------------------------------------
 
 router.delete("/users/borrar/:id", authenticate, async (req, res) => {
@@ -900,31 +958,8 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
     }
 });
 
-// CADUCAR PUNTOS ------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------
 
-// function runAtSpecificTimeOfDay(date, func) {
-//   const now = new Date();
-//   let remaining = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0).getTime() - now;
-//   setTimeout(function() {
-//     func();
-//   }, remaining);
-// }
 
-// async function caducarPuntos() {
-//     try {
-//         const result = await selectFechaLimit("puntos", "fecha", 12345678);
-
-//         if(result.length > 0) {
-//             result.forEach(async row => {
-//                 await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
-//             })
-//             res.status(200).json({message: 'Realizado con éxito'});
-//         }
-//     } catch (err) {
-//         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
-//     }
-// }
-
-// runAtSpecificTimeOfDay(date, caducarPuntos);
 
 module.exports = router;
