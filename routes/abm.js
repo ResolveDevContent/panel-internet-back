@@ -7,6 +7,8 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const { changePassword } = require("../controllers/auth");
 
+const { backupDatabase, restoreDatabase } = require('../utils/backup');
+
 const router = express.Router();
 
 const cron = require('node-cron');
@@ -898,8 +900,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
     }
 
     try {
-        const fecha = await selectTable("fecha");
-        const result = await updateRecord("fecha", req.body, 'ID_Fecha', fecha[0].ID_Fecha);
+        const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
             await insertRecord('historial', {message: "Se actualiazo la fecha de caducación de los puntos", fecha: Date.now()});
@@ -960,6 +961,28 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
 });
+
+// BACKUPS ------------------------------------------------------------------------------------------
+
+router.post('/backup', (req, res) => {
+    backupDatabase();
+    res.send('Backup en proceso...');
+});
+
+router.post('/restore', (req, res) => {
+    const { file } = req.body;
+    if (!file) {
+        return res.status(400).send('Se requiere el nombre del archivo de backup.');
+    }
+    restoreDatabase(file);
+    res.send('Restauración en proceso...');
+});
+
+router.get('/backups', (req, res) => {
+    listBackups();
+    res.send('Lista de archivos de backup generada en la consola.');
+});
+
 
 // ------------------------------------------------------------------------------------------
 

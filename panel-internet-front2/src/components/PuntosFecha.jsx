@@ -10,6 +10,7 @@ export const PuntosFecha = (titulo) => {
       })
   const [ result, setResult ] = useState(null);
   const [ update, setUpdate ] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleDates = () => {
     if(date == null) {
@@ -63,7 +64,7 @@ export const PuntosFecha = (titulo) => {
         let fechaHora = '';
         
         if(datos.length > 0) {
-          const date = new Date(datos[0].fecha);
+          let date = new Date(datos[0].fecha);
           date = date.setHours(0,0,0,0);
           const fecha = date.toISOString();
           fechaHora = fecha.split('T')[0] + ' 00:00';

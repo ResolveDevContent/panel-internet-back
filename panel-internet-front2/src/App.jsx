@@ -16,6 +16,7 @@ import { PerfilAuth } from './services/auth.js'
 import { ImportCsv } from './components/ImportCsv.jsx'
 import { ChangePassword } from './components/ChangePassword.jsx'
 import { PuntosFecha } from './components/PuntosFecha.jsx'
+import { Backups } from './components/Backups.jsx'
 
 function App() {
   const [auth, setAuth] = useState(false);
@@ -51,6 +52,8 @@ function App() {
               <Panel user={user}/>
             }>
               <Route element={<PrivateRoutes user={user} roles={['superadmin']}/>}>
+                <Route path="backups" element={<Backups titulo={"backups"}/>} />
+
                 <Route path="puntos/fecha" element={<PuntosFecha titulo={"puntos/fecha"}/>} />
                 <Route path="historial/listar" element={<Listado titulo={"historial"}/>} />
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
