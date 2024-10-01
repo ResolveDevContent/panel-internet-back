@@ -13,8 +13,8 @@ export const Backups = () => {
         makeBackup()
     }
 
-    const restaurarBackup = () => {
-        restoreBackup()
+    const restaurarBackup = (file) => {
+        restoreBackup(file)
     }
     
     useEffect(() => {
@@ -50,7 +50,7 @@ export const Backups = () => {
                 {backups.map((backup, idx) => (
                     <li key={idx}>
                         <span>{backup}</span>
-                        <button onClick={restaurarBackup}>Restaurar</button>
+                        <button onClick={() => restaurarBackup(backup)}>Restaurar</button>
                     </li>
                 ))}
             </ul>
