@@ -980,6 +980,8 @@ router.post('/restore', (req, res) => {
 
 router.get('/backups', (req, res) => {
     listBackups();
+    console.log("PRIMER",listBackups)
+    console.log("second",listBackups())
     res.status(200).send(listBackups());
 });
 
