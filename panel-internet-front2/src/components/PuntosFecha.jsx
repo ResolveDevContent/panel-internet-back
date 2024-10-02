@@ -67,9 +67,8 @@ export const PuntosFecha = ({titulo}) => {
 
         let fechaHora = '';
         
-        if(datos.length > 0 && datos[0].fecha >= Date.now()) {
-          let date = new Date(datos[0].fecha);
-          date = date.setHours(0,0,0,0);
+        if(datos.length > 0 && Number(datos[0].fecha) >= Date.now()) {
+          let date = new Date(Number(datos[0].fecha));
           const fecha = date.toISOString();
           fechaHora = fecha.split('T')[0] + ' 00:00';
         }
