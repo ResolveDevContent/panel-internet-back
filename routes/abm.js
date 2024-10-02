@@ -921,9 +921,11 @@ router.post("/puntos/fecha/listar", authenticate, async (req, res) => {
         const fecha = await selectTable("fecha");
 
         if(!fecha || fecha.length == 0 || fecha[0].fecha < Date.now()) {
+            console.log("entra", fecha)
             res.status(200).json([]);
         } else {
             setDate(fecha)
+            console.log(fecha)
             res.status(200).json(fecha);
         }
     } catch (err) {
