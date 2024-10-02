@@ -931,7 +931,7 @@ function setDate(date) {
     // cron.schedule(`0 0 ${new Date(date).getDate()} ${new Date(date).getMonth() + 1} *`, () => {
     //     return caducarPuntos(date);
     // });
-    cron.schedule(`45 11 2 10 *`, () => {
+    cron.schedule(`48 11 2 10 *`, () => {
         return caducarPuntos(date);
     });
 }
