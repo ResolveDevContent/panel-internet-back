@@ -614,10 +614,10 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', transaccion[0].ID_Cliente);
         const puntos = await selectAsociaciones("puntos", {first: "ID_Cliente", second: "fecha"}, {first: cliente[0].ID_Cliente, second: transaccion[0].fecha});
         const comercio = await selectOneRecord("comercio", 'ID_Comercio', transaccion[0].ID_Comercio);
-        
+
         if(puntos && puntos.length > 0) {
             await deleteRecord("puntos", 'ID_Puntos', transaccion[0].ID_Puntos);
-            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(puntos[0].puntos_totales)}, "ID_Comercio", comercio[0].ID_comercio);
+            await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(puntos[0].puntos_totales)}, "ID_Comercio", comercio[0].ID_Comercio);
         }
 
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
