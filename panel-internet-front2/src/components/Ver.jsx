@@ -44,8 +44,6 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                 return;
             }
 
-            datos[0].fecha = new Date(datos[0].fecha)
-
             setLoading(false)
             setData(datos)
         })
@@ -69,9 +67,7 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                             <ul className="card-body">
                                 {elementos.map((row, idx) => {
                                     if(row.element == 'input') { return <InputTemplate key={idx} data={row} disabledEmail={titulo == "comercios" || titulo == "admins"} values={data.length > 0 && id ? data[0] : {}}/> }
-                                    if(row.element == 'multiple') { return <MultipleSelectTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}}/> }
-                                    if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
-                                    if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
+                                    if(row.element == 'input' && row.nombre == 'message') { return <textarea key={idx}>{data[0].message}</textarea> }
                                 })}
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success" onClick={() => {navigate("/")}}>Volver</button>
