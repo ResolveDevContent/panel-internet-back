@@ -62,8 +62,8 @@ export const User = () => {
                 <div className='d-flex align-center wallet'>
                   <Wallet />
                   {
-                    total.monto_total && total.monto_total > 0 
-                    ? <span>$ {total.monto_total}</span> 
+                    total.monto_total[0].total && total.monto_total[0].total > 0 
+                    ? <span>$ {total.monto_total[0].total}</span> 
                     :<span className="saldado">$0</span> 
                   }
                 </div>
@@ -73,8 +73,8 @@ export const User = () => {
                 <div className='d-flex align-center'>
                   <Coin />
                   {
-                    total.puntos_totales && total.puntos_totales > 0 
-                    ? <span>{total.puntos_totales}</span> 
+                    total.puntos[0].total && total.puntos[0].total > 0 
+                    ? <span>{total.puntos[0].total}</span> 
                     :<span className="saldado">Sin puntos</span> 
                   }
                 </div>
