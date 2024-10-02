@@ -27,6 +27,17 @@ router.get("/historial/listar", (req,res) => {
     })
 });
 
+router.get("/historial/listar/:id", (req,res) => {
+    const { id } = req.params;
+    selectOneRecord("historial", "ID_Historial", id)
+    .then((results) => {
+        res.send(results);
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+});
+
 //COMERCIOS ---------------------------------------------------------------------------------
 
 router.get("/comercios/listar", (req,res) => {
