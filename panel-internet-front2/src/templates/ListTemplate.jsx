@@ -109,14 +109,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     datos.forEach(row => {
                       const _row = permisos.find(elm => elm.ID_Comercio == row.ID_Comercio);
                       // idx > -1 ? row.checked = true : row.checked = false;
-                      console.log(refPermisos.current)
-                      if(refPermisos.current.id == _row.ID_Comercio) {
-                        refPermisos.current.checked = true
-                      } else {
-                        refPermisos.current.checked = false
-                      }
+                      // if(refPermisos.current.id == _row.ID_Comercio) {
+                      //   refPermisos.current.checked = true
+                      // } else {
+                      //   refPermisos.current.checked = false
+                      // }
                     });
 
+                    console.log(refPermisos.current)
                     
                     console.log("AFTER FOREACH", datos)
                     const idsComercio = [];
@@ -201,14 +201,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                         </label>
                       : null
                     }
-                    <ul>
+                    <ul ref={refPermisos}>
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
                             <label>
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                ref={refPermisos}/>
+                                />
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
