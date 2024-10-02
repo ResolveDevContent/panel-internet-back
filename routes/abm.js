@@ -976,6 +976,7 @@ router.post('/restore', (req, res) => {
     if (!file) {
         return res.status(400).json({ error: 'Se requiere el nombre del archivo de backup.'});
     }
+    console.log(file)
     restoreDatabase(file);
     res.status(200).json({ message: 'Restauracion en proceso...'});
 });
