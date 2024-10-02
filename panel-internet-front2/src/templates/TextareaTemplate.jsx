@@ -5,7 +5,7 @@ export const TextareaTemplate = ({data, disabledEmail, values = {}}) => {
         <li>
             <div className="mb-3">
                 <label htmlFor={nombre} className="form-label text-capitalize">{placeholder}</label>
-                <textarea className="form-control" id={nombre} name={nombre} placeholder={placeholder}>{values[data.nombre]}</textarea> 
+                <textarea className="form-control" id={nombre} name={nombre} placeholder={placeholder} defaultValue={values[data.nombre]}></textarea> 
             </div>
         </li>
     ) 
