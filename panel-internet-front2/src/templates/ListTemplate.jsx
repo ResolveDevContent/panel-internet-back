@@ -12,6 +12,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const [ loading, setLoading] = useState(false)
     const [ permisos, setPermisos] = useState(false)
     const [ datos, setDatos ] = useState([]);
+    const [pepe, setPepe] = useState([])
 
     const originalListado = useRef([])
 
@@ -40,6 +41,15 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         setLoading(false)
         setSortedListado(newArr)
     }, [nombreComercio])
+    
+    const handleClick = e => {
+      const value = e.target.value;
+      const obj = {
+        ...pepe,
+        value: !pepe[e.target.value]
+      }
+      setPepe(obj)
+    }
 
     const handleChange = e => {
       setLoading(true)
@@ -115,6 +125,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     permisos.forEach(row => {
                       idsComercio.push(row.ID_Comercio)
                     })
+
+                    const reduce = datos.reduce((acc, elem, idx) => {
+                      acc[elem.ID_Comercio] = idsComercio.includes(elem.ID_Comercio)
+
+                      return acc;
+                    }, {})  
+
+                    setPepe(reduce)
 
                     setDatos(idsComercio);
                 })
@@ -199,8 +217,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                checked={datos.includes(row.ID_Comercio)}
-                                />
+                                checked={pepe[row.ID_Comercio]} onClick={handleClick}
+                              />
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
