@@ -55,10 +55,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setDatos(newArr);
 
       if(values) {
-        newArr = [
-          ...datosMostrar,
-          e.target.name
-        ];
+        if(e.target.checked) {
+          newArr = [
+            ...datosMostrar,
+            e.target.name
+          ];
+        } else {
+          newArr = datos.filter(row => row != e.target.name);
+        }
         setDatosMostrar(newArr)
       }
     }
@@ -123,7 +127,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
                     const idsComercio = [];
                     const nombresComercio = [];
-
+                    console.log(permisos)
                     permisos.forEach(row => {
                       idsComercio.push(row.ID_Comercio)
 
