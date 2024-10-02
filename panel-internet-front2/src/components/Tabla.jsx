@@ -35,6 +35,10 @@ const formatearDatos = (datos) => {
         return;
     }
 
+    if(titulo == "historial") {
+        datos = datos.sort((a, b) => b - a)
+    }
+
     const columns = Object.keys(datos[0]).slice(1, Object.keys(datos[0]).length)
     const rows = datos.map((data) => {
         if((titulo == 'historial' || titulo == 'transacciones' || titulo == 'comercios/pagos') && !data["fecha"].includes("/")) {
