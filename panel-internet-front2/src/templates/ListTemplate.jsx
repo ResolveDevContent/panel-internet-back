@@ -111,7 +111,13 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     });
                     
                     console.log("AFTER FOREACH", datos)
-                    setDatos(permisos);
+                    const idsComercio = [];
+
+                    permisos.forEach(row => {
+                      idsComercio.push(row.ID_Comercio)
+                    })
+                    
+                    setDatos(idsComercio);
                 })
                 .catch(err => {
                     setState({
