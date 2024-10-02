@@ -6,13 +6,11 @@ export const PermisosTemplate = ({data, values = {}}) => {
     const refNo = useRef()
 
     console.log(values, values[nombre])
-    if(values[nombre] && values[nombre] == 1) {
+    if(values[nombre] && values[nombre] == 1 && refSi.current) {
+      refSi.current.checked = true;
+    } else if(values[nombre] && values[nombre] == 0 && refNo.current){
       console.log(refSi, refSi.current)
-      // refSi.current.checked = true;
-    } else {
-      console.log(refSi, refSi.current)
-
-      // refNo.current.checked = true;
+      refNo.current.checked = true;
     }
 
     return(
