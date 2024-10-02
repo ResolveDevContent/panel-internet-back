@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 
 export const listar = (model) => {
     const token = Cookies.get("token");
+    console.log(model)
     return (
         fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar`, {
             method: "GET",
