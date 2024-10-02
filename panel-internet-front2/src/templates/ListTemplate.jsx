@@ -8,6 +8,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ state, setState ] = useState({text: "", res: ""})
     const [ loading, setLoading] = useState(false)
+    const [ permisos, setPermisos] = useState(false)
     const [ datos, setDatos ] = useState([]);
 
     const originalListado = useRef([])
@@ -94,6 +95,29 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
+              if(titulo == 'admins' && values.length > 0) {
+                listar(placeholder)
+                .then(permisos => {
+                    if(!permisos || permisos.error|| permisos.length == 0) {
+                        return;
+                    }
+
+                    setPermisos(true);
+                    datos.forEach(row => {
+                      const idx = permisos.findIndex(elm => elm.ID_Comercio == row.ID_Comercio);
+                      idx > -1 ? row.checked = true : row.checked = false;
+                    });
+
+                    setDatos(permisos);
+                })
+                .catch(err => {
+                    setState({
+                        text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                        res: "danger"
+                    })
+                })
+              }
+
               setSortedListado(datos)
               originalListado.current = datos;
           })
@@ -164,7 +188,10 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
                             <label>
-                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
+                                name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
+                                onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
+                                defaultChecked={permisos ? row.checked : false}/>
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
