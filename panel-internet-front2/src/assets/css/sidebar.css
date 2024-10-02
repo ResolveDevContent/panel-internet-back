@@ -125,7 +125,7 @@
 }
 
 .sidebar .menu li svg {
-  fill: white;
+  fill: white!important;
 }
 
 .sidebar .menu li label:hover,
