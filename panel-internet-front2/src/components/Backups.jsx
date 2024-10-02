@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { listBackups, makeBackup, restoreBackup } from "../services/abm"
 import '../assets/css/panel.css'
 import { Loading } from "./Loading"
+import { Modal } from "./Modal"
+import { Toast } from "./Toast"
 
 export const Backups = () => {
     const [backups, setBackups] = useState([])
@@ -11,6 +13,10 @@ export const Backups = () => {
         res: ""
     })
     const [update, setUpdate] = useState(null)
+    const [ modalState, setModalState ] = useState({
+        open: false,
+        backup: ""
+    })
 
     const makeBackups = () => {
         setLoading(true)
@@ -27,6 +33,7 @@ export const Backups = () => {
             setState({text: data.message, res: "primary"})
             setUpdate(Date.now())
         })
+        setModalState({open: false})
     }
 
     const restaurarBackup = (file) => {
@@ -87,10 +94,19 @@ export const Backups = () => {
                     {backups.map((backup, idx) => (
                         <li key={idx}>
                             <span>{backup}</span>
-                            <button onClick={() => restaurarBackup(backup)}>Restaurar</button>
+                            <button onClick={() => setModalState({open: !modalState.open, backup: backup})}>Restaurar</button>
                         </li>
                     ))}
                 </ul>
+            {modalState.open ? (
+                <Modal show={"show"} titulo={`Restaurar`} texto={"¿Estás seguro que deseas restaurar a este backup?"}>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={() => setModalState({open: false, id: ""})}>Cerrar</button>
+                        <button type="button" className="btn btn-primary" onClick={() => restaurarBackup(modalState.backup)}>Aceptar</button>
+                    </div>
+                </Modal>
+            ) : null}
+            { state.text ? <Toast texto={state.text} res={state.res} /> : null }
             </article>
         </>
     )

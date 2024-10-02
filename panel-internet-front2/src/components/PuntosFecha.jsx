@@ -81,7 +81,7 @@ export const PuntosFecha = ({titulo}) => {
         if(datos.length > 0 && Number(datos[0].fecha) >= Date.now()) {
           let date = new Date(Number(datos[0].fecha));
           const fecha = date.toISOString();
-          fechaHora = fecha.split('T')[0] + ' 00:00';
+          fechaHora = fecha.split('T')[0] + ' 00:00 hs';
         }
 
         setLoading(false);
@@ -109,11 +109,11 @@ export const PuntosFecha = ({titulo}) => {
         </div>
 
         {result != null && result != ''
-          ? <div className="d-flex flex-column">
-              <em>las fechas actuales: </em> 
+          ? <div className="d-flex flex-column mt-1">
+              <em>Las fechas actuales</em> 
               <div className="d-flex align-center">
                 <div>
-                    <span>Fecha desde: <span>{result}</span></span>
+                    <span className="d-flex gap-5 align-center mt-1">Fecha desde: <span>{result}</span></span>
                 </div>
               </div>
           </div>
