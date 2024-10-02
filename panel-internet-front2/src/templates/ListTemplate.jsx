@@ -57,12 +57,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       if(values) {
         let arr = []
         if(e.target.checked) {
-          arr = [
-            ...datosMostrar,
-            e.target.name
-          ];
+          if(!datosMostrar.includes(e.target.name)) {
+            arr = [
+              ...datosMostrar,
+              e.target.name
+            ];
+          }
         } else {
-          arr = datos.filter(row => row != e.target.name);
+          arr = datosMostrar.filter(row => row != e.target.name);
         }
         setDatosMostrar(arr)
       }
