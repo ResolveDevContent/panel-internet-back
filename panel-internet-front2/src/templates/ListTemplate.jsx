@@ -194,7 +194,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                defaultChecked={permisos ? row.checked : false}/>
+                                defaultChecked={permisos ? row.checked : false} checked={permisos ? row.checked : false}/>
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
