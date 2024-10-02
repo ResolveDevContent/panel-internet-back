@@ -86,7 +86,7 @@ export const ELEMENTOS = {
     {
         element: 'input',
         tipo: 'text',
-        nombre: 'codigo',
+        nombre: 'Codigo',
         placeholder: 'Codigo',
         valor: ''
     }
