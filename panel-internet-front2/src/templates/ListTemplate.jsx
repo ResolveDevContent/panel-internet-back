@@ -199,7 +199,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                checked={values && datos.includes(row.ID_Comercio)}
+                                checked={datos.includes(row.ID_Comercio)}
                                 />
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
