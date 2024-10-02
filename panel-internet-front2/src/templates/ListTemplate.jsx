@@ -14,6 +14,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const [ datos, setDatos ] = useState([]);
 
     const originalListado = useRef([])
+    const refPermisos = useRef()
 
     const { nombre, placeholder, tipo } = data;
 
@@ -106,9 +107,16 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     
                     setPermisos(true);
                     datos.forEach(row => {
-                      const idx = permisos.findIndex(elm => elm.ID_Comercio == row.ID_Comercio);
-                      idx > -1 ? row.checked = true : row.checked = false;
+                      const _row = permisos.find(elm => elm.ID_Comercio == row.ID_Comercio);
+                      // idx > -1 ? row.checked = true : row.checked = false;
+                      console.log(refPermisos.current)
+                      if(refPermisos.current.id == _row.ID_Comercio) {
+                        refPermisos.current.checked = true
+                      } else {
+                        refPermisos.current.checked = false
+                      }
                     });
+
                     
                     console.log("AFTER FOREACH", datos)
                     const idsComercio = [];
@@ -116,7 +124,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     permisos.forEach(row => {
                       idsComercio.push(row.ID_Comercio)
                     })
-                    
+
                     setDatos(idsComercio);
                 })
                 .catch(err => {
@@ -200,7 +208,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                defaultChecked={permisos ? row.checked : false} checked={permisos ? row.checked : false}/>
+                                ref={refPermisos}/>
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
