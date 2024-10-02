@@ -176,8 +176,9 @@ export const listBackups = () => {
     )
 }
 
-export const restoreBackup = (body) => {
+export const restoreBackup = (file) => {
     const token = Cookies.get("token");
+    const body = {file: file}
     return(
         fetch(`http://vps-4375167-x.dattaweb.com/abm/restore`, {
             method: "POST",
