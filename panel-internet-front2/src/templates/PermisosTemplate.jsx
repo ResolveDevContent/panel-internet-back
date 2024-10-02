@@ -7,9 +7,12 @@ export const PermisosTemplate = ({data, values = {}}) => {
 
     console.log(values, values[nombre])
     if(values[nombre] && values[nombre] == 1) {
-      refSi.current.checked = true;
+      console.log(refSi, refSi.current)
+      // refSi.current.checked = true;
     } else {
-      refNo.current.checked = true;
+      console.log(refSi, refSi.current)
+
+      // refNo.current.checked = true;
     }
 
     return(
