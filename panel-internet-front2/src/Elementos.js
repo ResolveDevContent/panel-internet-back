@@ -213,5 +213,21 @@ export const ELEMENTOS = {
         placeholder: "comercios",
         tipo: 'checkbox'
     },
-  ],
+    ],
+    historial: [
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'message',
+            placeholder: 'Mensaje',
+            valor: ''
+        },
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'fecha',
+            placeholder: 'Fecha',
+            valor: ''
+        }
+    ]
 }

@@ -57,7 +57,7 @@ function App() {
 
                 <Route path="puntos/fecha" element={<PuntosFecha titulo={"puntos/fecha"}/>} />
                 <Route path="historial/listar" element={<Listado titulo={"historial"}/>} />
-                <Route path="historial/ver/:id" element={<Ver titulo={"historial"}/>} />
+                <Route path="historial/ver/:id" element={<Ver elementos={ELEMENTOS.historial} titulo={"historial"}/>} />
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
                 <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} />} />
                 <Route path="clientes/agregar" element={<Form elementos={ELEMENTOS.clientes} user={user} titulo={"clientes"} />} />

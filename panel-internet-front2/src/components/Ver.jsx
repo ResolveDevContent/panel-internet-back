@@ -26,6 +26,7 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
 
         listarUno(titulo, id)
         .then(datos => {
+            console.log(datos)
             if(!datos || datos.length == 0) {
                 setState({
                     text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
@@ -42,6 +43,8 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                 })
                 return;
             }
+
+            datos[0].fecha = new Date(datos[0].fecha)
 
             setLoading(false)
             setData(datos)
