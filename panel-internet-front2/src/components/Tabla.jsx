@@ -36,7 +36,7 @@ const formatearDatos = (datos) => {
     }
 
     if(titulo == "historial") {
-        datos = datos.sort((a, b) => a - b)
+        datos = datos.sort((a, b) => b.fecha - a.fecha)
     }
 
     const columns = Object.keys(datos[0]).slice(1, Object.keys(datos[0]).length)
