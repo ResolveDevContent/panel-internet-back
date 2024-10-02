@@ -157,7 +157,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       }
-    }, [])
+    }, [values])
   
     return (
         <li className="list-template">
