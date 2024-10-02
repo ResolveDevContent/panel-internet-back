@@ -147,7 +147,7 @@ const selectAsociaciones = async (tableName, columns, values) => {
 }
 
 const selectFechaLimite = async (tableName, column, value) => {
-  const query = `SELECT * FROM ${tableName} WHERE ${column} <= FROM_UNIXTIME(${value})`;
+  const query = `SELECT * FROM ${tableName} WHERE ${column} <= ${value}`;
 
   try {
     const [results] = await pool.query(query, [value]);
