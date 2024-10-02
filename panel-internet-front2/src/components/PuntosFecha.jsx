@@ -49,6 +49,7 @@ export const PuntosFecha = (titulo) => {
 
     listar(titulo)
     .then(datos => {
+      console.log(datos)
         if(datos.error) {
             setLoading(false);
             setState({
