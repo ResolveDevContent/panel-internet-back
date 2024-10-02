@@ -740,9 +740,10 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
 router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
+        const asociacion = await selectOneRecord("asociaciones", 'ID_asociacion', id);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', asociacion[0].ID_Cliente);
+        const comercio = await selectOneRecord("comercio", 'ID_Comercio', asociacion[0].ID_Comercio);
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
-        const cliente = await selectOneRecord("clientes", 'ID_Cliente', results[0].ID_Cliente);
-        const comercio = await selectOneRecord("comercio", 'ID_Comercio', results[0].ID_Comercio);
         await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
