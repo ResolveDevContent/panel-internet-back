@@ -178,7 +178,7 @@ return (
                                             </li>
                                             : null
                                         }
-                                        {(admin == null || admin.permisos == 1) && (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones')
+                                        {(admin == null || admin.permisos == 1) && (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos')
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>
