@@ -82,7 +82,7 @@ const editar = (e, id) => {
 const borrarDatos = (e, id, email) => {
   e.preventDefault()
   PerfilAuth().then(user => {
-      if((user.message.role == "admin" || user.message.role == "superadmin") && titulo == "comercios") {
+      if((user.message.role == "admin" || user.message.role == "superadmin") && (titulo == "comercios" || titulo == "clientes")) {
           modificar(titulo, id, {activo: 0})
           .then(data => {
                 if(data.error) {

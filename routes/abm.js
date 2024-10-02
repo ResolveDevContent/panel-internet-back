@@ -270,7 +270,7 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
 router.get("/clientes/listar", async (req, res) => {
     try {
       // Obtener los registros de clientes
-      const results = await selectTable("clientes");
+      const results = await selectOneRecord("clientes", "activo", 1)
       res.status(200).send(results);
     } catch (err) {
       console.error('Error retrieving clients:', err);
@@ -363,7 +363,7 @@ router.post("/clientes/agregar", authenticate, async (req, res) => {
     try {
         const result = await agregarClientes([req.body]);
         if (result.every(r => r !== null)) {
-            const results = await insertRecord("clientes", req.body);
+            const results = await insertRecord("clientes", {...req.body, activo: 1});
             await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: Date.now()});
             res.status(201).json({ message: "Cliente creado correctamente!" });
         }
@@ -377,37 +377,6 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
     try {
         const results = await updateRecord("clientes", req.body, "ID_Cliente", id);
         await insertRecord('historial', {message: "Se modifico el cliente " + req.body.nombre, fecha: Date.now()});
-        res.status(200).json(results);
-    } catch (err) {
-        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
-    }
-});
-
-router.delete("/clientes/borrar/:id", authenticate, async (req, res) => {
-    const { id } = req.params;
-    try {
-        const cliente = await selectOneRecord("clientes", "ID_Cliente", id);
-        const asociacion = await selectOneRecord("asociaciones", "ID_Cliente", id);
-        const transaccion = await selectOneRecord("transacciones", "ID_Cliente", id);
-        const puntos = await selectOneRecord("puntos", "ID_Cliente", id);
-
-        if(asociacion.length > 0){
-            await deleteRecord("asociaciones", 'ID_Cliente', id);
-            await insertRecord('historial', {message: `Se borraron las asociaciones del cliente: ${cliente[0].nombre}`, fecha: Date.now()});
-        }
-
-        if(transaccion.length > 0){
-            await deleteRecord("transacciones", 'ID_Cliente', id);
-            await insertRecord('historial', {message: `Se borraron las transacciones del cliente: ${cliente[0].nombre}`, fecha: Date.now()});
-        }
-
-        if(puntos.length > 0){
-            await deleteRecord("puntos", 'ID_Cliente', id);
-            await insertRecord('historial', {message: `Se borraron los puntos del cliente: ${cliente[0].nombre}`, fecha: Date.now()});
-        }
-
-        const results = await deleteRecord("clientes", "ID_Cliente", id);
-        await insertRecord('historial', {message: "Se borro el cliente " + cliente[0].nombre, fecha: Date.now()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -524,7 +493,6 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
     if (req.body.ID_Comercio.length === 0 || req.body.ID_Cliente.length === 0) {
         return res.status(500).json({ error: "No se puede realizar una transacción sin completar todos los datos." });
     }
-    console.log(req.body)
     try {
         // if(!req.body.puntos_pago || req.body.puntos_pago == '') {
         //     req.body.puntos_pago = 0;
@@ -536,7 +504,6 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         }
 
         const row = comercio[0];
-        console.log(row)
         // const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
         const puntos = Number(req.body.monto_parcial);
         const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
@@ -579,7 +546,6 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 
         if(puntosFinales > 0) {
             const sumaPuntos = Number(comercio[0].puntos_totales) + Number(puntosFinales);
-            console.log(sumaPuntos)
             await insertRecord('puntos', {ID_Cliente: req.body.ID_Cliente, puntos: puntosFinales, fecha: currentDate});
             await updateRecord("comercio", {puntos_totales: sumaPuntos}, "ID_Comercio", req.body.ID_Comercio);
         }
@@ -853,7 +819,6 @@ router.get("/admins/listarByEmail/:email", authenticate, (req,res) => {
 router.post("/admins/agregar", authenticate, async (req, res) => {
     const { email, password, ID_Comercio, nombre, apellido } = req.body;
     const permisos = Number(req.body.permisos);
-    console.log(req.body)
     if (!ID_Comercio || ID_Comercio.length === 0) {
         return res.status(500).json({ error: "No se puede agregar un admin sin comercios adheridos." });
     }
@@ -978,11 +943,7 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 });
 
 function setDate(date) {
-    console.log("funcion",date)
-    // cron.schedule(`0 0 ${new Date(date).getDate()} ${new Date(date).getMonth() + 1} *`, () => {
-    //     return caducarPuntos(date);
-    // });
-    cron.schedule(`48 11 2 10 *`, () => {
+    cron.schedule(`0 0 ${new Date(date).getDate()} ${new Date(date).getMonth() + 1} *`, () => {
         return caducarPuntos(date);
     });
 }
@@ -990,7 +951,6 @@ function setDate(date) {
 async function caducarPuntos(date) {
     try {
         const result = await selectFechaLimite("puntos", "fecha", date);
-        console.log("RESULT", result)
         if(result.length > 0) {
             result.forEach(async row => {
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
@@ -1028,7 +988,6 @@ router.post('/restore', authenticate, async (req, res) => {
     if (!file) {
         return res.status(400).json({ error: 'Se requiere el nombre del archivo de backup.'});
     }
-    console.log(file)
     restoreDatabase(file);
     await insertRecord('historial', {message: "Se restauro exitosamente el backup", fecha: Date.now()});
     res.status(200).json({ message: 'Restauracion en proceso...'});
@@ -1045,9 +1004,6 @@ router.get('/backups', authenticate, async (req, res) => {
         }
 
         const backups = files.filter(file => file.startsWith('backup_') && file.endsWith('.sql'));
-        console.log('Archivos de backup encontrados:');
-        // backups.forEach(file => console.log(file));
-        console.log("BACKUPS", backups)
         res.status(200).send(backups);
     });
 
