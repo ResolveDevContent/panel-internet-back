@@ -78,7 +78,7 @@ export const Backups = () => {
                 </div>
                 :null
             }
-            <article className='d-flex flex-column w-100 h-100 mt-1'>
+            <article className='d-flex flex-column w-100 h-100 mt-1 backups'>
                 <strong className='p-3 text-capitalize'>Backups - listado</strong>
                 <button onClick={makeBackups} className="makebackups">Hacer backup</button>
                 <ul className="list-backups">

@@ -115,11 +115,18 @@
   font-weight: 600;
 }
 
+.backups {
+  gap: 1em;
+}
+
 .list-backups {
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 0.5em;
+  background-color: #fff;
+  padding: 1em;
+  border-radius: .5em;
 }
 
 .list-backups > li {
@@ -151,6 +158,9 @@
   cursor: pointer;
   color: #fff;
   font-weight: 600;
+  margin-top: 3em;
+  width: max-content;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
