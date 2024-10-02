@@ -116,7 +116,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                       // }
                     });
 
-                    console.log(refPermisos.current)
+                    console.log(Array.from(refPermisos.current))
                     
                     console.log("AFTER FOREACH", datos)
                     const idsComercio = [];
