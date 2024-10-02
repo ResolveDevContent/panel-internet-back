@@ -115,6 +115,44 @@
   font-weight: 600;
 }
 
+.list-backups {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5em;
+}
+
+.list-backups > li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.list-backups > li span {
+  font-weight: 600;
+}
+
+.list-backups > li button {
+  background-color: var(--color-1);
+  padding: .75em 2em;
+  border: none;
+  border-radius: .5em;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+}
+
+.makebackups {
+  background-color: var(--color-2);
+  padding: .75em 2em;
+  border: none;
+  border-radius: .5em;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+}
+
 @media (min-width: 768px) {
   .table-container {
     overflow-x: auto;
