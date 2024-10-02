@@ -24,6 +24,17 @@ export const PuntosFecha = ({titulo}) => {
         return
     }
     console.log(date)
+
+    if(new Date(date).getTime() <= Date.now()) {
+      setState({
+        text: "Ingrese una fecha mayor a hoy", 
+        res: "secondary"
+      });
+      setTimeout(() => {
+          setState({text: "", res: ""})
+      }, 4000)
+      return
+    }
     let fecha = new Date(date.replace(/-/g, '\/'));
     fecha = fecha.setHours(0,0,0,0);
 
