@@ -17,6 +17,7 @@ import { ImportCsv } from './components/ImportCsv.jsx'
 import { ChangePassword } from './components/ChangePassword.jsx'
 import { PuntosFecha } from './components/PuntosFecha.jsx'
 import { Backups } from './components/Backups.jsx'
+import { Ver } from './components/Ver.jsx'
 
 function App() {
   const [auth, setAuth] = useState(false);
@@ -56,6 +57,7 @@ function App() {
 
                 <Route path="puntos/fecha" element={<PuntosFecha titulo={"puntos/fecha"}/>} />
                 <Route path="historial/listar" element={<Listado titulo={"historial"}/>} />
+                <Route path="historial/ver" element={<Ver titulo={"historial"}/>} />
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
                 <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} />} />
                 <Route path="clientes/agregar" element={<Form elementos={ELEMENTOS.clientes} user={user} titulo={"clientes"} />} />
