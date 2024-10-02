@@ -34,7 +34,9 @@ function backupDatabase() {
 
 // Función para restaurar un backup
 function restoreDatabase(backupFile) {
-    const command = `mysql -u ${dbConfig.user} -p${dbConfig.password} ${dbConfig.database} < ${backupFile}`;
+    const restoreBackupFile = path.join(__dirname, backupFile);
+
+    const command = `mysql -u ${dbConfig.user} -p${dbConfig.password} ${dbConfig.database} < ${restoreBackupFile}`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
