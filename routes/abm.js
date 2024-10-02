@@ -922,7 +922,7 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 
         setDate(fecha)
         console.log(fecha)
-        res.status(200).json(fecha);
+        res.status(200).send(fecha);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
