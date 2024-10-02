@@ -55,15 +55,16 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setDatos(newArr);
 
       if(values) {
+        let arr = []
         if(e.target.checked) {
-          newArr = [
+          arr = [
             ...datosMostrar,
             e.target.name
           ];
         } else {
-          newArr = datos.filter(row => row != e.target.name);
+          arr = datos.filter(row => row != e.target.name);
         }
-        setDatosMostrar(newArr)
+        setDatosMostrar(arr)
       }
     }
 
@@ -83,14 +84,15 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       e.target.checked ? setDatos(newArr) : setDatos([]);
 
       if(values) {
-        const newArr = sortedListado.map(function(row) { 
+        const arr = sortedListado.map(function(row) { 
           if(placeholder == "clientes") {
             return row.nombre
           } else {
             return row.nombre_comercio
           }
         })
-        setDatosMostrar(newArr)
+        e.target.checked ? setDatosMostrar(arr) : setDatosMostrar([]);
+        
       }
     }
 
