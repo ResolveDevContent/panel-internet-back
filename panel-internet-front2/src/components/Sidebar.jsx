@@ -2,7 +2,7 @@ import "../assets/css/sidebar.css";
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LogoutAuth } from "../services/auth";
 import AuthContext from "../context/Auth";
-import { Admin, HamburgerMenu, LogOut, Money, Notepad, Shop, User, Wallet } from "../assets/icons/icons";
+import { Admin, Coin, HamburgerMenu, History, LogOut, Money, Notepad, Save, Shop, User, Wallet } from "../assets/icons/icons";
 import { useContext, useState, useEffect } from "react";
 import { Toast } from "./Toast";
 import { PerfilAuth } from "../services/auth";
@@ -98,7 +98,7 @@ export const Sidebar = ({user}) => {
               <li>
                 <input type="radio" id="backups" name="solapa"/>
                 <label htmlFor="backups">
-                  <User />
+                  <Save />
                   <span>Backups</span>
                 </label>
                 <ul>
@@ -110,7 +110,7 @@ export const Sidebar = ({user}) => {
               <li>
                 <input type="radio" id="puntos" name="solapa"/>
                 <label htmlFor="puntos">
-                  <User />
+                  <Coin />
                   <span>Puntos</span>
                 </label>
                 <ul>
@@ -122,7 +122,7 @@ export const Sidebar = ({user}) => {
               <li>
                 <input type="radio" id="historial" name="solapa"/>
                 <label htmlFor="historial">
-                  <User />
+                  <History />
                   <span>Historial</span>
                 </label>
                 <ul>

@@ -905,7 +905,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
         const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
-            await insertRecord('historial', {message: "Se actualiazo la fecha de caducación de los puntos", fecha: Date.now()});
+            await insertRecord('historial', {message: "Se actualizo la fecha de caducación de los puntos", fecha: Date.now()});
             setDate(req.body.fecha);
             res.status(201).json({ message: "fecha actualizada correctamente!" });
         } else {
@@ -943,6 +943,7 @@ async function caducarPuntos(date) {
         if(result.length > 0) {
             result.forEach(async row => {
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
+                await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(date)}`, fecha: Date.now()});
             })
         }
     } catch (err) {
@@ -964,22 +965,25 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 
 // BACKUPS ------------------------------------------------------------------------------------------
 
-router.post('/backup', (req, res) => {
+router.post('/backup', authenticate, async (req, res) => {
     backupDatabase();
+    await insertRecord('historial', {message: "Se creo exitosamente el backup", fecha: Date.now()});
+
     res.status(200).json({ message: 'Backup en proceso...'});
 });
 
-router.post('/restore', (req, res) => {
+router.post('/restore', authenticate, async (req, res) => {
     const { file } = req.body;
     if (!file) {
         return res.status(400).json({ error: 'Se requiere el nombre del archivo de backup.'});
     }
     console.log(file)
     restoreDatabase(file);
+    await insertRecord('historial', {message: "Se restauro exitosamente el backup", fecha: Date.now()});
     res.status(200).json({ message: 'Restauracion en proceso...'});
 });
 
-router.get('/backups', (req, res) => {
+router.get('/backups', authenticate, async (req, res) => {
     // listBackups();
     const backupDir = "/var/www/panel-internet-back/utils"; // Directorio donde se guardan los backups
 
