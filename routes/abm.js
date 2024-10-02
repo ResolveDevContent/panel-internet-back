@@ -916,7 +916,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
     }
 });
 
-router.post("/puntos/fecha/listar", authenticate, async (req, res) => {
+router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
     try {
         const fecha = await selectTable("fecha");
 
