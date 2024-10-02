@@ -43,12 +43,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     }, [nombreComercio])
     
     const handleClick = e => {
-      const value = e.target.value;
-      const obj = {
-        ...pepe,
-        value: !pepe[e.target.value]
-      }
-      setPepe(obj)
+      setPepe(e.target.value)
     }
 
     const handleChange = e => {
@@ -110,29 +105,20 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              if(titulo == 'admins' && values && values.email) {
+              if(titulo == 'admins' && values && values.email && pepe != null) {
                 listarByAdmin("permisos", values.email)
                 .then(permisos => {
                     if(!permisos || permisos.error|| permisos.length == 0) {
                         return;
                     }
-                    
+                  
                     setPermisos(true);
-                    
-                    console.log("AFTER FOREACH", datos)
+                  
                     const idsComercio = [];
 
                     permisos.forEach(row => {
                       idsComercio.push(row.ID_Comercio)
                     })
-
-                    const reduce = datos.reduce((acc, elem, idx) => {
-                      acc[elem.ID_Comercio] = idsComercio.includes(elem.ID_Comercio)
-
-                      return acc;
-                    }, {})  
-
-                    setPepe(reduce)
 
                     setDatos(idsComercio);
                 })
@@ -142,6 +128,17 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                         res: "danger"
                     })
                 })
+              } else {
+                let arr = []
+                if(!datos.includes(pepe)){
+                  arr =  [
+                    ...datos,
+                    pepe
+                  ]
+                } else {
+                  arr = datos.filter(row => row != pepe);
+                }
+                setDatos(arr)
               }
 
               setSortedListado(datos)
@@ -180,7 +177,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       }
-    }, [values])
+    }, [values, pepe])
   
     return (
         <li className="list-template">
@@ -217,7 +214,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                checked={pepe[row.ID_Comercio]} onClick={handleClick}
+                                checked={datos.includes(row.ID_Comercio)} onClick={handleClick}
                               />
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
