@@ -3,6 +3,8 @@ import { listar, listarByAdmin } from "../services/abm";
 import { Toast } from "../components/Toast";
 
 export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
+    console.log("VALUEIS", values)
+
     const [ nombreCliente, setNombreCliente ] = useState(null);
     const [ nombreComercio, setNombreComercio ] = useState(null);
     const [ sortedListado, setSortedListado ] = useState([]);
@@ -71,7 +73,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       e.target.checked ? setDatos(newArr) : setDatos([]);
     }
 
-  
   useEffect(() => {
       setLoading(true)
 
