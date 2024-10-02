@@ -175,6 +175,13 @@
 .ver textarea {
   min-height: 12em;
   max-height: 12em;
+  padding: 1em;
+  border-radius: 0.5em;
+  margin-top: 0.25em;
+}
+
+.icono-ver svg {
+  fill: #000!important;
 }
 
 @media (min-width: 768px) {

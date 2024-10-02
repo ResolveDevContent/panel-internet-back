@@ -168,7 +168,7 @@ return (
                                     <ul className='d-flex gap-2 align-center'>
                                         {titulo == "historial"
                                             ? <li>
-                                                <a href="#" className='btn btn-primary' onClick={() => {navigate("/historial/ver/" + row[0])}}><Show /></a>
+                                                <a href="#" className='btn btn-primary icono-ver' onClick={() => {navigate("/historial/ver/" + row[0])}}><Show /></a>
                                             </li>
                                             : null
                                         }
