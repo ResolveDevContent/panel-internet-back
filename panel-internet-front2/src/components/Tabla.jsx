@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { EmptyState } from './EmptyState'
 import { Modal } from './Modal'
-import { Delete, Edit } from '../assets/icons/icons'
+import { Delete, Edit, Show } from '../assets/icons/icons'
 import { modificar, borrar, listarByEmail } from '../services/abm'
 import { useNavigate } from 'react-router-dom'
 import { Toast } from './Toast'
@@ -153,7 +153,7 @@ return (
                             { table.columns.map((key, idx) => (
                                 <li key={idx} className='d-table-cell p-3 text-white bg-black text-capitalize'><span>{key}</span></li>
                             ))}
-                            {titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' ? (
+                            {titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == "historial" ? (
                                 <li className='text-white p-3 d-flex justify-center'>Acciones</li>
                             ) : null}
                         </ul>
@@ -166,6 +166,12 @@ return (
 
                                 <li className='px-3 py-1 d-flex justify-center'>
                                     <ul className='d-flex gap-2 align-center'>
+                                        {titulo == "historial"
+                                            ? <li>
+                                                <a href="#" className='btn btn-primary' onClick={() => {navigate("/historial/ver")}}><Show /></a>
+                                            </li>
+                                            : null
+                                        }
                                         {(admin == null || admin.permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins') 
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
