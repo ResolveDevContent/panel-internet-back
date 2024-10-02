@@ -96,7 +96,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               }
 
               if(titulo == 'admins' && values.length > 0) {
-                listar(placeholder)
+                listarByAdmin("permisos", values.email)
                 .then(permisos => {
                     if(!permisos || permisos.error|| permisos.length == 0) {
                         return;

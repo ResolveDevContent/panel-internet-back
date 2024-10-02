@@ -781,6 +781,17 @@ async function multipleAsociaciones(datos, id, comercio) {
 
 //CRUD: PERMISOS ---------------------------------------------------------------------------------
 
+router.get("/permisos/listar/admin/:email", authenticate, (req,res) => {
+    const { email } = req.params;
+    selectOneRecord("permisos", "ID_Admin", email)
+    .then((results) => {
+        res.send(results)
+    })
+    .catch((err) => {
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    })
+});
+
 // Obtener todos los administradores
 router.get("/admins/listar", async (req, res) => {
     try {
