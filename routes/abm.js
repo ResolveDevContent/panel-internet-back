@@ -611,6 +611,7 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const transaccion = await selectOneRecord("transacciones", "ID_Transaccion", id);
+        console.log(transaccion)
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', transaccion[0].ID_Cliente);
         const puntos = await selectAsociaciones("puntos", {first: "ID_Cliente", second: "fecha"}, {first: cliente[0].ID_Cliente, second: transaccion[0].fecha});
         const comercio = await selectOneRecord("comercio", 'ID_Comercio', transaccion[0].ID_Comercio);
