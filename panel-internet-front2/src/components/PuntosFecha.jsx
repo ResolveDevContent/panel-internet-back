@@ -53,7 +53,7 @@ export const PuntosFecha = (titulo) => {
         if(datos.error) {
             setLoading(false);
             setState({
-                text: datos.error,
+                text: datos.error, 
                 res: "secondary"
             })
             setTimeout(() => {
