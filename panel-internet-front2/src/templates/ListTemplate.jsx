@@ -3,16 +3,13 @@ import { listar, listarByAdmin } from "../services/abm";
 import { Toast } from "../components/Toast";
 
 export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
-    console.log("VALUEIS", values)
-
     const [ nombreCliente, setNombreCliente ] = useState(null);
     const [ nombreComercio, setNombreComercio ] = useState(null);
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ state, setState ] = useState({text: "", res: ""})
     const [ loading, setLoading] = useState(false)
-    const [ permisos, setPermisos] = useState(false)
     const [ datos, setDatos ] = useState([]);
-    const [pepe, setPepe] = useState([])
+    const [ datosMostrar, setDatosMostrar ] = useState([]);
 
     const originalListado = useRef([])
 
@@ -41,28 +38,29 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         setLoading(false)
         setSortedListado(newArr)
     }, [nombreComercio])
-    
-    const handleClick = e => {
-      setPepe(e.target.value)
-    }
 
     const handleChange = e => {
       setLoading(true)
       let newArr = [];
       if(e.target.checked) {
-        if(!datos.includes(e.target.value)) {
-          newArr = [
-            ...datos,
-            e.target.value
-          ];
-        }
+        newArr = [
+          ...datos,
+          e.target.value
+        ];
       } else {
         newArr = datos.filter(row => row != e.target.value);
       }
 
       setLoading(false)
       setDatos(newArr);
-      e.target.checked = !e.target.checked
+
+      if(values) {
+        newArr = [
+          ...datosMostrar,
+          e.target.name
+        ];
+        setDatosMostrar(newArr)
+      }
     }
 
     const handleChangeRadio = e => {
@@ -79,12 +77,23 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       })
 
       e.target.checked ? setDatos(newArr) : setDatos([]);
+
+      if(values) {
+        const newArr = sortedListado.map(function(row) { 
+          if(placeholder == "clientes") {
+            return row.nombre
+          } else {
+            return row.nombre_comercio
+          }
+        })
+        setDatosMostrar(newArr)
+      }
     }
 
+  
   useEffect(() => {
       setLoading(true)
 
-      console.log("ANTES DEL IF ",values)
       if(values.length > 0) {
         setSortedListado(values)
         originalListado.current = values;
@@ -105,22 +114,27 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              if(titulo == 'admins' && values && values.email && pepe != null) {
-                listarByAdmin("permisos", values.email)
+              if(titulo == 'admins' && values) {
+                listar(placeholder)
                 .then(permisos => {
                     if(!permisos || permisos.error|| permisos.length == 0) {
                         return;
                     }
-                  
-                    setPermisos(true);
-                  
+
                     const idsComercio = [];
+                    const nombresComercio = [];
 
                     permisos.forEach(row => {
                       idsComercio.push(row.ID_Comercio)
+
+                      const comercio = datos.find((_row) => _row.ID_Comercio == row.ID_Comercio)
+                      if(comercio) {
+                        nombresComercio.push(comercio.nombre_comercio)
+                      }
                     })
 
                     setDatos(idsComercio);
+                    setDatosMostrar(nombresComercio)
                 })
                 .catch(err => {
                     setState({
@@ -128,17 +142,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                         res: "danger"
                     })
                 })
-              } else {
-                let arr = []
-                if(!datos.includes(pepe)){
-                  arr =  [
-                    ...datos,
-                    pepe
-                  ]
-                } else {
-                  arr = datos.filter(row => row != pepe);
-                }
-                setDatos(arr)
               }
 
               setSortedListado(datos)
@@ -177,7 +180,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       }
-    }, [values, pepe])
+    }, [])
   
     return (
         <li className="list-template">
@@ -211,11 +214,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
                             <label>
-                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
-                                name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
-                                onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                checked={datos.includes(row.ID_Comercio)} onClick={handleClick}
-                              />
+                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" ? row.nombre : row.nombre_comercio} value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
@@ -226,6 +225,16 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 }
                 </div>
               : null}
+              { values && datosMostrar.length > 0 ? (
+                  <ul>
+                    {datosMostrar.map((row, idx) => (
+                        <li key={idx}>
+                            <span>{row}</span>
+                        </li>
+                      )
+                    )}
+                  </ul>
+              ) : null}
             <input type="hidden" name={nombre} value={JSON.stringify(datos)} required/>
             { state.text ? <Toast texto={state.text} res={state.res} /> : null }
         </li>
