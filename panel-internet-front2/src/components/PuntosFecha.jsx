@@ -23,6 +23,7 @@ export const PuntosFecha = ({titulo}) => {
         }, 4000)
         return
     }
+    console.log(date)
 
     setLoading(true);
 

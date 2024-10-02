@@ -906,7 +906,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
 
         if (result) {
             await insertRecord('historial', {message: "Se actualiazo la fecha de caducación de los puntos", fecha: Date.now()});
-            runAtSpecificTimeOfDay(date, caducarPuntos);
+            setDate(req.body.fecha);
             res.status(201).json({ message: "fecha actualizada correctamente!" });
         } else {
             res.status(500).json({ error: "La fecha actualizar correctamente!" });
@@ -919,9 +919,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
 router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
     try {
         const fecha = await selectTable("fecha");
-
-        setDate(fecha)
-        console.log(fecha)
+        
         res.status(200).send(fecha);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -929,23 +927,23 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 });
 
 function setDate(date) {
+    console.log("funcion",date)
     cron.schedule(`0 0 ${date.getDate()} ${date.getMonth()} *`, () => {
-        caducarPuntos();
+        return caducarPuntos();
     });
 }
 
 async function caducarPuntos() {
     try {
         const result = await selectFechaLimite("puntos", "fecha", 12345678);
-
+        console.log("RESULT", result)
         if(result.length > 0) {
             result.forEach(async row => {
                 await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
             })
-            res.status(200).json({message: 'Realizado con éxito'});
         }
     } catch (err) {
-        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+        return { error: "Se ha producido un error, inténtelo nuevamente." };
     }
 }
 
