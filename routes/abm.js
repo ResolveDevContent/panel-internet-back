@@ -920,14 +920,9 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
     try {
         const fecha = await selectTable("fecha");
 
-        if(!fecha || fecha.length == 0 || fecha[0].fecha < Date.now()) {
-            console.log("entra", fecha)
-            res.status(200).json([]);
-        } else {
-            setDate(fecha)
-            console.log(fecha)
-            res.status(200).json(fecha);
-        }
+        setDate(fecha)
+        console.log(fecha)
+        res.status(200).json(fecha);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
