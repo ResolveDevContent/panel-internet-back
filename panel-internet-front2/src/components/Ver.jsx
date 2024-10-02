@@ -75,7 +75,7 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                         <form className="card mt-3 ver">
                             <ul className="card-body">
                                 {elementos.map((row, idx) => {
-                                    if(row.element == 'input') { return <InputTemplate key={idx} data={row} disabledEmail={titulo == "comercios" || titulo == "admins"} values={data.length > 0 && id ? data[0] : {}}/> }
+                                    if(row.element == 'input' && row.nombre != 'message') { return <InputTemplate key={idx} data={row} disabledEmail={titulo == "comercios" || titulo == "admins"} values={data.length > 0 && id ? data[0] : {}}/> }
                                     if(row.element == 'input' && row.nombre == 'message') { return <textarea key={idx}>{data[0].message}</textarea> }
                                 })}
                                 <li className="mt-4 p-2 text-end">
