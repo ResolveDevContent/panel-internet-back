@@ -46,10 +46,12 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setLoading(true)
       let newArr = [];
       if(e.target.checked) {
-        newArr = [
-          ...datos,
-          e.target.value
-        ];
+        if(!datos.includes(e.target.value)) {
+          newArr = [
+            ...datos,
+            e.target.value
+          ];
+        }
       } else {
         newArr = datos.filter(row => row != e.target.value);
       }
@@ -197,7 +199,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                checked={values && datos.includes(row.ID_Comercio)}/>
+                                checked={values && datos.includes(row.ID_Comercio)}
+                                onClick={(e) => {e.target.checked = !e.target.checked}}/>
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
