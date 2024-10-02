@@ -72,6 +72,7 @@ export const PuntosFecha = (titulo) => {
 
         setLoading(false);
         setResult(fechaHora);
+        console.log(fechaHora)
     })
   }, [update])
 
@@ -98,7 +99,7 @@ export const PuntosFecha = (titulo) => {
               <em>las fechas actuales: </em> 
               <div className="d-flex align-center">
                 <div>
-                    <span>Fecha desde: <span>{result}</span></span>
+                    {/* <span>Fecha desde: <span>{result}</span></span> */}
                 </div>
               </div>
           </div>
