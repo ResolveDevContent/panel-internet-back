@@ -50,17 +50,17 @@ export const PuntosFecha = (titulo) => {
     listar(titulo)
     .then(datos => {
       console.log(datos)
-        if(datos.error) {
-            setLoading(false);
-            setState({
-                text: datos.error, 
-                res: "secondary"
-            })
-            setTimeout(() => {
-                setState({text: "", res: ""})
-            }, 4000)
-            return;
-        }
+        // if(datos.error) {
+        //     setLoading(false);
+        //     setState({
+        //         text: datos.error, 
+        //         res: "secondary"
+        //     })
+        //     setTimeout(() => {
+        //         setState({text: "", res: ""})
+        //     }, 4000)
+        //     return;
+        // }
 
         let fechaHora = '';
         
