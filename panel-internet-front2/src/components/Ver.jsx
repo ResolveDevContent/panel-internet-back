@@ -80,7 +80,7 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == 'textarea') { return <TextareaTemplate key={idx} data={row} values={data.length > 0 && id ? data[0] : {}}/>}
                                 })}
                                 <li className="mt-4 p-2 text-end">
-                                    <button className="btn btn-success" onClick={() => {navigate("/")}}>Volver</button>
+                                    <button className="btn btn-success" onClick={() => {navigate("/historial/listar")}}>Volver</button>
                                 </li>
                             </ul>
                         </form>
