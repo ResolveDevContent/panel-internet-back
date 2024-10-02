@@ -44,6 +44,15 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                 return;
             }
 
+            if(!isNaN(Number(datos[0].fecha))) {
+                let date = new Date(Number(datos[0].fecha));
+                const fecha = date.toISOString();
+                const hora = (fecha.split('T')[1]).split(':');
+                const fechaHora = fecha.split('T')[0] + ' ' + hora[0] + ':' + hora[1];
+    
+                datos[0].fecha = fechaHora;
+            }
+
             setLoading(false)
             setData(datos)
         })
