@@ -24,10 +24,12 @@ export const PuntosFecha = ({titulo}) => {
         return
     }
     console.log(date)
+    let fecha = new Date(date.replace(/-/g, '\/'));
+    fecha = fecha.setHours(0,0,0,0);
 
     setLoading(true);
 
-    agregar(titulo, {fecha: date})
+    agregar(titulo, {fecha: fecha})
     .then(data => {
         if(data.error) {
             setState({text: data.error, res: "secondary"})

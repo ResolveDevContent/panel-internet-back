@@ -928,18 +928,18 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 
 function setDate(date) {
     console.log("funcion",date)
-    cron.schedule(`0 0 ${date.getDate()} ${date.getMonth()} *`, () => {
-        return caducarPuntos();
+    cron.schedule(`0 0 ${new Date(date).getDate()} ${new Date(date).getMonth() + 1} *`, () => {
+        return caducarPuntos(date);
     });
 }
 
-async function caducarPuntos() {
+async function caducarPuntos(date) {
     try {
-        const result = await selectFechaLimite("puntos", "fecha", 12345678);
+        const result = await selectFechaLimite("puntos", "fecha", date);
         console.log("RESULT", result)
         if(result.length > 0) {
             result.forEach(async row => {
-                await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+                await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
             })
         }
     } catch (err) {
