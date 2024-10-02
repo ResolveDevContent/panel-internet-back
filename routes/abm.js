@@ -325,7 +325,8 @@ router.get("/clientes/puntos/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const puntos = await calcularPuntosTotales("puntos", "ID_Cliente", 'puntos', id);
-        res.send(puntos);
+        const monto_total = await calcularPuntosTotales("transacciones", "ID_Cliente", 'monto_parcial', id);
+        res.send([{puntos, monto_total}]);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }

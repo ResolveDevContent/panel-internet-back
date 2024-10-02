@@ -26,14 +26,19 @@ export const Backups = () => {
             if(data.error) {
                 setState({text: data.error, res: "secondary"})
                 setLoading(false)
+                setTimeout(() => {
+                    setState({text: "", res: ""})
+                }, 4000)
                 return
             }
 
             setLoading(false)
             setState({text: data.message, res: "primary"})
             setUpdate(Date.now())
+            setTimeout(() => {
+                setState({text: "", res: ""})
+            }, 4000)
         })
-        setModalState({open: false})
     }
 
     const restaurarBackup = (file) => {
@@ -44,11 +49,19 @@ export const Backups = () => {
             if(data.error) {
                 setState({text: data.error, res: "secondary"})
                 setLoading(false)
+                setTimeout(() => {
+                    setState({text: "", res: ""})
+                }, 4000)
                 return
             }
 
             setLoading(false)
             setState({text: data.message, res: "primary"})
+            setModalState({open: false})
+
+            setTimeout(() => {
+                setState({text: "", res: ""})
+            }, 4000)
         })
     }
     
