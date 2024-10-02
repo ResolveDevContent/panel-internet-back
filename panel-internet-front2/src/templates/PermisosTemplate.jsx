@@ -6,6 +6,7 @@ export const PermisosTemplate = ({data, values = {}}) => {
     const refNo = useRef()
     
     useEffect(() => {
+      console.log(values, values[nombre])
       if(values[nombre] && values[nombre] == 1) {
         refSi.current.checked = true;
       } else {
