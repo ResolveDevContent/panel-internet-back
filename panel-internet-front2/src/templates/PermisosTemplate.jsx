@@ -1,6 +1,18 @@
+import { useEffect, useRef } from "react"
+
 export const PermisosTemplate = ({data, values = {}}) => { 
     const { nombre, placeholder } = data
-    console.log(values)
+    const refSi = useRef()
+    const refNo = useRef()
+    
+    useEffect(() => {
+      if(values[nombre] && values[nombre] == 1) {
+        refSi.current.checked = true;
+      } else {
+        refNo.current.checked = true;
+      }
+    }, [])
+
     return(
         <li>
             <div className="mb-3">
@@ -8,11 +20,11 @@ export const PermisosTemplate = ({data, values = {}}) => {
                 <div className="d-flex align-center gap-1">
                   <label className="d-flex align-center gap-5">
                     No
-                    <input type="radio" className="form-control" name={nombre} value={0} defaultChecked={values[nombre] && values[nombre] == 0 ? true : false}/>
+                    <input type="radio" className="form-control" name={nombre} value={0} ref={refNo} />
                   </label>
                   <label className="d-flex align-center gap-5">
                     Si
-                    <input type="radio" className="form-control" name={nombre} value={1} defaultChecked={values[nombre] && values[nombre] == 1 ? true : false}/>
+                    <input type="radio" className="form-control" name={nombre} value={1} ref={refSi}/>
                   </label>
                 </div>
             </div>
