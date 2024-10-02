@@ -78,7 +78,7 @@ export const PuntosFecha = (titulo) => {
 
   return(
     <>
-      <article className="d-flex flex-column w-100 h-100 mt-1">
+      {/* <article className="d-flex flex-column w-100 h-100 mt-1">
         <strong className="p-3 text-capitalize">{titulo}</strong>
 
         <div className='puntos-fechas'>
@@ -99,7 +99,7 @@ export const PuntosFecha = (titulo) => {
               <em>las fechas actuales: </em> 
               <div className="d-flex align-center">
                 <div>
-                    {/* <span>Fecha desde: <span>{result}</span></span> */}
+                    <span>Fecha desde: <span>{result}</span></span>
                 </div>
               </div>
           </div>
@@ -108,7 +108,7 @@ export const PuntosFecha = (titulo) => {
           </div>
         }
       </article>
-      { state.text ? <Toast texto={state.text} res={state.res}/> : null }
+      { state.text ? <Toast texto={state.text} res={state.res}/> : null } */}
     </>
   ) 
 }
