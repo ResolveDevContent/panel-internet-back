@@ -1,22 +1,16 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 
 export const PermisosTemplate = ({data, values = {}}) => { 
     const { nombre, placeholder } = data
     const refSi = useRef()
     const refNo = useRef()
 
-    const update = () => {
-      console.log(values, values[nombre])
-      if(values[nombre] && values[nombre] == 1) {
-        refSi.current.checked = true;
-      } else {
-        refNo.current.checked = true;
-      }
+    console.log(values, values[nombre])
+    if(values[nombre] && values[nombre] == 1) {
+      refSi.current.checked = true;
+    } else {
+      refNo.current.checked = true;
     }
-    
-    useEffect(() => {
-      update()
-    }, [])
 
     return(
         <li>
