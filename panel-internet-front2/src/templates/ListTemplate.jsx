@@ -75,32 +75,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   useEffect(() => {
       setLoading(true)
 
+      console.log("ANTES DEL IF ",values)
       if(values.length > 0) {
-        console.log("ANTES DEL IF ",values)
-        if(titulo == 'admins') {
-          listarByAdmin("permisos", values.email)
-          .then(permisos => {
-              if(!permisos || permisos.error|| permisos.length == 0) {
-                  return;
-              }
-              
-              setPermisos(true);
-              values.forEach(row => {
-                const idx = permisos.findIndex(elm => elm.ID_Comercio == row.ID_Comercio);
-                idx > -1 ? row.checked = true : row.checked = false;
-              });
-              
-              console.log("AFTER FOREACH", values)
-              setDatos(permisos);
-          })
-          .catch(err => {
-              setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
-              })
-          })
-        }
-
         setSortedListado(values)
         originalListado.current = values;
         setLoading(false)
@@ -117,6 +93,30 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 setState({
                   text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
                   res: "danger"
+                })
+              }
+
+              if(titulo == 'admins' && values && values.email) {
+                listarByAdmin("permisos", values.email)
+                .then(permisos => {
+                    if(!permisos || permisos.error|| permisos.length == 0) {
+                        return;
+                    }
+                    
+                    setPermisos(true);
+                    datos.forEach(row => {
+                      const idx = permisos.findIndex(elm => elm.ID_Comercio == row.ID_Comercio);
+                      idx > -1 ? row.checked = true : row.checked = false;
+                    });
+                    
+                    console.log("AFTER FOREACH", datos)
+                    setDatos(permisos);
+                })
+                .catch(err => {
+                    setState({
+                        text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                        res: "danger"
+                    })
                 })
               }
 
