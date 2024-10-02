@@ -49,7 +49,7 @@ export const PuntosFecha = ({titulo}) => {
         }
         setLoading(false)
 
-        setUpdate('actualizado');
+        setUpdate(fecha);
         setState({text: data.message, res: "primary"})
     });
 

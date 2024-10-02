@@ -10,6 +10,7 @@ export const Backups = () => {
         text: "",
         res: ""
     })
+    const [update, setUpdate] = useState(null)
 
     const makeBackups = () => {
         setLoading(true)
@@ -24,6 +25,7 @@ export const Backups = () => {
 
             setLoading(false)
             setState({text: data.message, res: "primary"})
+            setUpdate(Date.now())
         })
     }
 
@@ -68,7 +70,7 @@ export const Backups = () => {
             setLoading(false);
             setBackups(datos);
         })
-    }, [])
+    }, [update])
 
     return (
         <>
