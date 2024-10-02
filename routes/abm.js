@@ -910,7 +910,7 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
             const permisosborrar = await deleteRecord("permisos", "ID_Admin", admins[0].email);
         }
         
-        const users = await deleteRecord("users", "userId", id);
+        const users = await deleteRecord("users", "email", admins[0].email);
         const result = await deleteRecord("admins", "ID_Admin", id);
         await insertRecord('historial', {message: "Se borro el admin " + admins[0].nombre, fecha: Date.now()});
         res.status(200).json(result);
