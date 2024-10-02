@@ -8,6 +8,7 @@ import { MultipleSelectTemplate } from '../templates/MultipleSelectTemplate'
 import { ListTemplate } from "../templates/ListTemplate"
 import { Loading } from "./Loading"
 import { PermisosTemplate } from "../templates/permisosTemplate";
+import { TextareaTemplate } from "../templates/TextareaTemplate";
 
 export const Ver = ({elementos = [], titulo = '', user = {}}) => {
     const [ data, setData ] = useState({})
@@ -75,8 +76,8 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
                         <form className="card mt-3 ver">
                             <ul className="card-body">
                                 {elementos.map((row, idx) => {
-                                    if(row.element == 'input' && row.nombre != 'message') { return <InputTemplate key={idx} data={row} disabledEmail={titulo == "comercios" || titulo == "admins"} values={data.length > 0 && id ? data[0] : {}}/> }
-                                    if(row.element == 'input' && row.nombre == 'message') { return <textarea key={idx}>{data[0].message}</textarea> }
+                                    if(row.element == 'input') { return <InputTemplate key={idx} data={row} disabledEmail={titulo == "comercios" || titulo == "admins"} values={data.length > 0 && id ? data[0] : {}}/> }
+                                    if(row.element == 'textarea') { return <TextareaTemplate key={idx} data={row} values={data.length > 0 && id ? data[0] : {}}/>}
                                 })}
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success" onClick={() => {navigate("/")}}>Volver</button>

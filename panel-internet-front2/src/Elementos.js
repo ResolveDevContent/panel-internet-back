@@ -216,7 +216,7 @@ export const ELEMENTOS = {
     ],
     historial: [
         {
-            element: 'input',
+            element: 'textarea',
             tipo: 'text',
             nombre: 'message',
             placeholder: 'Mensaje',
