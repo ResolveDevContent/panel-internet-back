@@ -254,8 +254,8 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
     try {
       // Borrar el registro
         const pago = await selectOneRecord('pagos', 'ID_Pagos', id);
-        const comercio = await selectOneRecord('comercio', 'ID_Comercio', pago[0].ID_comercio);
-        const results = await updateRecord("comercio", {puntos: Number(comercio[0].puntos) + Number(comercio[0].monto_parcial)}, "ID_Comercio", comercio[0].ID_comercio);
+        const comercio = await selectOneRecord('comercio', 'ID_Comercio', pago[0].ID_Comercio);
+        const results = await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) + Number(comercio[0].monto_parcial)}, "ID_Comercio", comercio[0].ID_Comercio);
         const result = await deleteRecord("pagos", "ID_Pagos", id);
         await insertRecord('historial', {message: "Se borro un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
         res.status(200).json(result);
