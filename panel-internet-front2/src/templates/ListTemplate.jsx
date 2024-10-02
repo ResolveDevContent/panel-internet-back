@@ -96,18 +96,20 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               }
 
               if(titulo == 'admins' && values.length > 0) {
+                console.log("ENTRA", values)
                 listarByAdmin("permisos", values.email)
                 .then(permisos => {
                     if(!permisos || permisos.error|| permisos.length == 0) {
                         return;
                     }
-
+                    
                     setPermisos(true);
                     datos.forEach(row => {
                       const idx = permisos.findIndex(elm => elm.ID_Comercio == row.ID_Comercio);
                       idx > -1 ? row.checked = true : row.checked = false;
                     });
-
+                    
+                    console.log("AFTER FOREACH", datos)
                     setDatos(permisos);
                 })
                 .catch(err => {
