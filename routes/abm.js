@@ -383,6 +383,37 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
     }
 });
 
+router.delete("/clientes/borrar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const cliente = await selectOneRecord("clientes", "ID_Cliente", id);
+        const asociacion = await selectOneRecord("asociaciones", "ID_Cliente", id);
+        const transaccion = await selectOneRecord("transacciones", "ID_Cliente", id);
+        const puntos = await selectOneRecord("puntos", "ID_Cliente", id);
+
+        if(asociacion.length > 0){
+            await deleteRecord("asociaciones", 'ID_Cliente', id);
+            await insertRecord('historial', {message: `Se borraron las asociaciones del cliente: ${cliente[0].nombre}`, fecha: Date.now()});
+        }
+
+        if(transaccion.length > 0){
+            await deleteRecord("transacciones", 'ID_Cliente', id);
+            await insertRecord('historial', {message: `Se borraron las transacciones del cliente: ${cliente[0].nombre}`, fecha: Date.now()});
+        }
+
+        if(puntos.length > 0){
+            await deleteRecord("puntos", 'ID_Cliente', id);
+            await insertRecord('historial', {message: `Se borraron los puntos del cliente: ${cliente[0].nombre}`, fecha: Date.now()});
+        }
+
+        const results = await deleteRecord("clientes", "ID_Cliente", id);
+        await insertRecord('historial', {message: "Se borro el cliente " + cliente[0].nombre, fecha: Date.now()});
+        res.status(200).json(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 async function agregarClientes(datos) {
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
