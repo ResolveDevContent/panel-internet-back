@@ -13,7 +13,7 @@ export const User = () => {
       res: ""
   })
   const [loading, setLoading] = useState(false)
-  const [total, setTotal] = useState({})
+  const [total, setTotal] = useState(null)
 
   useEffect(() => {
     setLoading(true)
@@ -62,7 +62,7 @@ export const User = () => {
                 <div className='d-flex align-center wallet'>
                   <Wallet />
                   {
-                    total.monto_total[0].total && total.monto_total[0].total > 0 
+                    total != null && total.monto_total[0].total && total.monto_total[0].total > 0 
                     ? <span>$ {total.monto_total[0].total}</span> 
                     :<span className="saldado">$0</span> 
                   }
@@ -73,7 +73,7 @@ export const User = () => {
                 <div className='d-flex align-center'>
                   <Coin />
                   {
-                    total.puntos[0].total && total.puntos[0].total > 0 
+                    total != null && total.puntos[0].total && total.puntos[0].total > 0 
                     ? <span>{total.puntos[0].total}</span> 
                     :<span className="saldado">Sin puntos</span> 
                   }
