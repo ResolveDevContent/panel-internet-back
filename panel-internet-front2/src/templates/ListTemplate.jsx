@@ -106,17 +106,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     }
                     
                     setPermisos(true);
-                    datos.forEach(row => {
-                      const _row = permisos.find(elm => elm.ID_Comercio == row.ID_Comercio);
-                      // idx > -1 ? row.checked = true : row.checked = false;
-                      // if(refPermisos.current.id == _row.ID_Comercio) {
-                      //   refPermisos.current.checked = true
-                      // } else {
-                      //   refPermisos.current.checked = false
-                      // }
-                    });
-
-                    console.log(Array.from(refPermisos.current))
                     
                     console.log("AFTER FOREACH", datos)
                     const idsComercio = [];
@@ -201,14 +190,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                         </label>
                       : null
                     }
-                    <ul ref={refPermisos}>
+                    <ul>
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
                             <label>
                               <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
-                                />
+                                checked={values && datos.includes(row.ID_Comercio)}/>
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
