@@ -14,7 +14,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const [ datos, setDatos ] = useState([]);
 
     const originalListado = useRef([])
-    const refPermisos = useRef()
 
     const { nombre, placeholder, tipo } = data;
 
@@ -58,6 +57,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
       setLoading(false)
       setDatos(newArr);
+      e.target.checked = !e.target.checked
     }
 
     const handleChangeRadio = e => {
@@ -200,7 +200,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                                 name="list" value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} 
                                 onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}
                                 checked={values && datos.includes(row.ID_Comercio)}
-                                onClick={(e) => {e.target.checked = !e.target.checked}}/>
+                                />
                               <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
                             </label>
                           </li>
