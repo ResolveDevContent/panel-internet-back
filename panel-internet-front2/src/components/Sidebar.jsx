@@ -40,8 +40,8 @@ export const Sidebar = ({user}) => {
             })
             return;
           }
-          console.log(comercio)
-          setTotal(comercio[0].puntos);
+
+          setTotal(comercio[0]);
         })
         .catch(err => {
           setState({
@@ -83,11 +83,11 @@ export const Sidebar = ({user}) => {
           <div className="totales d-flex align-center">
             <div className=" d-flex flex-column">
               <em>Monto a pagar</em>
-              {/* {
-                total.puntos_totales && total.puntos_totales > 0 
+              {
+                total.puntos_totales && Number(total.puntos_totales) > 0 
                 ? <span>${total.puntos_totales}</span> 
                 : <span>Saldado</span> 
-              } */}
+              }
             </div>
             <button onClick={getMonto}><Refresh/></button>
           </div>
