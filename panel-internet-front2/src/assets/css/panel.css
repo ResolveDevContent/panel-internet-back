@@ -167,7 +167,7 @@
 .ver select,
 .ver textarea {
   user-select: none;
-  background-color: #bbbbbb;
+  background-color: #ffffff;
   cursor: default;
   pointer-events: none;
 }
