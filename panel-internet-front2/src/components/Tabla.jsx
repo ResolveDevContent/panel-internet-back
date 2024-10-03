@@ -61,7 +61,7 @@ const formatearDatos = (datos) => {
             }
         }
 
-        if((titulo == 'transacciones' || titulo == "historial/transacciones") && data.puntos_pago) {
+        if((titulo == 'transacciones' || titulo == "historial/transacciones")) {
             delete data.puntos_pago
         }
 
