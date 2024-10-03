@@ -184,10 +184,10 @@
   fill: #000!important;
 }
 
+
 .datos-mostrar {
   display: flex;
   gap: 0.5em;
-  margin-top: 1em;
   flex-wrap: wrap;
 }
 
@@ -195,6 +195,11 @@
   padding: 0.25em;
   border-radius: 0.5em;
   background-color: #ccc;
+}
+
+.datos-mostrar li span {
+  font-size: .85em;
+
 }
 
 @media (min-width: 768px) {

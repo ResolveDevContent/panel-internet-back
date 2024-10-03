@@ -230,7 +230,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 </div>
               : null}
               { values && datosMostrar.length > 0 ? (
-                  <div className="d-flex flex-column gap-1">
+                  <div className="d-flex flex-column gap-1 mt-1">
                     <span>Comercios asignados al admin: </span>
                     <ul className="datos-mostrar">
                       {datosMostrar.map((row, idx) => (
