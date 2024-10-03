@@ -7,7 +7,7 @@ export const InputTemplate = ({data, disabledEmail, values = {}}) => {
                 {tipo == "number" ? (
                     <input type={tipo} min="0" step="0.01" className="form-control" id={nombre} name={nombre} placeholder={placeholder} defaultValue={values[data.nombre]} required={nombre != "puntos_pago"}/>
                 ) : (
-                    <input type={tipo} className="form-control" id={nombre} name={nombre} placeholder={placeholder} defaultValue={values[data.nombre]} required={nombre != "puntos_pago" && tipo != "password"} disabled={nombre == "email" && values[data.nombre] && disabledEmail ? true : false}/>
+                    <input type={tipo} className={nombre == "email" && values[data.nombre] && disabledEmail ? "form-control disabled" : "form-control"} id={nombre} name={nombre} placeholder={placeholder} defaultValue={values[data.nombre]} required={nombre != "puntos_pago" && tipo != "password"}/>
                 )}
             </div>
         </li>

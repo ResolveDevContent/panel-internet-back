@@ -202,6 +202,12 @@
 
 }
 
+input.disabled {
+  pointer-events: none;
+  user-select: none;
+  background-color: #b4b4b4;
+}
+
 @media (min-width: 768px) {
   .table-container {
     overflow-x: auto;
