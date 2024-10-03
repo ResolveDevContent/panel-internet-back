@@ -54,7 +54,11 @@ const formatearDatos = (datos) => {
         }
 
         if(titulo == 'admins' && data.permisos) {
-            data.permisos = Boolean(data.permisos)
+            if(Boolean(data.permisos)) {
+                data.permisos = "Activo"
+            } else {
+                data.permisos = "Inactivo"
+            }
         }
 
         const newArr = Object.values(data)
