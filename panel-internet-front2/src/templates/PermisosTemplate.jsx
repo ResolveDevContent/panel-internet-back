@@ -5,12 +5,12 @@ export const PermisosTemplate = ({data, values = {}}) => {
     const refSi = useRef()
     const refNo = useRef()
 
-    console.log(values, values[nombre])
+    console.log(values["permisos"])
     console.log(refSi, refNo)
 
-    if(values[nombre] && values[nombre] == 1 && refSi.current) {
+    if(values["permisos"] && values["permisos"] == 1 && refSi.current) {
       refSi.current.checked = true;
-    } else if(values[nombre] && values[nombre] == 0 && refNo.current){
+    } else if(values["permisos"] && values["permisos"] == 0 && refNo.current){
       refNo.current.checked = true;
     }
 
