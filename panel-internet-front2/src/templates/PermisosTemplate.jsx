@@ -23,11 +23,11 @@ export const PermisosTemplate = ({data, values = {}}) => {
                 <div className="d-flex align-center gap-1">
                   <label className="d-flex align-center gap-5">
                     No
-                    <input type="radio" className="form-control" name={nombre} value={0} ref={refNo} />
+                    <input type="radio" className="form-control" name="permisos" value={0} ref={refNo} />
                   </label>
                   <label className="d-flex align-center gap-5">
                     Si
-                    <input type="radio" className="form-control" name={nombre} value={1} ref={refSi}/>
+                    <input type="radio" className="form-control" name="permisos" value={1} ref={refSi}/>
                   </label>
                 </div>
             </div>
