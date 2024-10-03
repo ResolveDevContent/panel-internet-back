@@ -53,6 +53,10 @@ const formatearDatos = (datos) => {
             data.puntos_totales = new Intl.NumberFormat('es-ES').format(Number(data.puntos_totales))
         }
 
+        if(titulo == 'admins' && data.permisos) {
+            data.permisos = Boolean(data.permisos)
+        }
+
         const newArr = Object.values(data)
 
         return newArr
