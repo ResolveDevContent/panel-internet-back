@@ -8,10 +8,10 @@ export const PermisosTemplate = ({data, values = {}}) => {
     useEffect(() => {
       console.log(values["permisos"])
   
-      if(values["permisos"] && values["permisos"] == 1 && refSi.current) {
+      if(values["permisos"] == 1 && refSi.current) {
         refSi.current.checked = true;
         console.log(refSi.current)
-      } else if(values["permisos"] && values["permisos"] == 0 && refNo.current){
+      } else if(values["permisos"] == 0 && refNo.current){
         console.log(refNo.current)
         refNo.current.checked = true;
       }
