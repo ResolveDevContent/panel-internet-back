@@ -964,8 +964,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
     }
 
     if(req.body.fecha <= Date.now()) {
-        const masage = caducarPuntos(req.body.fecha);
-        console.log(masage)
+        const masage = await caducarPuntos(req.body.fecha);
         return res.status(201).json(masage);
     }
 
