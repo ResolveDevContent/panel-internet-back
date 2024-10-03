@@ -23,7 +23,6 @@ export const PuntosFecha = ({titulo}) => {
         }, 4000)
         return
     }
-    console.log(date)
 
     if(new Date(date).getTime() <= Date.now()) {
       setState({
@@ -63,7 +62,6 @@ export const PuntosFecha = ({titulo}) => {
 
     listar(titulo)
     .then(datos => {
-      console.log(datos)
         if(datos.error) {
             setLoading(false);
             setState({
@@ -86,7 +84,6 @@ export const PuntosFecha = ({titulo}) => {
 
         setLoading(false);
         setResult(fechaHora);
-        console.log(fechaHora)
     })
   }, [update])
 

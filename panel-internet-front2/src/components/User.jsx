@@ -40,7 +40,6 @@ export const User = () => {
               })
               return;
             }
-            console.log(datos[0])
             setTotal(datos[0])
             setLoading(false)
           })

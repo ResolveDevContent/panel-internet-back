@@ -68,7 +68,6 @@ export const Backups = () => {
     useEffect(() => {
         setLoading(true)
         listBackups().then(datos => {
-            console.log(datos)
             if(datos.error) {
                 setLoading(false);
                 setState({

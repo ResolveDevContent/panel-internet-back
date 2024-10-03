@@ -26,7 +26,6 @@ export const Tabla = ({titulo, datos}) => {
 const navigate = useNavigate();
 
 const formatearDatos = (datos) => {
-    console.log("DATOS",datos)
     if(!datos || datos.length == 0) {
         setTable({
             columns: [],

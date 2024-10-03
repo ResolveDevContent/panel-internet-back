@@ -85,9 +85,7 @@ export const Listado = ({titulo}) => {
         }
 
         const newArr = listado.filter(row => {
-            console.log(row)
             const dateString = row.fecha.split(" ").join("T");
-            console.log(dateString, dateString + ':00')
             const fecha = new Date(dateString + ':00').getTime();
             let firstDate = new Date(date.first.replace(/-/g, '\/'));
             firstDate = firstDate.setHours(0,0,0,0);

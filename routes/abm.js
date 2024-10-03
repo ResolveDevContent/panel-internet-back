@@ -863,7 +863,6 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
 });
 
 router.put("/admins/modificar/:id", authenticate, async (req, res) => {
-    console.log(req.body)
     const { id } = req.params;
     const admin = {
         nombre: req.body.nombre,
