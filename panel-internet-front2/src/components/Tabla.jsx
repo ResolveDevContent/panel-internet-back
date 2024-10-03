@@ -133,6 +133,7 @@ useEffect(() => {
         if(user && user.message.role == 'admin') {
             listarByEmail('admins', user.email)
             .then(result => {
+                console.log(result)
                 setAdmin(result);
             })
         }
