@@ -398,7 +398,7 @@ export const Listado = ({titulo}) => {
                                     </div>
                                 </div>
                             : null}
-                            {titulo == "transacciones" || titulo == 'comercios/pagos' || titulo == "historial"
+                            {titulo == "transacciones" || titulo == 'comercios/pagos' || titulo == "historial" || titulo == "historial/transacciones"
                                 ? <div className='fechas'>
                                         <em>B&uacute;squeda por fecha</em>
                                         <div>
