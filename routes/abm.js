@@ -114,7 +114,8 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                         } else {
                             insertRecord("users", user)
                             .then( async (insert) => {
-                                await insertRecord('historial', {message: "Se agrego el comercio " + nombre_comercio, fecha: Date.now()});
+                                const date = new Date().toLocaleString()
+                                await insertRecord('historial', {message: "Se agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
                                 res.status(201).json({ message: "Comercio creado correctamente!" });
                             })
                             .catch((err) => {
@@ -146,7 +147,8 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
             delete req.body.password
             updateRecord("comercio", req.body, "ID_Comercio", id)
             .then(async (results) => {
-                await insertRecord('historial', {message: "Se modifico el comercio " + req.body.nombre_comercio, fecha: Date.now()});
+                const date = new Date().toLocaleString()
+                await insertRecord('historial', {message: "Se modifico el comercio " + req.body.nombre_comercio, fecha: new Date(date).getTime()});
                 res.status(200).json(results);
             })
             .catch((err) => {
@@ -193,10 +195,11 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
         }
 
         if (Number(req.body.monto_parcial) <= Number(comercio[0].puntos_totales)) {
-            const body = { ...req.body, fecha: Date.now() };
+            const date = new Date().toLocaleString()
+            const body = { ...req.body, fecha: new Date(date).getTime() };
             await insertRecord("pagos", body);
             await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) - Number(req.body.monto_parcial)}, "ID_Comercio", req.body.ID_Comercio);
-            await insertRecord('historial', {message: "Se agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+            await insertRecord('historial', {message: "Se agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
             return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
             return res.status(400).json({ error: "El monto ingresado es mayor al adeudado por el comercio." });
@@ -240,7 +243,8 @@ router.put("/comercios/pagos/modificar/:id", authenticate, async (req, res) => {
       // Actualizar el registro
       const results = await updateRecord("pagos", req.body, "ID_Pagos", id);
       const comercio = await selectOneRecord('comercios', 'ID_Comercio', id)
-      await insertRecord('historial', {message: "Se modifico un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+      const date = new Date().toLocaleString()
+      await insertRecord('historial', {message: "Se modifico un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
       res.status(200).json(results);
     } catch (err) {
       console.error('Error updating payment record:', err);
@@ -257,7 +261,8 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
         const comercio = await selectOneRecord('comercio', 'ID_Comercio', pago[0].ID_Comercio);
         const results = await updateRecord("comercio", {puntos_totales: Number(comercio[0].puntos_totales) + Number(pago[0].monto_parcial)}, "ID_Comercio", comercio[0].ID_Comercio);
         const result = await deleteRecord("pagos", "ID_Pagos", id);
-        await insertRecord('historial', {message: "Se borro un pago del comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se borro un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         res.status(200).json(result);
     } catch (err) {
       console.error('Error deleting payment record:', err);
@@ -348,7 +353,8 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
     try {
         const result = await agregarClientes(req.body);
         if (result.every(r => r !== null)) {
-            await insertRecord('historial', {message: "Se agregaron clientes a traves de un archivo csv", fecha: Date.now()});
+            const date = new Date().toLocaleString()
+            await insertRecord('historial', {message: "Se agregaron clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             res.status(201).json({ message: "Clientes creados/editados correctamente!" });
         } else {
             res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
@@ -362,9 +368,8 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 router.post("/clientes/agregar", authenticate, async (req, res) => {
     try {
         const results = await insertRecord("clientes", {...req.body, activo: 1});
-        await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: Date.now()});
         const date = new Date().toLocaleString()
-        console.log(Date.now(), new Date().toLocaleString(), new Date(date).getTime())
+        await insertRecord('historial', {message: "Se agrego el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         res.status(201).json({ message: "Cliente creado correctamente!" });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -375,7 +380,8 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     try {
         const results = await updateRecord("clientes", req.body, "ID_Cliente", id);
-        await insertRecord('historial', {message: "Se modifico el cliente " + req.body.nombre, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se modifico el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -552,8 +558,8 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 
         const results = await insertRecord("transacciones", body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-
-        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         res.status(201).json({ message: "Transacción creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -586,7 +592,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 
 //         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
 //         const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
-//         await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
+//         await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: new Date(date).getTime()});
 //         const results = await updateRecord("transacciones", body, "ID_Transaccion", id);
 //         res.status(200).json(results);
 //     } catch (err) {
@@ -618,7 +624,8 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
         }
 
         const results = await deleteRecord("transacciones", "ID_Transaccion", id);
-        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -666,7 +673,8 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
         const results = await insertRecord("asociaciones", req.body);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: new Date(date).getTime()});
         res.status(201).json({ message: "Asociación creada correctamente." });
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -686,7 +694,8 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
 
         if (resultados.every(result => result)) {
             const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
-            await insertRecord('historial', {message: "Se agregaron asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+            const date = new Date().toLocaleString()
+            await insertRecord('historial', {message: "Se agregaron asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
             return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
@@ -709,7 +718,8 @@ router.post("/asociaciones/comercios/agregar", authenticate, async (req, res) =>
 
         if (resultados.every(result => result)) {
             const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-            await insertRecord('historial', {message: "Se agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: Date.now()});
+            const date = new Date().toLocaleString()
+            await insertRecord('historial', {message: "Se agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
             return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
@@ -726,7 +736,8 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
         const results = await updateRecord("asociaciones", req.body, "ID_asociacion", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
         const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
-        await insertRecord('historial', {message: "Se modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -741,7 +752,8 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', asociacion[0].ID_Cliente);
         const comercio = await selectOneRecord("comercio", 'ID_Comercio', asociacion[0].ID_Comercio);
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
-        await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         res.status(200).json(results);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -854,7 +866,8 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
         const result2 = await insertRecord("admins", {nombre, apellido, email, permisos});
 
         if (await addPermisos(ID_Comercio, email)) {
-            await insertRecord('historial', {message: "Se agrego el admin " + nombre, fecha: Date.now()});
+            const date = new Date().toLocaleString()
+            await insertRecord('historial', {message: "Se agrego el admin " + nombre, fecha: new Date(date).getTime()});
             res.status(201).json({ message: "Admin creado correctamente!" });
         } else {
             res.status(500).json({ error: "El admin no se pudo crear correctamente!" });
@@ -904,8 +917,8 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             }
         }
 
-
-        await insertRecord('historial', {message: "Se actualizo el admin " + req.body.nombre, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se actualizo el admin " + req.body.nombre, fecha: new Date(date).getTime()});
         res.status(200).json(updateAdmin);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -925,7 +938,8 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
         
         const users = await deleteRecord("users", "email", admins[0].email);
         const result = await deleteRecord("admins", "ID_Admin", id);
-        await insertRecord('historial', {message: "Se borro el admin " + admins[0].nombre, fecha: Date.now()});
+        const date = new Date().toLocaleString()
+        await insertRecord('historial', {message: "Se borro el admin " + admins[0].nombre, fecha: new Date(date).getTime()});
         res.status(200).json(result);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -974,7 +988,8 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
         const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
-            await insertRecord('historial', {message: "Se actualizo la fecha de caducación de los puntos", fecha: Date.now()});
+            const date = new Date().toLocaleString()
+            await insertRecord('historial', {message: "Se actualizo la fecha de caducación de los puntos", fecha: new Date(date).getTime()});
             setDate(req.body.fecha);
             res.status(201).json({ message: "Fecha actualizada correctamente!" });
         } else {
@@ -1007,7 +1022,8 @@ async function caducarPuntos(date) {
         if(result.length > 0) {
             result.forEach(async row => {
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
-                await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(date)}`, fecha: Date.now()});
+                const date = new Date().toLocaleString()
+                await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(date)}`, fecha: new Date(date).getTime()});
                 return {message:  `Se borraron los puntos`}
             })
         } else {
@@ -1034,7 +1050,8 @@ router.delete("/users/borrar/:id", authenticate, async (req, res) => {
 
 router.post('/backup', authenticate, async (req, res) => {
     backupDatabase();
-    await insertRecord('historial', {message: "Se creo exitosamente el backup", fecha: Date.now()});
+    const date = new Date().toLocaleString()
+    await insertRecord('historial', {message: "Se creo exitosamente el backup", fecha: new Date(date).getTime()});
 
     res.status(200).json({ message: 'Backup en proceso...'});
 });
@@ -1045,7 +1062,8 @@ router.post('/restore', authenticate, async (req, res) => {
         return res.status(400).json({ error: 'Se requiere el nombre del archivo de backup.'});
     }
     restoreDatabase(file);
-    await insertRecord('historial', {message: "Se restauro exitosamente el backup", fecha: Date.now()});
+    const date = new Date().toLocaleString()
+    await insertRecord('historial', {message: "Se restauro exitosamente el backup", fecha: new Date(date).getTime()});
     res.status(200).json({ message: 'Restauracion en proceso...'});
 });
 
