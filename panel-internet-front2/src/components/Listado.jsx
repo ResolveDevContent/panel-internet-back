@@ -85,14 +85,17 @@ export const Listado = ({titulo}) => {
         }
 
         const newArr = listado.filter(row => {
-            const fecha = new Date(row.fecha).getTime();
+            const fecha = row.fecha.split(",")[0]
+            const fechaReverse = fecha.split("/").reverse().join("/");
+            const fechaCompleta = fechaReverse + row.fecha.split(",")[1];
+
+            const timestamp = new Date(fechaCompleta).getTime();
             let firstDate = new Date(date.first.replace(/-/g, '\/'));
             firstDate = firstDate.setHours(0,0,0,0);
             let secondDate = new Date(date.second.replace(/-/g, '\/'));
             secondDate = secondDate.setHours(23,59,59,99);
             
-            console.log(row.fecha, fecha, firstDate, secondDate)
-            return Number(fecha) >= firstDate && Number(fecha) <= secondDate;
+            return Number(timestamp) >= firstDate && Number(timestamp) <= secondDate;
         })
 
         if(titulo == 'transacciones') {

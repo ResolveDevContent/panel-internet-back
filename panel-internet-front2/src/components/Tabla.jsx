@@ -45,8 +45,6 @@ const formatearDatos = (datos) => {
                 let date = new Date(Number(data['fecha']));
                 const fecha = date.toLocaleString();
     
-                // date = date.toLocaleDateString();
-    
                 data.fecha = fecha;
             }
         }
