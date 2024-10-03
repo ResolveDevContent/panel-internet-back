@@ -899,7 +899,7 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             const idxComercios = req.body.ID_Comercio.findIndex((row) => row == permiso.ID_Comercio)
 
             if(idxComercios == -1) {
-                const updatePermisos = await deleteRecord("permisos", "ID_Permisos", permiso.ID_Permiso);
+                const updatePermisos = await deleteRecord("permisos", "ID_Permisos", permiso.ID_Permisos);
             }
         }
 
