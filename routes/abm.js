@@ -840,11 +840,13 @@ router.get("/admins/listar/:id", authenticate, async (req, res) => {
 
 router.get("/admins/listarByEmail/:email", authenticate, async (req,res) => {
     const { email } = req.params;
-    const results = await selectOneRecord("admins", "email", email)
-    res.send(results)
-    .catch((err) => {
+    try {
+        const results = await selectOneRecord("admins", "email", email)
+        res.send(results)
+    }
+    catch(err){
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-    })
+    }
 });
 
 // Agregar administrador
