@@ -870,7 +870,6 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
         email: req.body.email,
         permisos: req.body.permisos
     }
-
     
     try {
         const updateAdmin = await updateRecord("admins", admin, "ID_Admin", id);
@@ -886,13 +885,13 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             const updateUser = await updateRecord("users", newPassword, "email", req.body.email);
         }
 
-        for(const comercio of req.body.ID_Comercio) {
-            const objComercio = {
-                ID_Comercio: comercio
-            }
+        // for(const comercio of req.body.ID_Comercio) {
+        //     const objComercio = {
+        //         ID_Comercio: Number(comercio)
+        //     }
 
-            const updatePermisos = await updateRecord("permisos", objComercio, "ID_Admin", req.body.email);
-        }
+        //     const updatePermisos = await updateRecord("permisos", objComercio, "ID_Admin", req.body.email);
+        // }
 
         await insertRecord('historial', {message: "Se actualizo el admin " + req.body.nombre, fecha: Date.now()});
         res.status(200).json(results);
