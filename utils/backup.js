@@ -14,7 +14,7 @@ const dbConfig = {
 
 // Función para crear un backup
 function backupDatabase() {
-    const timestamp = new Date().toLocaleString().replace(/[-:.]/g, '_');
+    const timestamp = new Date().toLocaleString();
     const backupFile = path.join(__dirname, `backup_${timestamp}.sql`);
 
     const command = `mysqldump -u ${dbConfig.user} -p${dbConfig.password} ${dbConfig.database} > ${backupFile}`;
