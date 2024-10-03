@@ -1,5 +1,5 @@
 export const InputTemplate = ({data, disabledEmail, values = {}}) => { 
-    const { nombre, tipo, placeholder, valor } = data
+    const { nombre, tipo, placeholder, valor, mensaje } = data
     return(
         <li>
             <div className="mb-3">
@@ -9,6 +9,9 @@ export const InputTemplate = ({data, disabledEmail, values = {}}) => {
                 ) : (
                     <input type={tipo} className={nombre == "email" && values[data.nombre] && disabledEmail ? "form-control disabled" : "form-control"} id={nombre} name={nombre} placeholder={placeholder} defaultValue={values[data.nombre]} required={nombre != "puntos_pago" && tipo != "password"}/>
                 )}
+                {mensaje != '' ? (
+                    <span style={{color: "#ccc", fontSize: "0.75em", marginTop: "0.25em", fontWeight: "300"}}>{mensaje}</span>
+                ) : null}
             </div>
         </li>
     ) 
