@@ -131,6 +131,7 @@ useEffect(() => {
     formatearDatos(datos)
     PerfilAuth().then(user => {
         if(user && user.message.role == 'admin') {
+            console.log(user)
             listarByEmail('admins', user.email)
             .then(result => {
                 console.log(result)
