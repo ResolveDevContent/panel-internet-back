@@ -61,6 +61,10 @@ const formatearDatos = (datos) => {
             }
         }
 
+        if((titulo == 'transacciones' || titulo == "historial/transacciones") && data.puntos_pago) {
+            delete data.puntos_pago
+        }
+
         const newArr = Object.values(data)
 
         return newArr
@@ -73,7 +77,12 @@ const formatearDatos = (datos) => {
         const idxCliente = columns.findIndex(column => column == "ID_Cliente");
         columns[idxCliente] = "Nombre Cliente" 
     }
-    console.log(rows)
+
+    if(titulo == "transacciones" || titulo == "historial/transacciones") {
+        const idx = columns.findIndex(column => column == "puntos_pago");
+        columns.splice(idx, 1)
+    }
+
     setTable({
         columns: columns,
         rows: rows
