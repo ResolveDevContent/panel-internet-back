@@ -133,7 +133,6 @@ useEffect(() => {
         if(user && user.message.role == 'admin') {
             listarByEmail('admins', user.message.email)
             .then(result => {
-                console.log(result)
                 setAdmin(result);
             })
         }
@@ -172,13 +171,13 @@ return (
                                             </li>
                                             : null
                                         }
-                                        {(admin == null || admin.permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins') 
+                                        {(admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins') 
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>
                                             : null
                                         }
-                                        {(admin == null || admin.permisos == 1) && (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos' || titulo == 'asociaciones' || titulo == 'clientes')
+                                        {(admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos' || titulo == 'asociaciones' || titulo == 'clientes')
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>
