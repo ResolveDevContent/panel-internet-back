@@ -16,6 +16,7 @@
 .toast .toast-body {
   font-weight: 600;
   font-size: .8em;
+  color: #fff;
 }
 .toast button {
   display: flex;
