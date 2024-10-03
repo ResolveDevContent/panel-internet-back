@@ -57,16 +57,13 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       if(values) {
         let arr = datosMostrar
         if(e.target.checked) {
-          console.log("true")
           if(!datosMostrar.includes(e.target.name)) {
-            console.log("choto")
             arr = [
               ...datosMostrar,
               e.target.name
             ];
           }
         } else {
-          console.log("te fomes")
           arr = datosMostrar.filter(row => row != e.target.name);
         }
         setDatosMostrar(arr)
@@ -125,14 +122,12 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               if(titulo == 'admins' && values) {
                 listarByAdmin("permisos", values.email)
                 .then(permisos => {
-                    console.log(permisos)
                     if(!permisos || permisos.error|| permisos.length == 0) {
                         return;
                     }
 
                     const idsComercio = [];
                     const nombresComercio = [];
-                    console.log(permisos)
                     permisos.forEach(row => {
                       idsComercio.push(row.ID_Comercio)
 
@@ -235,14 +230,17 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 </div>
               : null}
               { values && datosMostrar.length > 0 ? (
-                  <ul>
-                    {datosMostrar.map((row, idx) => (
-                        <li key={idx}>
-                            <span>{row}</span>
-                        </li>
-                      )
-                    )}
-                  </ul>
+                  <div className="d-flex flex-column gap-1">
+                    <span>Comercios asignados al admin: </span>
+                    <ul className="datos-mostrar">
+                      {datosMostrar.map((row, idx) => (
+                          <li key={idx}>
+                              <span>{row}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
               ) : null}
             <input type="hidden" name={nombre} value={JSON.stringify(datos)} required/>
             { state.text ? <Toast texto={state.text} res={state.res} /> : null }

@@ -184,6 +184,19 @@
   fill: #000!important;
 }
 
+.datos-mostrar {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 1em;
+  flex-wrap: wrap;
+}
+
+.datos-mostrar li {
+  padding: 0.25em;
+  border-radius: 0.5em;
+  background-color: #ccc;
+}
+
 @media (min-width: 768px) {
   .table-container {
     overflow-x: auto;
