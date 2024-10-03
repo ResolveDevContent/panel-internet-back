@@ -863,14 +863,40 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
 });
 
 router.put("/admins/modificar/:id", authenticate, async (req, res) => {
-    const { id } = req.params;
-    try {
-        const results = await updateRecord("admins", req.body, "ID_Admin", id);
-        await insertRecord('historial', {message: "Se agrego el admin " + req.body.nombre, fecha: Date.now()});
-        res.status(200).json(results);
-    } catch (err) {
-        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
-    }
+    console.log(req.body)
+    // const { id } = req.params;
+    // const admin = {
+    //     nombre: req.body.nombre,
+    //     apellido: req.body.apellido,
+    //     email: req.body.email,
+    //     permisos: req.body.permisos
+    // }
+
+    
+    // try {
+    //     const updateAdmin = await updateRecord("admins", admin, "ID_Admin", id);
+        
+    //     if(req.body.password) {
+    //         const salt = await bcrypt.genSalt(10);
+    //         const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        
+    //         const newPassword = {
+    //             password: hashedPassword
+    //         }
+            
+    //         const updateUser = await updateRecord("users", newPassword, "email", req.body.email);
+    //     }
+
+    //     const permisos = {
+
+    //     }
+    //     const updatePermisos = await updateRecord("permisos", newPassword, "email", req.body.email);
+
+    //     await insertRecord('historial', {message: "Se actualizo el admin " + req.body.nombre, fecha: Date.now()});
+    //     res.status(200).json(results);
+    // } catch (err) {
+    //     res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    // }
 });
 
 // Borrar administrador
