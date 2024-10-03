@@ -246,10 +246,16 @@ export const Sidebar = ({user}) => {
             </li>
           ) : null}
           {user && user.role == "cliente" ? (
-            <li>
-              <input type="radio" id="clientes" name="solapa"/>
-              <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cliente">Mis puntos</NavLink>
-            </li>
+            <>
+              <li>
+                <input type="radio" id="clientes" name="solapa"/>
+                <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cliente">Mis puntos</NavLink>
+              </li>
+              <li>
+                <input type="radio" id="clientes" name="solapa"/>
+                <NavLink className={({isActive}) => isActive ? 'active' : ''} to="historial/transacciones/listar">Historial</NavLink>
+              </li>
+            </>
           ) : null}
         </ul>
         <ul className="menu two">
