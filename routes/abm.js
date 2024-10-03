@@ -366,6 +366,16 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 
 // Agregar cliente
 router.post("/clientes/agregar", authenticate, async (req, res) => {
+
+    const results = await selectAsociaciones("clientes", 
+        { first: "Id", second: "Codigo" }, 
+        { first: row.Id.toString(), second: row.Codigo.toString() }
+    );
+
+    if(results.length > 0) {
+        return res.status(500).json({ error: "Ya existe el cliente" })
+    }
+
     try {
         const results = await insertRecord("clientes", {...req.body, activo: 1});
         const date = new Date().toLocaleString()

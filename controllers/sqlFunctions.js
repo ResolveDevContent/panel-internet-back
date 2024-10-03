@@ -20,7 +20,6 @@ const checkRecordExists = async (tableName, column, value) => {
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }
 };
-
 const insertRecord = async (tableName, record) => {
   const placeHolder = Object.keys(record).map(() => "?").join(",");
   const query = `INSERT INTO ${tableName} (${Object.keys(record)}) VALUES (${placeHolder})`;
