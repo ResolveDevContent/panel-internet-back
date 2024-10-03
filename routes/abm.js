@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, deleteRecordByAdmin } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -874,7 +874,6 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
     
     try {
         const updateAdmin = await updateRecord("admins", admin, "ID_Admin", id);
-        console.log(updateAdmin)
         
         if(req.body.password) {
             const salt = await bcrypt.genSalt(10);
@@ -885,21 +884,28 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             }
             
             const updateUser = await updateRecord("users", newPassword, "email", req.body.email);
-            console.log(updateUser)
-
         }
 
+        const permisos = await selectOneRecord("permisos", "ID_Admin", req.body.email);
         for(const comercio of req.body.ID_Comercio) {
-            const objComercio = {
-                ID_Comercio: Number(comercio)
-            }
+            const idxPermisos = permisos.findIndex((row) => row.ID_Comercio == comercio.ID_Comercio)
 
-            const updatePermisos = await updateRecord("permisos", objComercio, "ID_Admin", req.body.email);
-            console.log(updatePermisos)
+            if(idxPermisos == -1) {
+                const updatePermisos = await insertRecord("permisos", {ID_Comercio: comercio.ID_Comercio, ID_Admin: req.body.email}, "ID_Admin", req.body.email);
+            }
         }
+
+        for(const permiso of permisos) {
+            const idxComercios = req.body.ID_Comercio.findIndex((row) => row.ID_Comercio == permiso.ID_Comercio)
+
+            if(idxComercios == -1) {
+                const updatePermisos = await deleteRecord("permisos", "ID_Permisos", permiso.ID_Permiso);
+            }
+        }
+
 
         await insertRecord('historial', {message: "Se actualizo el admin " + req.body.nombre, fecha: Date.now()});
-        res.status(200).json(results);
+        res.status(200).json(updateAdmin);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }

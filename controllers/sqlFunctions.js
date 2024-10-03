@@ -182,6 +182,7 @@ const deleteRecord = async (tableName, column, value) => {
   }
 }
 
+
 const updateRecord = async (tableName, update, column, value) => {
   const query = `UPDATE ${tableName} SET ${Object.keys(update).map(key => `${key} = ?`).join(", ")} WHERE ${column} = ?`;
   const parameters = [...Object.values(update), value];
@@ -225,5 +226,5 @@ module.exports = {
   updateRecordCliente,
   calcularPuntosTotales,
   selectOneDato,
-  selectByAdminPermisos
+  selectByAdminPermisos,
 };
