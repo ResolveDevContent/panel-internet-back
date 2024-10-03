@@ -963,15 +963,20 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
         return res.status(500).json({ error: "No hay una fecha establecida." });
     }
 
+    if(req.body.fecha <= Date.now()) {
+        caducarPuntos(req.body.fecha);
+        return res.status(201).json({ message: "Los puntos se borraron con exito" });
+    }
+
     try {
         const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
             await insertRecord('historial', {message: "Se actualizo la fecha de caducación de los puntos", fecha: Date.now()});
             setDate(req.body.fecha);
-            res.status(201).json({ message: "fecha actualizada correctamente!" });
+            res.status(201).json({ message: "Fecha actualizada correctamente!" });
         } else {
-            res.status(500).json({ error: "La fecha actualizar correctamente!" });
+            res.status(500).json({ error: "La fecha no se actualizo correctamente!" });
         }
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
