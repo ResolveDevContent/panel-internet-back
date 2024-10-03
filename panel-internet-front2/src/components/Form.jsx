@@ -46,21 +46,21 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
 
         if(id) {
             console.log(dataObj)
-            setLoading(true)
-            modificar(titulo, id, dataObj)
-            .then(data => {
-                if(data.error) {
-                    setLoading(false)
-                    setState({
-                        text: data.error,
-                        res: "secondary"
-                    })
-                    return;
-                }
-                setLoading(false)
-                setState({text: data.message, res: "primary"})
-                navigate(`/${titulo}/listar`)
-            })
+            // setLoading(true)
+            // modificar(titulo, id, dataObj)
+            // .then(data => {
+            //     if(data.error) {
+            //         setLoading(false)
+            //         setState({
+            //             text: data.error,
+            //             res: "secondary"
+            //         })
+            //         return;
+            //     }
+            //     setLoading(false)
+            //     setState({text: data.message, res: "primary"})
+            //     navigate(`/${titulo}/listar`)
+            // })
         } else {
             setLoading(true)
 
