@@ -838,12 +838,10 @@ router.get("/admins/listar/:id", authenticate, async (req, res) => {
     }
 });
 
-router.get("/admins/listarByEmail/:email", authenticate, (req,res) => {
+router.get("/admins/listarByEmail/:email", authenticate, async (req,res) => {
     const { email } = req.params;
-    selectOneRecord("admins", "email", email)
-    .then((results) => {
-        res.send(results)
-    })
+    const results = await selectOneRecord("admins", "email", email)
+    res.send(results)
     .catch((err) => {
         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
     })
