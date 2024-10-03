@@ -65,7 +65,7 @@ const formatearDatos = (datos) => {
         const idxCliente = columns.findIndex(column => column == "ID_Cliente");
         columns[idxCliente] = "Nombre Cliente" 
     }
-
+    console.log(rows)
     setTable({
         columns: columns,
         rows: rows
