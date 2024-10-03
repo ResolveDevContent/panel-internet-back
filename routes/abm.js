@@ -964,8 +964,8 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
     }
 
     if(req.body.fecha <= Date.now()) {
-        caducarPuntos(req.body.fecha);
-        return res.status(201).json({ message: "Los puntos se borraron con exito" });
+        const masage = caducarPuntos(req.body.fecha);
+        return res.status(201).json(masage);
     }
 
     try {
@@ -1006,7 +1006,10 @@ async function caducarPuntos(date) {
             result.forEach(async row => {
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
                 await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(date)}`, fecha: Date.now()});
+                return {message:  `Se borraron los puntos`}
             })
+        } else {
+            return {message: "No hay puntos hasta esa fecha"}
         }
     } catch (err) {
         return { error: "Se ha producido un error, inténtelo nuevamente." };
