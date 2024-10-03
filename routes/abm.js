@@ -874,6 +874,7 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
     
     try {
         const updateAdmin = await updateRecord("admins", admin, "ID_Admin", id);
+        console.log(updateAdmin)
         
         if(req.body.password) {
             const salt = await bcrypt.genSalt(10);
@@ -884,6 +885,8 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             }
             
             const updateUser = await updateRecord("users", newPassword, "email", req.body.email);
+            console.log(updateUser)
+
         }
 
         for(const comercio of req.body.ID_Comercio) {
@@ -892,6 +895,7 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             }
 
             const updatePermisos = await updateRecord("permisos", objComercio, "ID_Admin", req.body.email);
+            console.log(updatePermisos)
         }
 
         await insertRecord('historial', {message: "Se actualizo el admin " + req.body.nombre, fecha: Date.now()});
