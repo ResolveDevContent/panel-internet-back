@@ -26,7 +26,7 @@ export const Listado = ({titulo}) => {
 
     const filteredNombre = useMemo(() => {
         let newArr = [];
-        if(titulo != "asociaciones" && titulo != "transacciones" && titulo != "historial" && titulo != "comercios" && titulo != "comercios/pagos" && titulo != "admins") {
+        if(titulo != "asociaciones" && titulo != "transacciones" && titulo != "historial" && titulo != "comercios" && titulo != "comercios/pagos" && titulo != "admins" && titulo != "historial/transacciones") {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
                     return row.nombre.toLowerCase().includes(nombre.toLowerCase())
@@ -45,7 +45,7 @@ export const Listado = ({titulo}) => {
 
     const filteredComercio = useMemo(() => {
         let newArr = [];
-        if(titulo != "asociaciones" && titulo != "transacciones" && titulo != "comercios/pagos") {
+        if(titulo != "asociaciones" && titulo != "transacciones" && titulo != "comercios/pagos" && titulo != "historial/transacciones") {
             newArr = nombreComercio != null && nombreComercio.length > 0
                 ? listado.filter(row => {
                     return row.nombre_comercio.toLowerCase().includes(nombreComercio.toLowerCase())
