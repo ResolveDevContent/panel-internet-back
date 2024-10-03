@@ -13,7 +13,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
     const originalListado = useRef([])
 
-    const { nombre, placeholder, tipo } = data;
+    const { nombre, placeholder, tipo, lista } = data;
 
     const filteredNombre = useMemo(() => {
         setLoading(true)
@@ -229,9 +229,9 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 }
                 </div>
               : null}
-              { values && datosMostrar.length > 0 ? (
+              { lista && values && datosMostrar.length > 0 ? (
                   <div className="d-flex flex-column gap-1 mt-1">
-                    <span>Comercios asignados al admin: </span>
+                    <span>{placeholder} asignados: </span>
                     <ul className="datos-mostrar">
                       {datosMostrar.map((row, idx) => (
                           <li key={idx}>

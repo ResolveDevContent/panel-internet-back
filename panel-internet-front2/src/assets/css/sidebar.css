@@ -204,7 +204,7 @@
   }
   .sidebar {
     display: none;
-    position: absolute;
+    position: fixed;
     transition: all .5s;
     animation: rightanimation 1s ease-in-out;
   }

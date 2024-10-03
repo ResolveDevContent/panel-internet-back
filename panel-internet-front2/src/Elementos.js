@@ -28,7 +28,8 @@ export const ELEMENTOS = {
             element: 'list',
             nombre: 'ID_Comercio',
             placeholder: "comercios",
-            tipo: 'checkbox'
+            tipo: 'checkbox',
+            lista: true
         },
         {
             element: 'permisos',
@@ -196,7 +197,8 @@ export const ELEMENTOS = {
         element: 'list',
         nombre: 'ID_Comercio',
         placeholder: "comercios",
-        tipo: 'radio'
+        tipo: 'radio',
+        lista: false
     },
     {
         element: 'input',
@@ -212,13 +214,15 @@ export const ELEMENTOS = {
         element: 'list',
         nombre: 'ID_Cliente',
         placeholder: "clientes",
-        tipo: 'checkbox'
+        tipo: 'checkbox',
+        lista: false
     },
     {
         element: 'list',
         nombre: 'ID_Comercio',
         placeholder: "comercios",
-        tipo: 'radio'
+        tipo: 'radio',
+        lista: false
     },
   ],
   asociacionesComercios: [
@@ -226,13 +230,15 @@ export const ELEMENTOS = {
         element: 'list',
         nombre: 'ID_Cliente',
         placeholder: "clientes",
-        tipo: 'radio'
+        tipo: 'radio',
+        lista: false
     },
     {
         element: 'list',
         nombre: 'ID_Comercio',
         placeholder: "comercios",
-        tipo: 'checkbox'
+        tipo: 'checkbox',
+        lista: false
     },
     ],
     historial: [
