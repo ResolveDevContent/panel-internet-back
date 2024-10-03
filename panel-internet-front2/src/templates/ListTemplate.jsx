@@ -55,7 +55,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setDatos(newArr);
 
       if(values) {
-        let arr = []
+        let arr = datosMostrar
         if(e.target.checked) {
           console.log("true")
           if(!datosMostrar.includes(e.target.name)) {
