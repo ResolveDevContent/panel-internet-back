@@ -375,7 +375,7 @@ export const Listado = ({titulo}) => {
                                                 </span>
                                             </div>
                                         : null}
-                                        {titulo != "clientes" && titulo != "historial"
+                                        {titulo != "clientes" && titulo != "historial" && titulo != "historial/transacciones"
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setnombreComercio(e.target.value)
