@@ -888,15 +888,15 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
 
         const permisos = await selectOneRecord("permisos", "ID_Admin", req.body.email);
         for(const comercio of req.body.ID_Comercio) {
-            const idxPermisos = permisos.findIndex((row) => row.ID_Comercio == comercio.ID_Comercio)
+            const idxPermisos = permisos.findIndex((row) => row.ID_Comercio == comercio)
 
             if(idxPermisos == -1) {
-                const updatePermisos = await insertRecord("permisos", {ID_Comercio: comercio.ID_Comercio, ID_Admin: req.body.email}, "ID_Admin", req.body.email);
+                const updatePermisos = await insertRecord("permisos", {ID_Comercio: comercio, ID_Admin: req.body.email}, "ID_Admin", req.body.email);
             }
         }
 
         for(const permiso of permisos) {
-            const idxComercios = req.body.ID_Comercio.findIndex((row) => row.ID_Comercio == permiso.ID_Comercio)
+            const idxComercios = req.body.ID_Comercio.findIndex((row) => row == permiso.ID_Comercio)
 
             if(idxComercios == -1) {
                 const updatePermisos = await deleteRecord("permisos", "ID_Permisos", permiso.ID_Permiso);
