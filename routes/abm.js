@@ -842,6 +842,7 @@ router.get("/admins/listarByEmail/:email", authenticate, async (req,res) => {
     const { email } = req.params;
     try {
         const results = await selectOneRecord("admins", "email", email)
+        console.log(results, email)
         res.send(results)
     }
     catch(err){
