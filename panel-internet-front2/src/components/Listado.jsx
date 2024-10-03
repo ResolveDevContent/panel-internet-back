@@ -85,8 +85,7 @@ export const Listado = ({titulo}) => {
         }
 
         const newArr = listado.filter(row => {
-            const dateString = row.fecha.split(" ").join("T");
-            const fecha = new Date(dateString + ':00').getTime();
+            const fecha = new Date(row.fecha).getTime();
             let firstDate = new Date(date.first.replace(/-/g, '\/'));
             firstDate = firstDate.setHours(0,0,0,0);
             let secondDate = new Date(date.second.replace(/-/g, '\/'));

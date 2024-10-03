@@ -43,13 +43,11 @@ const formatearDatos = (datos) => {
         if((titulo == 'historial' || titulo == 'transacciones' || titulo == 'comercios/pagos') && !data["fecha"].includes("/")) {
             if(!isNaN(Number(data['fecha']))) {
                 let date = new Date(Number(data['fecha']));
-                const fecha = date.toISOString();
-                const hora = (fecha.split('T')[1]).split(':');
-                const fechaHora = fecha.split('T')[0] + ' ' + hora[0] + ':' + hora[1];
+                const fecha = date.toLocaleString();
     
                 // date = date.toLocaleDateString();
     
-                data.fecha = fechaHora;
+                data.fecha = fecha;
             }
         }
 
