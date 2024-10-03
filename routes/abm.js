@@ -369,7 +369,7 @@ router.post("/clientes/agregar", authenticate, async (req, res) => {
 
     const results = await selectAsociaciones("clientes", 
         { first: "Id", second: "Codigo" }, 
-        { first: row.Id.toString(), second: row.Codigo.toString() }
+        { first: req.body.Id.toString(), second: req.body.Codigo.toString() }
     );
 
     if(results.length > 0) {
