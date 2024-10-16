@@ -196,7 +196,12 @@ export const Listado = ({titulo}) => {
                     throw new Error(total.error); // Maneja el error lanzando una excepción
                 }
 
-                row.puntos = total[0].puntos;
+                if(total.length > 0 && total[0].puntos.length > 0) {
+                    row.puntos = total[0].puntos[0].total;
+                } else {
+                    row.puntos = 0;
+                }
+
                 return row;
             } catch (error) {
                 // Maneja el error aquí
