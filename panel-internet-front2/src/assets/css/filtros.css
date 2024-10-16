@@ -104,6 +104,7 @@
   border: 1px solid #ccc;
   padding: .25em;
   margin-left: .25em;
+  width: 12em;
 }
 
 .filtros .fechas ul,

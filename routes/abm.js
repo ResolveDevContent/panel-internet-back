@@ -1013,7 +1013,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
 router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
     try {
         const fecha = await selectTable("fecha");
-        
+        console.log(fecha)
         res.status(200).send(fecha);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });

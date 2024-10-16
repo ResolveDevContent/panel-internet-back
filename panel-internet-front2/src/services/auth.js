@@ -2,7 +2,7 @@ import Cookies from "js-cookie"
 
 export const LoginAuth = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/login', {
+        const response = await fetch('http://localhost:3009/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export const LoginAuth = async (credentials, setAuth, setState) => {
 
 export const LoginCliente = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/login/cliente', {
+        const response = await fetch('http://localhost:3009/auth/login/cliente', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export const LoginCliente = async (credentials, setAuth, setState) => {
 
 export const LogoutAuth = async (setAuth, setState) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/logout', {
+        const response = await fetch('http://localhost:3009/auth/logout', {
             method: 'GET',
         });
 
@@ -82,7 +82,7 @@ export const PerfilAuth = () => {
     const token = Cookies.get("token");
 
     return (
-        fetch('http://vps-4375167-x.dattaweb.com/auth/perfil', {
+        fetch('http://localhost:3009/auth/perfil', {
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -93,7 +93,7 @@ export const PerfilAuth = () => {
 
 export const RegisterAuth = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/register', {
+        const response = await fetch('http://localhost:3009/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ export const RegisterAuth = async (credentials, setAuth, setState) => {
 
 export const CambiarContraseña = async (credentials, setAuth, setState) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/changepassword', {
+        const response = await fetch('http://localhost:3009/auth/changepassword', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
