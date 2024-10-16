@@ -287,12 +287,12 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     <ul>
                       {sortedListado.map((row, idx) => (
                           Array.isArray(row) ? (
-                            row.map((item) => {
+                            row.map((item, key) => {
                               // console.log(item)
                               // <li key={idx}>
                               //   <label>
                               //     <input type={tipo} id={item} name={item} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                                  <span className="text-ellipsis">{item}</span>
+                                  <span key={key} className="text-ellipsis">{item}</span>
                               //   </label>
                               // </li>
                             })
