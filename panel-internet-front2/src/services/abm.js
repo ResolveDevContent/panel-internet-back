@@ -4,7 +4,7 @@ export const listar = (model) => {
     const token = Cookies.get("token");
     console.log(model)
     return (
-        fetch(`http://localhost:3009/abm/${model}/listar`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -18,7 +18,7 @@ export const listar = (model) => {
 export const listarUno = (model, id) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/listar/${id}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/${id}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -32,7 +32,7 @@ export const listarUno = (model, id) => {
 export const listarByZona = (zona) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/clientes/listar/zona/${zona}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/clientes/listar/zona/${zona}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -46,7 +46,7 @@ export const listarByZona = (zona) => {
 export const listarByComercio = (model, id) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/listar/comercio/${id}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/comercio/${id}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -60,7 +60,7 @@ export const listarByComercio = (model, id) => {
 export const listarByAdmin = (model, email) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/listar/admin/${email}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/admin/${email}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const listarByAdmin = (model, email) => {
 export const listarByAdminAndParam = (model, email, param) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/listar/admin/${email}/${param}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/admin/${email}/${param}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -88,7 +88,7 @@ export const listarByAdminAndParam = (model, email, param) => {
 export const listarByEmail = (model, email) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/listarByEmail/${email}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listarByEmail/${email}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -102,7 +102,7 @@ export const listarByEmail = (model, email) => {
 export const importarCSV = (model, body) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/importarcsv`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/importarcsv`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export const importarCSV = (model, body) => {
 export const agregar = (model, body) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/agregar`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/agregar`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ export const agregar = (model, body) => {
 export const modificar = (model, id, body) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://localhost:3009/abm/${model}/modificar/${id}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/modificar/${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ export const modificar = (model, id, body) => {
 export const borrar = (model, id) => {
     const token = Cookies.get("token");
     return(
-        fetch(`http://localhost:3009/abm/${model}/borrar/${id}`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/borrar/${id}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ export const borrar = (model, id) => {
 export const makeBackup = () => {
     const token = Cookies.get("token");
     return(
-        fetch(`http://localhost:3009/abm/backup`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/backup`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ export const makeBackup = () => {
 export const listBackups = () => {
     const token = Cookies.get("token");
     return(
-        fetch(`http://localhost:3009/abm/backups`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/backups`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -195,7 +195,7 @@ export const restoreBackup = (file) => {
     const token = Cookies.get("token");
     const body = {file: file}
     return(
-        fetch(`http://localhost:3009/abm/restore`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/restore`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
