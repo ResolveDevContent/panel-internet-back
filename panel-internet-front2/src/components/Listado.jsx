@@ -190,6 +190,7 @@ export const Listado = ({titulo}) => {
         const actualizaciones = datos.map(async (row, idx) => {
             try {
                 const total = await puntosTotales(row.ID_Cliente);
+                console.log(total)
                 
                 if (total.error) {
                     throw new Error(total.error); // Maneja el error lanzando una excepción
