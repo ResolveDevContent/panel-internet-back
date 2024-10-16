@@ -156,7 +156,9 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   
   useEffect(() => {
       setLoading(true)
-
+      setSortedListado([])
+      originalListado.current = [];
+      
       if(user && user.role == "superadmin") {
           listar(placeholder)
           .then(datos => {
