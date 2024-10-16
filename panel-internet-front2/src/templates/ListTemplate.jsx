@@ -286,12 +286,13 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     }
                     <ul>
                       {sortedListado.map((row, idx) => (
-                          <li key={idx}>
-                            <label>
-                              <input type={tipo} id={placeholder == "clientes" && zona == "" ? row.ID_Cliente : zona == 'zonas' && placeholder != "comercios" ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" && zona == ""  ? row.nombre : zona == 'zonas' && placeholder != "comercios" ? row : row.nombre_comercio} value={placeholder == "clientes" && zona == ""  ? row.ID_Cliente : zona == 'zonas' && placeholder != "comercios" ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                              <span className="text-ellipsis">{placeholder == "clientes" && zona == ""  ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : zona == 'zonas' && placeholder != "comercios" ? row : row.nombre_comercio}</span>
-                            </label>
-                          </li>
+                          console.log(row)
+                          // <li key={idx}>
+                          //   <label>
+                          //     <input type={tipo} id={placeholder == "clientes" && zona == "" ? row.ID_Cliente : zona == 'zonas' && placeholder != "comercios" ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" && zona == ""  ? row.nombre : zona == 'zonas' && placeholder != "comercios" ? row : row.nombre_comercio} value={placeholder == "clientes" && zona == ""  ? row.ID_Cliente : zona == 'zonas' && placeholder != "comercios" ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                          //     <span className="text-ellipsis">{placeholder == "clientes" && zona == ""  ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : zona == 'zonas' && placeholder != "comercios" ? row : row.nombre_comercio}</span>
+                          //   </label>
+                          // </li>
                         )
                       )}
                     </ul>
