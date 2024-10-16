@@ -251,7 +251,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   
     return (
         <li className="list-template">
-            <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
+            {/* <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
             {placeholder == 'clientes'
                 ? <div className='buscador-field'>
                     <input type="text" onChange={e => {
@@ -313,7 +313,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                   </div>
               ) : null}
             <input type="hidden" name={nombre} value={JSON.stringify(datos)} required/>
-            { state.text ? <Toast texto={state.text} res={state.res} /> : null }
+            { state.text ? <Toast texto={state.text} res={state.res} /> : null } */}
         </li>
     )
 }
