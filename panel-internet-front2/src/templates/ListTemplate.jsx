@@ -251,7 +251,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   
     return (
         <li className="list-template">
-            {/* <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
+            <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
             {placeholder == 'clientes'
                 ? <div className='buscador-field'>
                     <input type="text" onChange={e => {
@@ -287,10 +287,10 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     <ul>
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
-                            <label>
+                            {/* <label>
                               <input type={tipo} id={placeholder == "clientes" && zona == "" ? row.ID_Cliente : zona == 'zonas' ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" && zona == ""  ? row.nombre : zona == 'zonas' ? row : row.nombre_comercio} value={placeholder == "clientes" && zona == ""  ? row.ID_Cliente : zona == 'zonas' ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
                               <span className="text-ellipsis">{placeholder == "clientes" && zona == ""  ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : zona == 'zonas' ? row : row.nombre_comercio}</span>
-                            </label>
+                            </label> */}
                           </li>
                         )
                       )}
@@ -313,7 +313,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                   </div>
               ) : null}
             <input type="hidden" name={nombre} value={JSON.stringify(datos)} required/>
-            { state.text ? <Toast texto={state.text} res={state.res} /> : null } */}
+            { state.text ? <Toast texto={state.text} res={state.res} /> : null }
         </li>
     )
 }
