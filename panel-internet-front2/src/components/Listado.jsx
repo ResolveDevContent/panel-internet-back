@@ -9,7 +9,7 @@ import { Filter, Search } from '../assets/icons/icons'
 import { Tabla } from './Tabla'
 import { puntosTotales } from '../services/totales'
 
-export const Listado = ({titulo}) => {
+export const Listado = ({titulo, user = {}}) => {
     const [ state, setState ] = useState({
         text: "",
         res: ""
