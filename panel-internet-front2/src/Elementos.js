@@ -29,7 +29,8 @@ export const ELEMENTOS = {
             nombre: 'ID_Comercio',
             placeholder: "comercios",
             tipo: 'checkbox',
-            lista: true
+            lista: true,
+            zona: ""
         },
         {
             element: 'permisos',
@@ -206,7 +207,8 @@ export const ELEMENTOS = {
             nombre: 'ID_Comercio',
             placeholder: "comercios",
             tipo: 'radio',
-            lista: false
+            lista: false,
+            zona: ""
         },
         {
             element: 'input',
@@ -223,21 +225,24 @@ export const ELEMENTOS = {
             nombre: 'ID_Cliente',
             placeholder: "clientes",
             tipo: 'checkbox',
-            lista: false
+            lista: false,
+            zona: ""
         },
         {
             element: 'list',
-            nombre: 'zonas',
-            placeholder: "zonas",
+            nombre: 'ID_Cliente',
+            placeholder: "clientes",
             tipo: 'checkbox',
-            lista: false
+            lista: false,
+            zona: "zonas"
         },
         {
             element: 'list',
             nombre: 'ID_Comercio',
             placeholder: "comercios",
             tipo: 'radio',
-            lista: false
+            lista: false,
+            zona: ""
         },
     ],
     asociacionesComercios: [
@@ -246,14 +251,16 @@ export const ELEMENTOS = {
             nombre: 'ID_Cliente',
             placeholder: "clientes",
             tipo: 'radio',
-            lista: false
+            lista: false,
+            zona: ""
         },
         {
             element: 'list',
             nombre: 'ID_Comercio',
             placeholder: "comercios",
             tipo: 'checkbox',
-            lista: false
+            lista: false,
+            zona: ""
         },
     ],
     historial: [

@@ -5,7 +5,7 @@ import { Toast } from "../components/Toast";
 export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const [ nombreCliente, setNombreCliente ] = useState(null);
     const [ nombreComercio, setNombreComercio ] = useState(null);
-    const [ zona, setZona ] = useState(null);
+    const [ nombreZona, setNombreZona ] = useState(null);
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ state, setState ] = useState({text: "", res: ""})
     const [ loading, setLoading] = useState(false)
@@ -14,7 +14,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
     const originalListado = useRef([])
 
-    const { nombre, placeholder, tipo, lista } = data;
+    const { nombre, placeholder, tipo, lista, zona } = data;
 
     const filteredNombre = useMemo(() => {
         setLoading(true)
@@ -42,21 +42,21 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
     const filteredZona = useMemo(() => {
         setLoading(true)
-        const newArr = zona != null && zona.length > 0
+        const newArr = nombreZona != null && nombreZona.length > 0
         ? originalListado.current.filter(row => {
-            return row.toLowerCase().includes(zona.toLowerCase())
+            return row.toLowerCase().includes(nombreZona.toLowerCase())
         })
         : originalListado.current
 
         setLoading(false)
         setSortedListado(newArr)
-    }, [zona])
+    }, [nombreZona])
 
     const handleChange = async e => {
       setLoading(true)
       let newArr = [];
 
-      if(placeholder == 'zonas') {
+      if(zona == 'zonas') {
         newArr = [
           ...datos
         ]
@@ -111,7 +111,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const handleChangeAll = e => {
       if(e.target.checked) {
         const newArr = sortedListado.map(function(row) { 
-          if(placeholder == "clientes" || placeholder == 'zonas') {
+          if(placeholder == "clientes") {
             return row.ID_Cliente
           } else {
             return row.ID_Comercio
@@ -202,7 +202,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              if(placeholder == 'zonas') {
+              if(zona == 'zonas') {
                 zonaList(datos)
               } else {
                 setSortedListado(datos)
@@ -233,7 +233,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              if(placeholder == 'zonas') {
+              if(zona == 'zonas') {
                 zonaList(datos)
               } else {
                 setSortedListado(datos)
@@ -251,7 +251,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   
     return (
         <li className="list-template">
-            <label htmlFor={nombre} className="text-capitalize">{placeholder}</label>
+            <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
             {placeholder == 'clientes'
                 ? <div className='buscador-field'>
                     <input type="text" onChange={e => {
@@ -266,7 +266,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     </div>
                   : <div className='buscador-field'>
                       <input type="text" onChange={e => {
-                          setZona(e.target.value)
+                          setNombreZona(e.target.value)
                       }} placeholder='Zona...' />
                     </div>
             }
@@ -288,8 +288,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
                             <label>
-                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : placeholder == 'zonas' ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" ? row.nombre : placeholder == 'zonas' ? row : row.nombre_comercio} value={placeholder == "clientes" ? row.ID_Cliente : placeholder == 'zonas' ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                              <span className="text-ellipsis">{placeholder == "clientes" ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : placeholder == 'zonas' ? row : row.nombre_comercio}</span>
+                              <input type={tipo} id={placeholder == "clientes" && zona == "" ? row.ID_Cliente : zona == 'zonas' ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" && zona == ""  ? row.nombre : zona == 'zonas' ? row : row.nombre_comercio} value={placeholder == "clientes" && zona == ""  ? row.ID_Cliente : zona == 'zonas' ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                              <span className="text-ellipsis">{placeholder == "clientes" && zona == ""  ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : zona == 'zonas' ? row : row.nombre_comercio}</span>
                             </label>
                           </li>
                         )
