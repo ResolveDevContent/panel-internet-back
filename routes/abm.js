@@ -695,12 +695,17 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
 router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => {
     const { ID_Cliente, ID_Comercio } = req.body;
 
-    if (!ID_Cliente.length || !ID_Comercio.length) {
+    if ((!zonas.length && !ID_Cliente.length) || !ID_Comercio.length) {
         return res.status(500).json({ error: "No se puede realizar una asociación sin completar todos los datos." });
     }
 
+    if (zonas.length && ID_Cliente.length) {
+        return res.status(500).json({ error: "No se puede realizar una asociación con clientes y zonas" });
+    }
+
     try {
-        const resultados = await multipleAsociaciones(ID_Cliente, ID_Comercio, true);
+        const datos = req.body.ID_Cliente.length ? req.body.ID_Cliente : req.body.zonas
+        const resultados = await multipleAsociaciones(datos, ID_Comercio, true);
 
         if (resultados.every(result => result)) {
             const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
@@ -989,21 +994,16 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
         return res.status(500).json({ error: "No hay una fecha establecida." });
     }
 
-    if(req.body.fecha <= Date.now()) {
-        const masage = await caducarPuntos(req.body.fecha);
-        return res.status(201).json(masage);
-    }
-
     try {
         const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
             const date = new Date().toLocaleString()
-            await insertRecord('historial', {message: "Se actualizo la fecha de caducación de los puntos", fecha: new Date(date).getTime()});
+            await insertRecord('historial', {message: "Se actualizo el día de caducación de los puntos", fecha: new Date(date).getTime()});
             setDate(req.body.fecha);
-            res.status(201).json({ message: "Fecha actualizada correctamente!" });
+            res.status(201).json({ message: "Día actualizada correctamente!" });
         } else {
-            res.status(500).json({ error: "La fecha no se actualizo correctamente!" });
+            res.status(500).json({ error: "El día no se actualizo correctamente!" });
         }
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -1021,19 +1021,32 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 });
 
 function setDate(date) {
-    cron.schedule(`0 0 ${new Date(date).getDate()} ${new Date(date).getMonth() + 1} *`, () => {
-        return caducarPuntos(date);
+    cron.schedule(`0 0 ${Number(date)} * *`, () => {
+        return caducarPuntos();
     });
 }
 
-async function caducarPuntos(date) {
+async function caducarPuntos() {
+    const now = Date.now();
+    let month = now.getMonth() - 2;
+
+    if((now.getMonth() - 2) == -1) {
+        month = 11;
+    }
+
+    if((now.getMonth() - 2) == -2) {
+        month = 10;
+    }
+
+    now.setMonth(month);
+
     try {
-        const result = await selectFechaLimite("puntos", "fecha", date);
+        const result = await selectFechaLimite("puntos", "fecha", now);
         if(result.length > 0) {
             result.forEach(async row => {
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
                 const date = new Date().toLocaleString()
-                await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(date)}`, fecha: new Date(date).getTime()});
+                await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(now)}`, fecha: new Date(date).getTime()});
                 return {message:  `Se borraron los puntos`}
             })
         } else {

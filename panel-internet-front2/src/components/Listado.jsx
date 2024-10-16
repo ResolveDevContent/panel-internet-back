@@ -113,7 +113,11 @@ export const Listado = ({titulo}) => {
     }
 
     const cleanFilters = () => {
-        setSortedListado(originalListado.current)
+        if(titulo == 'clientes') {
+            setSortedListado([])
+        } else {
+            setSortedListado(originalListado.current)
+        }
     }
 
     async function formatToNombres(data) {
@@ -179,6 +183,38 @@ export const Listado = ({titulo}) => {
         }, {});
 
         setcalculosTotales(result);
+    }
+
+    async function totales(datos) {
+        const actualizaciones = datos.map(async (row, idx) => {
+            try {
+                const total = await puntosTotales(row.ID_Cliente);
+                
+                if (total.error) {
+                    throw new Error(total.error); // Maneja el error lanzando una excepción
+                }
+
+                row.puntos = total[0].puntos;
+                return row;
+            } catch (error) {
+                // Maneja el error aquí
+                setState({
+                    text: error.message,
+                    res: "secondary"
+                });
+                return null;
+            }
+        })
+
+        const resultados = await Promise.all(actualizaciones);
+
+        // Filtra los resultados nulos (en caso de errores)
+        const datosActualizados = resultados.filter(row => row !== null);
+
+        // Actualiza el estado después de que todos los datos se han procesado
+        setLoading(false);
+        setListado(datosActualizados);
+        originalListado.current = datosActualizados;
     }
 
     useEffect(() => {
@@ -253,6 +289,10 @@ export const Listado = ({titulo}) => {
                             setListado([])
                             originalListado.current = [];
                             return;
+                        }
+
+                        if(titulo == 'clientes') {
+                            totales(datos);
                         }
 
                         if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {

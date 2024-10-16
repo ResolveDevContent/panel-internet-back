@@ -1,10 +1,11 @@
 import { useState, useRef, useMemo, useEffect } from "react";
-import { listar, listarByAdmin } from "../services/abm";
+import { listar, listarByAdmin, listarByZona } from "../services/abm";
 import { Toast } from "../components/Toast";
 
 export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     const [ nombreCliente, setNombreCliente ] = useState(null);
     const [ nombreComercio, setNombreComercio ] = useState(null);
+    const [ zona, setZona ] = useState(null);
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ state, setState ] = useState({text: "", res: ""})
     const [ loading, setLoading] = useState(false)
@@ -39,16 +40,49 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         setSortedListado(newArr)
     }, [nombreComercio])
 
-    const handleChange = e => {
+    const filteredZona = useMemo(() => {
+        setLoading(true)
+        const newArr = zona != null && zona.length > 0
+        ? originalListado.current.filter(row => {
+            return row.toLowerCase().includes(zona.toLowerCase())
+        })
+        : originalListado.current
+
+        setLoading(false)
+        setSortedListado(newArr)
+    }, [zona])
+
+    const handleChange = async e => {
       setLoading(true)
       let newArr = [];
-      if(e.target.checked) {
+
+      if(placeholder == 'zonas') {
         newArr = [
-          ...datos,
-          e.target.value
-        ];
+          ...datos
+        ]
+        if(e.target.checked) {
+          const clientesZona = await listarByZona(e.target.value);
+          if(clientesZona && clientesZona.length > 0) {
+            newArr.concat(clientesZona);
+          }
+        } else {
+          const clientesZona = await listarByZona(e.target.value);
+          if(clientesZona && clientesZona.length > 0) {
+            clientesZona.forEach(doc => {
+              newArr = newArr.filter(row => row != doc.zona);
+            })
+          }
+          console.log(newArr)
+        }
       } else {
-        newArr = datos.filter(row => row != e.target.value);
+        if(e.target.checked) {
+          newArr = [
+            ...datos,
+            e.target.value
+          ];
+        } else {
+          newArr = datos.filter(row => row != e.target.value);
+        }
       }
 
       setLoading(false)
@@ -75,33 +109,53 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     }
 
     const handleChangeAll = e => {
-      const newArr = sortedListado.map(function(row) { 
-        if(placeholder == "clientes") {
-          return row.ID_Cliente
-        } else {
-          return row.ID_Comercio
-        }
-      })
-
-      e.target.checked ? setDatos(newArr) : setDatos([]);
-
-      if(values) {
-        const arr = sortedListado.map(function(row) { 
-          if(placeholder == "clientes") {
-            return row.nombre
+      if(e.target.checked) {
+        const newArr = sortedListado.map(function(row) { 
+          if(placeholder == "clientes" || placeholder == 'zonas') {
+            return row.ID_Cliente
           } else {
-            return row.nombre_comercio
+            return row.ID_Comercio
           }
         })
-        e.target.checked ? setDatosMostrar(arr) : setDatosMostrar([]);
-        
+
+        setDatos(newArr)
+      } else {
+        setDatos([]);
+      }
+
+      if(values) {
+        if(e.target.checked) {
+          const arr = sortedListado.map(function(row) { 
+            if(placeholder == "clientes") {
+              return row.nombre
+            } else {
+              return row.nombre_comercio
+            }
+          })
+          
+          setDatosMostrar(arr);
+        } else {
+          setDatosMostrar([]);
+        }
       }
     }
 
+    const zonaList = newArr => {
+        const result = newArr.reduce((acc, row) => {
+            if(!acc.includes(row.zona)) {
+              acc.push(row.zona)
+            }
+            return acc;
+        }, []);
+
+        console.log(result);
+
+        setSortedListado([result]);
+        originalListado.current = [result];
+    }
   
   useEffect(() => {
       setLoading(true)
-
 
       if(user && user.role == "superadmin") {
           listar(placeholder)
@@ -148,8 +202,13 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              setSortedListado(datos)
-              originalListado.current = datos;
+              if(placeholder == 'zonas') {
+                zonaList(datos)
+              } else {
+                setSortedListado(datos)
+                originalListado.current = datos;
+              }
+
           })
           .catch(err => {
               setState({
@@ -174,8 +233,12 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              setSortedListado(datos)
-              originalListado.current = datos;
+              if(placeholder == 'zonas') {
+                zonaList(datos)
+              } else {
+                setSortedListado(datos)
+                originalListado.current = datos;
+              }
           }).catch(err => {
               setState({
                   text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
@@ -195,11 +258,18 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                         setNombreCliente(e.target.value)
                     }} placeholder='Nombre cliente...' />
                   </div>
-                : <div className='buscador-field'>
-                    <input type="text" onChange={e => {
-                        setNombreComercio(e.target.value)
-                    }} placeholder='Nombre comercio...' />
-                  </div>}
+                : placeholder == 'comercios'
+                  ? <div className='buscador-field'>
+                      <input type="text" onChange={e => {
+                          setNombreComercio(e.target.value)
+                      }} placeholder='Nombre comercio...' />
+                    </div>
+                  : <div className='buscador-field'>
+                      <input type="text" onChange={e => {
+                          setZona(e.target.value)
+                      }} placeholder='Zona...' />
+                    </div>
+            }
             {sortedListado.length > 0 
               ? <div className="dropdown-list">
                 {loading 
@@ -218,8 +288,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                       {sortedListado.map((row, idx) => (
                           <li key={idx}>
                             <label>
-                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" ? row.nombre : row.nombre_comercio} value={placeholder == "clientes" ? row.ID_Cliente : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                              <span>{placeholder == "clientes" ? row.nombre : row.nombre_comercio}</span>
+                              <input type={tipo} id={placeholder == "clientes" ? row.ID_Cliente : placeholder == 'zonas' ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" ? row.nombre : placeholder == 'zonas' ? row : row.nombre_comercio} value={placeholder == "clientes" ? row.ID_Cliente : placeholder == 'zonas' ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                              <span className="text-ellipsis">{placeholder == "clientes" ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : placeholder == 'zonas' ? row : row.nombre_comercio}</span>
                             </label>
                           </li>
                         )

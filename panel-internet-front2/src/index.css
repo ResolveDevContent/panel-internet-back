@@ -75,6 +75,10 @@ textarea {
     color: #fff;
 }
 
+.text-ellipsis {
+    text-overflow: ellipsis;
+}
+
 .gap-1 {
     gap: 1em;
 }

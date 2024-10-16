@@ -29,6 +29,20 @@ export const listarUno = (model, id) => {
     )
 }
 
+export const listarByZona = (zona) => {
+    const token = Cookies.get("token");
+    return (
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/clientes/listar/zona/${zona}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    )
+}
+
 export const listarByComercio = (model, id) => {
     const token = Cookies.get("token");
     return (
