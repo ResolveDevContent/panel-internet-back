@@ -288,11 +288,11 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                       {sortedListado.map((row, idx) => (
                           Array.isArray(row) ? (
                             row.map((item) => {
-                              console.log(item)
+                              // console.log(item)
                               // <li key={idx}>
                               //   <label>
                               //     <input type={tipo} id={item} name={item} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                              //     <span className="text-ellipsis">{item}</span>
+                                  <span className="text-ellipsis">{item}</span>
                               //   </label>
                               // </li>
                             })
