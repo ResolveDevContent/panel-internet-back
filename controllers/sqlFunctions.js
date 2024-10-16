@@ -76,6 +76,7 @@ const selectByAdmin = async (tableName, column, values) => {
 
   try {
     const [results] = await pool.query(query);
+    console.log(results)
     return results;
   } catch (err) {
     console.error('Error executing query:', err); // Manejo de errores
