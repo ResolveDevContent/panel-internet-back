@@ -227,7 +227,7 @@ router.get("/comercios/pagos/listar/admin/:email", authenticate, async (req, res
         if(!Array.isArray(datos)) {
             datos = [datos];
         }
-
+        console.log(datos)
         res.send(datos);
             
     } catch (err) {

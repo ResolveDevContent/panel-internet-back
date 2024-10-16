@@ -7,6 +7,7 @@ import { listar, listarByAdmin, listarByComercio, listarByEmail, listarUno } fro
 import { PerfilAuth } from '../services/auth'
 import { Filter, Search } from '../assets/icons/icons'
 import { Tabla } from './Tabla'
+import { puntosTotales } from '../services/totales'
 
 export const Listado = ({titulo}) => {
     const [ state, setState ] = useState({
