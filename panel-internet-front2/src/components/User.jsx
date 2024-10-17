@@ -61,7 +61,7 @@ export const User = () => {
             {cliente ? (
               <div className='d-flex flex-column mb-1'>
                 <em className='mb-1'>¡Bienvenido {cliente.nombre}!</em>
-                <ul className='d-flex flex-column gap-1'>
+                <ul className='d-flex flex-column gap-1 mt-3'>
                   <li>
                     <span>Nombre y apellido: {cliente.nombre + " " + cliente.apellido}</span>
                   </li>
