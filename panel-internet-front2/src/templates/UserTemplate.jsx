@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 export const UserTemplate = ({user = {}, values = []}) => { 
-    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if(user && user.role) {
@@ -9,7 +8,7 @@ export const UserTemplate = ({user = {}, values = []}) => {
             setLoading(true)
         }
 
-    }, [values])
+    }, [values, user])
 
     return (
         <li>
