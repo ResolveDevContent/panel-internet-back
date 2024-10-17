@@ -649,7 +649,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         // }
 
         const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
-
+        console.log(comercio)
         const row = comercio[0];
         // const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
         const puntos = Number(req.body.monto_parcial);
