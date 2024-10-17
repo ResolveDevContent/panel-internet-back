@@ -25,7 +25,7 @@ export const PuntosFecha = ({titulo}) => {
         }
         setLoading(false)
 
-        setUpdate(fecha);
+        setUpdate(data);
         setState({text: data.message, res: "primary"})
     });
 
