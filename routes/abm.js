@@ -454,6 +454,7 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
         } else {
             nombre_user = req.body.user.nombre
         }
+        console.log(nombre_user, req.body.user)
         await insertRecord('historial', {message: "El " + req.body.user.role +  " " + nombre_user + " modifico el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         res.status(200).json(results);
     } catch (err) {
