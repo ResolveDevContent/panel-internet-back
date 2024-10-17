@@ -7,6 +7,7 @@ export const UserTemplate = ({user = {}}) => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        console.log(user)
         if(!user) {
             setLoading(true)
             PerfilAuth().then((result) => {
