@@ -54,3 +54,7 @@
 .user-container .wallet svg {
   fill: black;
 }
+
+.mb-1 {
+  margin-bottom: 0.5em;
+}

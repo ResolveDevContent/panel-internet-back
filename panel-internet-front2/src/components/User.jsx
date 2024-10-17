@@ -59,7 +59,26 @@ export const User = () => {
         }
         <div className="user-container d-flex align-center flex-column justify-center">
             {cliente ? (
-              <span>Bienvenido {cliente.nombre}!</span>
+              <div className='d-flex flex-column mb-1'>
+                <strong className='mb-1'>Bienvenido {cliente.nombre}!</strong>
+                <ul className='d-flex flex-column gap-1'>
+                  <li>
+                    <span>Tus datos:</span>
+                  </li>
+                  <li>
+                    <span>Nombre y apellido: {cliente.nombre + " " + cliente.apellido}</span>
+                  </li>
+                  <li>
+                    <span>Direccion Principal: {cliente.direccion_principal}</span>
+                  </li>
+                  <li>
+                    <span>Email: {cliente.email}</span>
+                  </li>
+                  <li>
+                    <span>Zona: {cliente.zona}</span>
+                  </li>
+                </ul>
+              </div>
             ) : null}
             <div className="d-flex align-center flex-column">
                 <em>Monto total gastado</em>
