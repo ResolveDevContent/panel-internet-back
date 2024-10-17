@@ -33,12 +33,17 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                 value = 0
             }
 
+            if(name == "user") {
+                console.log(value)
+                value = JSON.parse(value)
+                console.log(value)
+            }
+
             if((titulo == "admins" && name == "ID_Comercio") ||
             titulo == "asociaciones/clientes" ||
             titulo == "asociaciones/comercios" ||
             titulo == "comercios/pagos" || 
-            titulo == "transacciones" || 
-            titulo == "clientes") { 
+            titulo == "transacciones") { 
                 value = JSON.parse(value)    
             }
 
