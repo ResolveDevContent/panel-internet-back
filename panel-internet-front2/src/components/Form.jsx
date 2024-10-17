@@ -156,7 +156,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == 'multiple') { return <MultipleSelectTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}}/> }
                                     if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
-                                    if(row.element == "user") {return <UserTemplate key={idx} user={user}  />}
+                                    if(row.element == "user") {return <UserTemplate key={idx} />}
                                 })}
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success">Confirmar</button>
