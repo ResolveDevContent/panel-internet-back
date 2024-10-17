@@ -119,6 +119,8 @@ export const Listado = ({titulo, user = {}}) => {
         } else {
             setSortedListado(originalListado.current)
         }
+
+        setcalculosTotales(null)
     }
 
     async function formatToNombres(data) {
@@ -468,9 +470,9 @@ export const Listado = ({titulo, user = {}}) => {
                                                     <li>
                                                         <span>Puntos totales: <span>{calculosTotales.puntos_totales}</span></span>
                                                     </li>
-                                                    <li>
+                                                    {/* <li>
                                                         <span>Puntos utilizados: <span>{calculosTotales.puntos_pagos}</span></span>
-                                                    </li>
+                                                    </li> */}
                                                     <li>
                                                         <span>Monto total: <span>{calculosTotales.monto_total}</span></span>
                                                     </li>
