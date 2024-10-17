@@ -1,14 +1,13 @@
 import { useEffect } from "react"
 
-export const UserTemplate = ({user = {}, values = []}) => { 
+export const UserTemplate = ({user = {}}) => { 
 
     useEffect(() => {
         if(user && user.role) {
             console.log(user)
-            setLoading(true)
         }
 
-    }, [values, user])
+    }, [user])
 
     return (
         <li>
