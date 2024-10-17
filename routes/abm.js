@@ -1314,7 +1314,6 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
 router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
     try {
         const fecha = await selectTable("fecha");
-        console.log(fecha)
         res.status(200).send(fecha);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
@@ -1325,6 +1324,7 @@ function setDate(date) {
     // cron.schedule(`0 0 ${Number(date)} * *`, () => {
     //     return caducarPuntos();
     // });
+    console.log("ENTRA AL SETDATE")
     cron.schedule(`${Number(date)} * * * *`, () => {
         return caducarPuntos();
     });
@@ -1343,10 +1343,10 @@ async function caducarPuntos() {
     // }
 
     // now.setMonth(month);
-
+    console.log("ENTRA A CADUCAR")
     try {
         const result = await selectFechaLimite("puntos", "fecha", now);
-        console.log(result)
+        console.log("RESUL",result)
         if(result.length > 0) {
             result.forEach(async row => {
                 console.log(row)
