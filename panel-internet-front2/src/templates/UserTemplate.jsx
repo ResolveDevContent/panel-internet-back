@@ -1,5 +1,16 @@
+import { useEffect } from "react"
+
 export const UserTemplate = ({user}) => { 
-    return user && user.role ? (
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if(user && user.role) {
+            setLoading(true)
+        }
+
+    }, [])
+
+    return loading ? (
         <li>
             <input type="hidden" id="user" name="user" value={JSON.stringify(user)}/>
         </li>
