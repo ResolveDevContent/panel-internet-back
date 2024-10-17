@@ -1326,6 +1326,7 @@ function setDate(date) {
     // });
     console.log("ENTRA AL SETDATE")
     cron.schedule(`${Number(date)} * * * *`, () => {
+        console.log("ESTAMOS ADENTRO DEL SCHEDULE EPRRRO")
         return caducarPuntos();
     });
 }
