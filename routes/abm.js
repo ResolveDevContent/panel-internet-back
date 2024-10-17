@@ -443,6 +443,7 @@ router.post("/clientes/agregar", authenticate, async (req, res) => {
 
 router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
+    console.log(req.body.user)
     try {
         const results = await updateRecord("clientes", req.body, "ID_Cliente", id);
         const date = new Date().toLocaleString()
@@ -454,7 +455,6 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
         } else {
             nombre_user = req.body.user.nombre
         }
-        console.log(nombre_user, req.body.user)
         await insertRecord('historial', {message: "El " + req.body.user.role +  " " + nombre_user + " modifico el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         res.status(200).json(results);
     } catch (err) {
