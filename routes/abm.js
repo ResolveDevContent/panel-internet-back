@@ -1298,6 +1298,7 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
         const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
+            console.log("ENTRA?")
             const date = new Date().toLocaleString()
             await insertRecord('historial', {message: "Se actualizo el día de caducación de los puntos, el día " + req.body.fecha + " de cada mes", fecha: new Date(date).getTime()});
             setDate(req.body.fecha);
@@ -1345,8 +1346,10 @@ async function caducarPuntos() {
 
     try {
         const result = await selectFechaLimite("puntos", "fecha", now);
+        console.log(result)
         if(result.length > 0) {
             result.forEach(async row => {
+                console.log(row)
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
                 const date = new Date().toLocaleString()
                 await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(now)}`, fecha: new Date(date).getTime()});
