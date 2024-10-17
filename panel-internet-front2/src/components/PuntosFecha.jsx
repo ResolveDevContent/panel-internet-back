@@ -52,7 +52,7 @@ export const PuntosFecha = ({titulo}) => {
         }
 
         let fechaHora = '';
-        
+        console.log(datos)
         if(datos.length > 0) {
           fechaHora = datos.fecha;
         }
