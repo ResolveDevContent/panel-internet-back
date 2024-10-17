@@ -45,6 +45,9 @@ export const ELEMENTOS = {
             valor: '',
             mensaje: "Volve a escribir la contraseña o inserte una nueva."
         },
+        {
+            element: "user"
+        }
     ],
     clientes: [
         {
@@ -110,6 +113,9 @@ export const ELEMENTOS = {
             placeholder: 'Codigo',
             valor: '',
             mensaje: "",
+        },
+        {
+            element: "user"
         }
     ],
     comercios: [
@@ -176,6 +182,9 @@ export const ELEMENTOS = {
             placeholder: "Cambiar Contraseña",
             valor: '',
             mensaje: "",
+        },
+        {
+            element: "user"
         }
     ],
     transacciones: [
@@ -194,6 +203,9 @@ export const ELEMENTOS = {
             valor: '',
             mensaje: "",
         },
+        {
+            element: "user"
+        }
         // {
         //     element: 'input',
         //     tipo: 'number',
@@ -218,6 +230,9 @@ export const ELEMENTOS = {
             valor: '',
             mensaje: "",
         },
+        {
+            element: "user"
+        }
     ],
     asociacionesClientes: [
         {
@@ -244,6 +259,9 @@ export const ELEMENTOS = {
             lista: false,
             zona: ""
         },
+        {
+            element: "user"
+        }
     ],
     asociacionesComercios: [
         {
@@ -262,6 +280,9 @@ export const ELEMENTOS = {
             lista: false,
             zona: ""
         },
+        {
+            element: "user"
+        }
     ],
     historial: [
         {
@@ -279,6 +300,9 @@ export const ELEMENTOS = {
             placeholder: 'Fecha',
             valor: '',
             mensaje: "",
+        },
+        {
+            element: "user"
         }
     ]
 }

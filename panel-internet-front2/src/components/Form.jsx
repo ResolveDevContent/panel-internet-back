@@ -8,6 +8,7 @@ import { MultipleSelectTemplate } from '../templates/MultipleSelectTemplate'
 import { ListTemplate } from "../templates/ListTemplate"
 import { Loading } from "./Loading"
 import { PermisosTemplate } from "../templates/permisosTemplate";
+import { UserTemplate } from "../templates/UserTemplate";
 
 export const Form = ({elementos = [], titulo = '', user = {}}) => {
     const [ data, setData ] = useState({})
@@ -33,6 +34,10 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                 value = 0
             }
 
+            if(name == "user") {
+                value = JSON.parse(value)
+            }
+
             if((titulo == "admins" && name == "ID_Comercio") ||
             titulo == "asociaciones/clientes" ||
             titulo == "asociaciones/comercios" ||
@@ -46,9 +51,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
 
         if(id) {
             setLoading(true)
-            if(user) {
-                console.log(dataObj, user)
-            }
+            console.log(dataObj)
             modificar(titulo, id, dataObj)
             .then(data => {
                 if(data.error) {
@@ -153,12 +156,8 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == 'multiple') { return <MultipleSelectTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}}/> }
                                     if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
+                                    if(row.element == "user") {return <UserTemplate key={idx} user={user} />}
                                 })}
-                                {/* <li>
-                                    {user ? (
-                                        <input type="hidden" id="user" name="user" value={JSON.stringify(user)}/>
-                                    ) : null}
-                                </li> */}
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success">Confirmar</button>
                                 </li>
