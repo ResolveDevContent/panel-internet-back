@@ -1324,9 +1324,7 @@ function setDate(date) {
     // cron.schedule(`0 0 ${Number(date)} * *`, () => {
     //     return caducarPuntos();
     // });
-    console.log("ENTRA AL SETDATE")
-    cron.schedule(`1 * * * * *`, () => {
-        console.log("ESTAMOS ADENTRO DEL SCHEDULE EPRRRO")
+    cron.schedule(`${Number(date)} * * * * *`, () => {
         return caducarPuntos();
     });
 }
@@ -1344,13 +1342,10 @@ async function caducarPuntos() {
     // }
 
     // now.setMonth(month);
-    console.log("ENTRA A CADUCAR")
     try {
         const result = await selectFechaLimite("puntos", "fecha", now);
-        console.log("RESUL",result)
         if(result.length > 0) {
             result.forEach(async row => {
-                console.log(row)
                 await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
                 const date = new Date().toLocaleString()
                 await insertRecord('historial', {message: `Se borraron los puntos caducados hasta la fecha: ${new Date(now)}`, fecha: new Date(date).getTime()});
