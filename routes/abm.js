@@ -1298,7 +1298,6 @@ router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {
         const result = await updateRecord("fecha", req.body, 'ID_Fecha', 1);
 
         if (result) {
-            console.log("ENTRA?")
             const date = new Date().toLocaleString()
             await insertRecord('historial', {message: "Se actualizo el día de caducación de los puntos, el día " + req.body.fecha + " de cada mes", fecha: new Date(date).getTime()});
             setDate(req.body.fecha);
@@ -1324,7 +1323,7 @@ function setDate(date) {
     // cron.schedule(`0 0 ${Number(date)} * *`, () => {
     //     return caducarPuntos();
     // });
-    cron.schedule(`${Number(date)} * * * * *`, () => {
+    cron.schedule(`* * * ${Number(date)} * * `, () => {
         return caducarPuntos();
     });
 }
