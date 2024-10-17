@@ -149,7 +149,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                 <strong className="p-3 text-capitalize">{titulo} - {id ? "Editar" : "Agregar"}</strong>
                 {elementos.length == 0
                     ? <EmptyState texto="No hay informacion disponible" />
-                    :<>
+                    : user ? <>
                         <form className="card mt-3" onSubmit={handlesubmit}>
                             <ul className="card-body">
                                 {elementos.map((row, idx) => {
@@ -168,8 +168,8 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                 </li>
                             </ul>
                         </form>
-                    </>
-                }
+                    </> : null
+                } 
                 { state.text ? <Toast texto={state.text} res={state.res}/> : null }
             </article>
         </>
