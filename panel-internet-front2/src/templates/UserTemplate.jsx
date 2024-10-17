@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export const UserTemplate = ({user}) => { 
     const [loading, setLoading] = useState(false)
