@@ -640,6 +640,9 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
     const user = req.body.user;
     delete req.body.user;
 
+    req.body.ID_Comercio = JSON.parse(req.body.ID_Comercio)
+    req.body.ID_Cliente = JSON.parse(req.body.ID_Cliente)
+
     if (req.body.ID_Comercio.length === 0 || req.body.ID_Cliente.length === 0) {
         return res.status(500).json({ error: "No se puede realizar una transacción sin completar todos los datos." });
     }
@@ -648,8 +651,8 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         //     req.body.puntos_pago = 0;
         // }
 
-        const comercio = await selectOneRecord("comercio", "ID_Comercio", Number(req.body.ID_Comercio));
-        console.log(comercio)
+        const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
+        
         const row = comercio[0];
         // const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
         const puntos = Number(req.body.monto_parcial);
