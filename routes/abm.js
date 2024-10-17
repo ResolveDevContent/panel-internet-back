@@ -1320,9 +1320,6 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 });
 
 function setDate(date) {
-    // cron.schedule(`0 0 ${Number(date)} * *`, () => {
-    //     return caducarPuntos();
-    // });
     cron.schedule(`* * * ${Number(date)} * * `, () => {
         return caducarPuntos();
     });
@@ -1330,17 +1327,18 @@ function setDate(date) {
 
 async function caducarPuntos() {
     const now = Date.now();
-    // let month = now.getMonth() - 2;
+    let month = now.getMonth() - 2;
 
-    // if((now.getMonth() - 2) == -1) {
-    //     month = 11;
-    // }
+    if((now.getMonth() - 2) == -1) {
+        month = 11;
+    }
 
-    // if((now.getMonth() - 2) == -2) {
-    //     month = 10;
-    // }
+    if((now.getMonth() - 2) == -2) {
+        month = 10;
+    }
 
-    // now.setMonth(month);
+    now.setMonth(month);
+    
     try {
         const result = await selectFechaLimite("puntos", "fecha", now);
         if(result.length > 0) {
