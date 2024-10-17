@@ -1321,7 +1321,10 @@ router.get("/puntos/fecha/listar", authenticate, async (req, res) => {
 });
 
 function setDate(date) {
-    cron.schedule(`0 0 ${Number(date)} * *`, () => {
+    // cron.schedule(`0 0 ${Number(date)} * *`, () => {
+    //     return caducarPuntos();
+    // });
+    cron.schedule(`${Number(date)} * * * *`, () => {
         return caducarPuntos();
     });
 }
