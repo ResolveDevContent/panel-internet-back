@@ -46,7 +46,9 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
 
         if(id) {
             setLoading(true)
-            console.log(dataObj, user)
+            if(user) {
+                console.log(dataObj, user)
+            }
             modificar(titulo, id, dataObj)
             .then(data => {
                 if(data.error) {
@@ -128,7 +130,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             setLoading(false)
             setData(datos)
         })
-    }, [])
+    }, [user])
 
     return (
         <>
