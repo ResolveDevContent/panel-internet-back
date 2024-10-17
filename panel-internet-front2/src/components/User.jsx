@@ -14,6 +14,7 @@ export const User = () => {
   })
   const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(null)
+  const [cliente, setCliente] = useState({})
 
   useEffect(() => {
     setLoading(true)
@@ -30,6 +31,7 @@ export const User = () => {
             })
             return;
           }
+          setCliente(cliente[0])
           puntosTotales(cliente[0].ID_Cliente)
           .then(datos => {
             if(datos.error) {
@@ -56,6 +58,9 @@ export const User = () => {
           :null
         }
         <div className="user-container d-flex align-center flex-column justify-center">
+            {cliente ? (
+              <span>Bienvenido {cliente.nombre}!</span>
+            ) : null}
             <div className="d-flex align-center flex-column">
                 <em>Monto total gastado</em>
                 <div className='d-flex align-center wallet'>

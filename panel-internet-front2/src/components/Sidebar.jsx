@@ -133,7 +133,7 @@ export const Sidebar = ({user}) => {
               </li>
             </>
           ) : null}
-          {user && (user.role == "admin" || user.role == "comercio" || user.role == "superadmin") ? (
+          {user && (user.role == "admin" || user.role == "superadmin") ? (
             <li>
               <input type="radio" id="clientes" name="solapa"/>
               <label htmlFor="clientes">
