@@ -3,10 +3,7 @@ import { useEffect } from "react"
 export const UserTemplate = ({user = {}}) => { 
 
     useEffect(() => {
-        if(user && user.role) {
-            console.log(user)
-        }
-
+        console.log(user)
     }, [user])
 
     return (
