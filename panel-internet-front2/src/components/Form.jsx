@@ -159,7 +159,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                 })}
                                 <li>
-                                    <input type="hidden" id="user" value={JSON.stringify(user)}/>
+                                    <input type="hidden" id="user" name="user" value={JSON.stringify(user)}/>
                                 </li>
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success">Confirmar</button>
