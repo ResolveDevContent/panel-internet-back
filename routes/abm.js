@@ -649,9 +649,6 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         // }
 
         const comercio = await selectOneRecord("comercio", "ID_Comercio", req.body.ID_Comercio);
-        if (comercio.length === 0) {
-            return res.status(500).json({ error: "Comercio no encontrado." });
-        }
 
         const row = comercio[0];
         // const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
