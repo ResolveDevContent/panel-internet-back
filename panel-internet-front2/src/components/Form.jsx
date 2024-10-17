@@ -130,7 +130,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             setLoading(false)
             setData(datos)
         })
-    }, [user])
+    }, [])
 
     return (
         <>
