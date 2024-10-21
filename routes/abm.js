@@ -708,7 +708,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
