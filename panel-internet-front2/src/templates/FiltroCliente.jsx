@@ -60,9 +60,8 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
                 } else {
                     datos[0].puntos = 0;
                 }
-
+                console.log(total)
                 setCliente(datos[0])
-                console.log(datos[0])
             })
         })
     }
