@@ -167,6 +167,7 @@ export const Listado = ({titulo, user = {}}) => {
     }
 
     const calculoDeTotales = newArr => {
+        console.log(newArr)
         const result = newArr.reduce((acc, row) => {
             if(!acc.hasOwnProperty('puntos_totales')) {
                 acc['puntos_totales'] = 0;
@@ -392,6 +393,7 @@ export const Listado = ({titulo, user = {}}) => {
                 })
             }
         })
+        console.log(calculosTotales)
     }, [titulo])
 
     return loading ? (
