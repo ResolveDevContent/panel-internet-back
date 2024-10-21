@@ -30,7 +30,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
             ? originalOtherOpciones.current.filter(row => {
                 return row.nombre.toLowerCase().includes(nombreCliente.toLowerCase())
             })
-            : originalOtherOpciones.current
+            : []
 
         setLoading(false)
         setotherOpciones(newArr)
@@ -194,7 +194,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
                         <strong>Nombre y apellido: {cliente.nombre + " " + cliente.apellido}</strong>
                         <p>Direccion: {cliente.direccion_principal}</p>
                         <p>Email: {cliente.email}</p>
-                        <p>Puntos: {cliente.puntos}</p>
+                        <p>Puntos: {!cliente.puntos ? "Sin puntos" : cliente.puntos}</p>
                     </div>
                 ) : null}
                 <input type="hidden" name={otherNombre} value={JSON.stringify(otherDato)} required/>
