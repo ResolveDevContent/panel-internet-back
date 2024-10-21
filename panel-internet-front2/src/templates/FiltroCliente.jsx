@@ -71,9 +71,11 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
     }
 
     useEffect(() => {
+        const controller = new AbortController()
+        const signal = controller.signal
         if(dato.length > 0) {
             setLoading(true)
-            listarByComercio("clientes", dato)
+            listarByComercio("clientes", dato, signal)
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
@@ -107,9 +109,11 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
     }, [dato])
     
     useEffect(() => {
+        const controller = new AbortController()
+        const signal = controller.signal
         setLoading(true)
 
-        listarByEmail('comercios', user.email)
+        listarByEmail('comercios', user.email, signal)
         .then(datos => {
             if(!datos || datos.length == 0) {
                 originalOtherOpciones.current = [];

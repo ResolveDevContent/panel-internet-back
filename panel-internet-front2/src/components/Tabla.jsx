@@ -145,10 +145,12 @@ const borrarDatos = (e, id, email) => {
 }
 
 useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
     formatearDatos(datos)
-    PerfilAuth().then(user => {
+    PerfilAuth(signal).then(user => {
         if(user && user.message.role == 'admin') {
-            listarByEmail('admins', user.message.email)
+            listarByEmail('admins', user.message.email, signal)
             .then(result => {
                 setAdmin(result);
             })

@@ -228,6 +228,9 @@ export const Listado = ({titulo, user = {}}) => {
     }
 
     useEffect(() => {
+        const controller = new AbortController()
+        const signal = controller.signal
+
         setLoading(true)
 
         // limpiando
@@ -237,10 +240,10 @@ export const Listado = ({titulo, user = {}}) => {
         setcalculosTotales(null);
         originalListado.current = [];
 
-        PerfilAuth().then(user => {
+        PerfilAuth(signal).then(user => {
             if(user.message.role == "superadmin" || user.message.role == "cliente") {
                 if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
-                    listarByEmail('clientes', user.message.email)
+                    listarByEmail('clientes', user.message.email, signal)
                     .then(datos => {
                         if(datos.error) {
                             setLoading(false);
@@ -254,7 +257,7 @@ export const Listado = ({titulo, user = {}}) => {
                             return;
                         }
 
-                        listarUno(titulo, datos[0].ID_Cliente)
+                        listarUno(titulo, datos[0].ID_Cliente, signal)
                         .then(result => {
                             if(result.error) {
                                 setLoading(false);
@@ -281,7 +284,7 @@ export const Listado = ({titulo, user = {}}) => {
                         })
                     })
                 } else {
-                    listar(titulo).then(datos => {
+                    listar(titulo, signal).then(datos => {
                         if(datos.error) {
                             setLoading(false);
                             setState({
@@ -317,7 +320,7 @@ export const Listado = ({titulo, user = {}}) => {
             }
 
             if (user.message.role == "admin") {
-                listarByAdmin(titulo, user.message.email)
+                listarByAdmin(titulo, user.message.email, signal)
                 .then(datos => {
                     if(datos.error) {
                         setLoading(false);
@@ -348,7 +351,7 @@ export const Listado = ({titulo, user = {}}) => {
                 })
             } 
             if(user.message.role == "comercio" ) {
-                listarByEmail("comercios", user.message.email)
+                listarByEmail("comercios", user.message.email, signal)
                 .then((comercio) => {
                     if(comercio.error) {
                         setLoading(false)
@@ -362,7 +365,7 @@ export const Listado = ({titulo, user = {}}) => {
                         return;
                     }
                     comercio = comercio[0]
-                    listarByComercio(titulo, comercio.ID_Comercio).then(datos => {
+                    listarByComercio(titulo, comercio.ID_Comercio, signal).then(datos => {
                         if(datos.error) {
                             setLoading(false);
                             setState({

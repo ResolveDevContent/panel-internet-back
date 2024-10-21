@@ -17,11 +17,13 @@ export const User = () => {
   const [cliente, setCliente] = useState({})
 
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
     setLoading(true)
 
-    PerfilAuth().then((result) => {
+    PerfilAuth(signal).then((result) => {
       if(result && result.message.role == "cliente") {
-        listarUno("clientes", result.message.ID_Cliente)
+        listarUno("clientes", result.message.ID_Cliente, signal)
         .then((cliente) => {
           if(cliente.error) {
             setLoading(false)

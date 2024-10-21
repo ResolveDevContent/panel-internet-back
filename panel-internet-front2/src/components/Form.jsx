@@ -107,11 +107,13 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
     }
 
     useEffect(() => {
+        const controller = new AbortController()
+        const signal = controller.signal
         if(!id) return
 
         setLoading(true)
 
-        listarUno(titulo, id)
+        listarUno(titulo, id,signal)
         .then(datos => {
             if(!datos || datos.length == 0) {
                 setState({

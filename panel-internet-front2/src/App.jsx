@@ -34,9 +34,11 @@ function App() {
   }
 
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
     setLoading(true)
     readCookie();
-    PerfilAuth().then((result) => {
+    PerfilAuth(signal).then((result) => {
       setUser(result.message)
     }).finally((res) => {
       setLoading(false)

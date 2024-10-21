@@ -155,12 +155,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     }
   
   useEffect(() => {
+    const controller = new AbortController()
+    const signal = controller.signal
       setLoading(true)
       setSortedListado([])
       originalListado.current = [];
 
       if(user && user.role == "superadmin") {
-          listar(placeholder)
+          listar(placeholder, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
                   setSortedListado([])
@@ -176,7 +178,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               }
 
               if(titulo == 'admins' && values) {
-                listarByAdmin("permisos", values.email)
+                listarByAdmin("permisos", values.email, signal)
                 .then(permisos => {
                     if(!permisos || permisos.error|| permisos.length == 0) {
                         return;
@@ -220,7 +222,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       } else {
-          listarByAdmin(placeholder, user.email)
+          listarByAdmin(placeholder, user.email, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
                   setSortedListado([])

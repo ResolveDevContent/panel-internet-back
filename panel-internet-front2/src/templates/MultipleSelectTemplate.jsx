@@ -48,9 +48,11 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     }, [nombreComercio])
 
     useEffect(() => {
+        const controller = new AbortController()
+        const signal = controller.signal
         if(dato.length > 0) {
             setLoading(true)
-            listarByComercio("clientes", dato)
+            listarByComercio("clientes", dato, signal)
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
@@ -83,10 +85,12 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     }, [dato])
     
     useEffect(() => {
+        const controller = new AbortController()
+        const signal = controller.signal
         setLoading(true)
 
         if(user && user.role == "superadmin") {
-            listar('comercios')
+            listar('comercios', signal)
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];

@@ -1,8 +1,9 @@
 import Cookies from "js-cookie"
 
-export const LoginAuth = async (credentials, setAuth, setState) => {
+export const LoginAuth = async (credentials, setAuth, setState, signal) => {
     try {
         const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/login', {
+            signal,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,9 +30,10 @@ export const LoginAuth = async (credentials, setAuth, setState) => {
     }
 };
 
-export const LoginCliente = async (credentials, setAuth, setState) => {
+export const LoginCliente = async (credentials, setAuth, setState, signal) => {
     try {
         const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/login/cliente', {
+            signal,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,9 +59,10 @@ export const LoginCliente = async (credentials, setAuth, setState) => {
     }
 };
 
-export const LogoutAuth = async (setAuth, setState) => {
+export const LogoutAuth = async (setAuth, setState, signal) => {
     try {
         const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/logout', {
+            signal,
             method: 'GET',
         });
 
@@ -78,11 +81,12 @@ export const LogoutAuth = async (setAuth, setState) => {
     }
 }
 
-export const PerfilAuth = () => {
+export const PerfilAuth = (signal) => {
     const token = Cookies.get("token");
 
     return (
         fetch('http://vps-4375167-x.dattaweb.com/auth/perfil', {
+            signal,
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -91,9 +95,10 @@ export const PerfilAuth = () => {
     )
 }
 
-export const RegisterAuth = async (credentials, setAuth, setState) => {
+export const RegisterAuth = async (credentials, setAuth, setState, signal) => {
     try {
         const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/register', {
+            signal,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -119,9 +124,10 @@ export const RegisterAuth = async (credentials, setAuth, setState) => {
     }
 }
 
-export const CambiarContraseña = async (credentials, setAuth, setState) => {
+export const CambiarContraseña = async (credentials, setAuth, setState, signal) => {
     try {
         const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/changepassword', {
+            signal,
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
