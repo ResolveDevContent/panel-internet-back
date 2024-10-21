@@ -199,7 +199,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
                         <p>Puntos: {!cliente.puntos ? "Sin puntos" : cliente.puntos}</p>
                     </div>
                 ) : null}
-                <input type="hidden" name={otherNombre} value={JSON.stringify(otherDato)} required/>
+                <input type="hidden" name={otherNombre} value={otherDato} required/>
                 { state.text ? <Toast texto={state.text} res={state.res} /> : null }
             </li>
         </>
