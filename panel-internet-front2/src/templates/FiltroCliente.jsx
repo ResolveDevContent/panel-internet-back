@@ -34,7 +34,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
 
         setLoading(false)
         setotherOpciones(newArr)
-    }, [nombreCliente, originalOtherOpciones])
+    }, [nombreCliente, otherOpciones])
 
     const buscarCliente = (id) => {
         console.log("HLOAL")
