@@ -87,7 +87,8 @@ function App() {
               ) : null}
               {!loading ? (
                 <Route element={<PrivateRoutes user={user} roles={['comercio']}/>}>
-                  <Route path="transacciones/agregar" element={<Form elementos={ELEMENTOS.transaccionesComercio} titulo={'transacciones'} user={user} />}  />
+                  <Route path="transaccionesComercio/listar" element={<Listado user={user} titulo={"transacciones"}/>} />
+                  <Route path="transaccionesComercio/agregar" element={<Form elementos={ELEMENTOS.transaccionesComercio} titulo={'transacciones'} user={user} />}  />
                 </Route>
               ) : null}
               {!loading ? (

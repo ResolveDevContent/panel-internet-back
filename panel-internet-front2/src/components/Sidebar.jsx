@@ -228,7 +228,7 @@ export const Sidebar = ({user}) => {
               </li>
             </>
           ) : null}
-          {user && (user.role == "admin" || user.role == "comercio" || user.role == "superadmin") ? (
+          {user && (user.role == "admin" || user.role == "superadmin") ? (
             <li>
               <input type="radio" id="transacciones" name="solapa"/>
               <label htmlFor="transacciones" >
@@ -256,6 +256,23 @@ export const Sidebar = ({user}) => {
                 <NavLink className={({isActive}) => isActive ? 'active' : ''} to="historial/transacciones/listar">Historial</NavLink>
               </li>
             </>
+          ) : null}
+          {user && user.role == "comercio" ? (
+            <li>
+              <input type="radio" id="transacciones" name="solapa"/>
+              <label htmlFor="transacciones" >
+                <Wallet />
+                <span>Transacciones</span>
+              </label>
+              <ul>
+                <li>
+                  <NavLink className={({isActive}) => isActive ? 'active' : ''} to="transaccionesComercio/listar">Listar</NavLink>
+                </li>
+                <li>
+                  <NavLink className={({isActive}) => isActive ? 'active' : ''} to="transaccionesComercio/agregar">Agregar</NavLink>
+                </li>
+              </ul>
+            </li>
           ) : null}
         </ul>
         <ul className="menu two">
