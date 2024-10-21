@@ -37,7 +37,10 @@ export const PuntosFecha = ({titulo}) => {
   useEffect(() => {
     setLoading(true);
 
-    listar(titulo)
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    listar(titulo, signal)
     .then(datos => {
         if(datos.error) {
             setLoading(false);
@@ -52,7 +55,6 @@ export const PuntosFecha = ({titulo}) => {
         }
 
         let fechaHora = '';
-        console.log(datos)
         if(datos.length > 0) {
           fechaHora = datos[0].fecha;
         }
@@ -60,6 +62,8 @@ export const PuntosFecha = ({titulo}) => {
         setLoading(false);
         setResult(fechaHora);
     })
+
+    return () => controller.abort();
   }, [update])
 
   return(

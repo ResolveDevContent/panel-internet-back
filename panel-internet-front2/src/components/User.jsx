@@ -50,6 +50,8 @@ export const User = () => {
         })
       }
     })
+
+    return () => controller.abort();
   }, [])
     return (
       <>

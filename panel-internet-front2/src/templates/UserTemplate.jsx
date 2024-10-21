@@ -7,13 +7,19 @@ export const UserTemplate = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-            setLoading(true)
-            PerfilAuth().then((result) => {
-                console.log(result)
-                setUserObj(result.message)
-            }).finally((res) => {
-                setLoading(false)
-            })
+        setLoading(true)
+
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        PerfilAuth(signal).then((result) => {
+            console.log(result)
+            setUserObj(result.message)
+        }).finally((res) => {
+            setLoading(false)
+        })
+
+        return () => controller.abort();
     }, [])
 
     return loading ? null : (

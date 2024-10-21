@@ -82,6 +82,8 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             })
             .finally(setLoading(false))
         }
+
+        return () => controller.abort();
     }, [dato])
     
     useEffect(() => {
@@ -150,6 +152,8 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             })
             .finally(setLoading(false))
         }
+
+        return () => controller.abort();
     }, [])
 
     return (

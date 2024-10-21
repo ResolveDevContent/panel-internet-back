@@ -156,6 +156,8 @@ useEffect(() => {
             })
         }
     })
+
+    return () => controller.abort();
 }, [datos])
 
 return (

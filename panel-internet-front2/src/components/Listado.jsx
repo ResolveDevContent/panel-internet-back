@@ -167,7 +167,6 @@ export const Listado = ({titulo, user = {}}) => {
     }
 
     const calculoDeTotales = newArr => {
-        console.log(newArr)
         const result = newArr.reduce((acc, row) => {
             if(!acc.hasOwnProperty('puntos_totales')) {
                 acc['puntos_totales'] = 0;
@@ -193,7 +192,6 @@ export const Listado = ({titulo, user = {}}) => {
         const actualizaciones = datos.map(async (row, idx) => {
             try {
                 const total = await puntosTotales(row.ID_Cliente);
-                console.log(total)
                 
                 if (total.error) {
                     throw new Error(total.error); // Maneja el error lanzando una excepción
@@ -396,7 +394,8 @@ export const Listado = ({titulo, user = {}}) => {
                 })
             }
         })
-        console.log(calculosTotales)
+
+        return () => controller.abort()
     }, [titulo])
 
     return loading ? (

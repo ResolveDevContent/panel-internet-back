@@ -43,6 +43,8 @@ function App() {
     }).finally((res) => {
       setLoading(false)
     })
+
+    return () => controller.abort();
   }, [auth])
 
   return (

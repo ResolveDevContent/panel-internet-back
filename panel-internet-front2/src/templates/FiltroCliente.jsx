@@ -41,7 +41,6 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
     }, [nombreCliente, originalOtherOpciones.current])
 
     const buscarCliente = (id) => {
-        console.log("HLOAL")
         if(!id) {
             return;
         }
@@ -64,7 +63,6 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
                 } else {
                     datos[0].puntos = 0;
                 }
-                console.log(total)
                 setCliente(datos[0])
             })
         })
@@ -105,7 +103,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
             })
             .finally(setLoading(false))
         }
-        console.log("SPRINEMR USEFEF",cliente)
+        return () => controller.abort()
     }, [dato])
     
     useEffect(() => {

@@ -51,7 +51,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
 
         if(id) {
             setLoading(true)
-            console.log(dataObj)
+
             modificar(titulo, id, dataObj)
             .then(data => {
                 if(data.error) {
@@ -135,6 +135,8 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             setLoading(false)
             setData(datos)
         })
+
+        return () => controller.abort()
     }, [])
 
     return (

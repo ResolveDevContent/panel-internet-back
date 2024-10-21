@@ -58,6 +58,8 @@ export const Ver = ({elementos = [], titulo = '', user = {}}) => {
             setLoading(false)
             setData(datos)
         })
+
+        return () => controller.abort();
     }, [])
 
     return (

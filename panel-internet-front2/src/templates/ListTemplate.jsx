@@ -155,9 +155,11 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     }
   
   useEffect(() => {
-    const controller = new AbortController()
-    const signal = controller.signal
       setLoading(true)
+
+      const controller = new AbortController();
+      const signal = controller.signal;
+
       setSortedListado([])
       originalListado.current = [];
 
@@ -251,6 +253,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       }
+
+      return () => controller.abort()
     }, [values])
   
     return (
@@ -290,12 +294,24 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     }
                     <ul>
                       {sortedListado.map((row, idx) => (
-                          <li key={idx}>
-                            <label>
-                              <input type={tipo} id={placeholder == "clientes" && zona == "" ? row.ID_Cliente : zona == 'zonas' && placeholder != "comercios" ? row : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" && zona == ""  ? row.nombre : zona == 'zonas' && placeholder != "comercios"? row : row.nombre_comercio} value={placeholder == "clientes" && zona == ""  ? row.ID_Cliente : zona == 'zonas' && placeholder != "comercios" ? row : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                              <span className="text-ellipsis">{placeholder == "clientes" && zona == ""  ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : zona == 'zonas' && placeholder != "comercios" ? row : row.nombre_comercio}</span>
-                            </label>
-                          </li>
+                          zona == 'zonas' ?
+                            typeof row !== 'object' ? (
+                              <li key={idx}>
+                                <label>
+                                  <input type={tipo} id={row} name={tipo == "radio" ? "list" : row} value={row} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                                  <span className="text-ellipsis">{row}</span>
+                                </label>
+                              </li> 
+                            )
+                            : null
+                          : (
+                            <li key={idx}>
+                              <label>
+                                <input type={tipo} id={placeholder == "clientes" && zona == "" ? row.ID_Cliente : row.ID_Comercio} name={tipo == "radio" ? "list" : placeholder == "clientes" && zona == ""  ? row.nombre :  row.nombre_comercio} value={placeholder == "clientes" && zona == ""  ? row.ID_Cliente : row.ID_Comercio} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                                <span className="text-ellipsis">{placeholder == "clientes" && zona == ""  ? row.nombre + " " + row.apellido + " - " + row.direccion_principal : row.nombre_comercio}</span>
+                              </label>
+                            </li>
+                          )
                         )
                       )}
                     </ul>

@@ -48,7 +48,10 @@ export const Login = () => {
     }
 
     useEffect(() => {
-        PerfilAuth().then((result) => {
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        PerfilAuth(signal).then((result) => {
             if(auth && result.message.role == "comercio") {
                 navigate("/transaccionesComercio/agregar")
             } else if(auth) {
@@ -64,6 +67,7 @@ export const Login = () => {
             password.current.type = "password"
         }
 
+        return () => controller.abort()
     }, [auth, visible])
 
     return (

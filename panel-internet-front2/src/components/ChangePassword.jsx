@@ -56,7 +56,10 @@ export const ChangePassword = () => {
     }
 
     useEffect(() => {
-        PerfilAuth().then((result) => {
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        PerfilAuth(signal).then((result) => {
             setUser(result.message)
             setDataLogin({ ...dataLogin, "email": result.message.email })
         }).catch((err) => {
@@ -69,6 +72,7 @@ export const ChangePassword = () => {
             password.current.type = "password"
         }
 
+        return () => controller.abort()
     }, [auth, visible])
 
     return (

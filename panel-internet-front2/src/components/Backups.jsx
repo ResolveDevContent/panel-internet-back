@@ -67,7 +67,11 @@ export const Backups = () => {
     
     useEffect(() => {
         setLoading(true)
-        listBackups().then(datos => {
+
+        const controller = new AbortController()
+        const signal = controller.signal
+
+        listBackups(signal).then(datos => {
             if(datos.error) {
                 setLoading(false);
                 setState({
@@ -89,6 +93,8 @@ export const Backups = () => {
             setLoading(false);
             setBackups(datos);
         })
+
+        return () => controller.abort()
     }, [update])
 
     return (
