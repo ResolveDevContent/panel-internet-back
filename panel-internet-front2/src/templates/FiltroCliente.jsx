@@ -37,6 +37,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
     }, [nombreCliente])
 
     const buscarCliente = (id) => {
+        console.log("HLOAL")
         if(!id) {
             return;
         }
