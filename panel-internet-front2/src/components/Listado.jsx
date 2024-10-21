@@ -470,13 +470,13 @@ export const Listado = ({titulo, user = {}}) => {
                                         {calculosTotales != null
                                             ? <ul>
                                                     <li>
-                                                        <span>Puntos totales: <span>{calculosTotales.puntos_totales}</span></span>
+                                                        {/* <span>Puntos totales: <span>{calculosTotales.puntos_totales}</span></span> */}
                                                     </li>
                                                     {/* <li>
                                                         <span>Puntos utilizados: <span>{calculosTotales.puntos_pagos}</span></span>
                                                     </li> */}
                                                     <li>
-                                                        <span>Monto total: <span>{calculosTotales.monto_total}</span></span>
+                                                        {/* <span>Monto total: <span>{calculosTotales.monto_total}</span></span> */}
                                                     </li>
                                                 </ul>
                                             : null}
