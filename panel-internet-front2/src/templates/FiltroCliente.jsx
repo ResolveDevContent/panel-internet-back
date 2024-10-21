@@ -32,6 +32,10 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
             })
             : []
 
+        if(newArr.length == 0) {
+            setCliente(null)
+        }
+
         setLoading(false)
         setotherOpciones(newArr)
     }, [nombreCliente, originalOtherOpciones.current])
@@ -188,7 +192,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
                     </div>
                     : null}
                 {cliente != null ? (
-                    <div>
+                    <div className="info-cliente">
                         <strong>Nombre y apellido: {cliente.nombre + " " + cliente.apellido}</strong>
                         <p>Direccion: {cliente.direccion_principal}</p>
                         <p>Email: {cliente.email}</p>
