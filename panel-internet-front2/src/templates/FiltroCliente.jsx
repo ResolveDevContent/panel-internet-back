@@ -177,8 +177,8 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
                             : <>
                                 <ul>
                                 {otherOpciones.map((row, idx) => (
-                                    <li key={idx}>
-                                        <label onClick={() => { buscarCliente(row.ID_Cliente) }}>
+                                    <li key={idx} onClick={buscarCliente(row.ID_Cliente)}>
+                                        <label>
                                             <input type='radio' id={row.ID_Cliente} value={row.ID_Cliente} name="listCliente" onChange={e => setOtherDato(e.target.value)}/>
                                             <span>{row.nombre}</span>
                                         </label>
