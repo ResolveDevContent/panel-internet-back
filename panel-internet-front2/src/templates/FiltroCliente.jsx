@@ -34,7 +34,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
 
         setLoading(false)
         setotherOpciones(newArr)
-    }, [nombreCliente])
+    }, [nombreCliente, originalOtherOpciones])
 
     const buscarCliente = (id) => {
         console.log("HLOAL")
@@ -103,7 +103,6 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
     }, [dato])
     
     useEffect(() => {
-        console.log("GHAOOAG")
         setLoading(true)
 
         listarByEmail('comercios', user.email)
@@ -121,7 +120,6 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
             })
         })
         .finally(setLoading(false))
-        console.log(cliente)
     }, [])
 
     return (
