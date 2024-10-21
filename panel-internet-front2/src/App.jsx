@@ -86,6 +86,11 @@ function App() {
                 </Route>
               ) : null}
               {!loading ? (
+                <Route element={<PrivateRoutes user={user} roles={['comercio']}/>}>
+                  <Route path="transacciones/agregar" element={<Form elementos={ELEMENTOS.transaccionesComercio} titulo={'transacciones'} user={user} />}  />
+                </Route>
+              ) : null}
+              {!loading ? (
                 <Route element={<PrivateRoutes user={user} roles={['cliente']}/>}>
                   <Route path='cliente' element={<User />} />
                   <Route path='historial/transacciones/listar' element={<Listado user={user} titulo={'historial/transacciones'} />} />

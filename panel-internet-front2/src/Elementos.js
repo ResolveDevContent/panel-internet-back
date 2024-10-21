@@ -213,6 +213,32 @@ export const ELEMENTOS = {
         //     placeholder: 'Pago con puntos'
         // },    
     ],
+    transaccionesComercio: [
+        {
+            element: 'filtroCliente',
+            nombre: 'ID_Comercio',
+            placeholder: 'comercios',
+            otherNombre: 'ID_Cliente',
+            otherPlaceholder: 'clientes',
+        },
+        {
+            element: 'input',
+            tipo: 'number',
+            nombre: 'monto_parcial',
+            placeholder: 'Monto',
+            valor: '',
+            mensaje: "",
+        },
+        {
+            element: "user"
+        }
+        // {
+        //     element: 'input',
+        //     tipo: 'number',
+        //     nombre: 'puntos_pago',
+        //     placeholder: 'Pago con puntos'
+        // },    
+    ],
     pagos: [
         {
             element: 'list',
