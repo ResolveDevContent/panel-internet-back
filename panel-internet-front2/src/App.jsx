@@ -79,7 +79,7 @@ function App() {
                 <Route path="asociaciones/agregarcomercios/agregar" element={<Form elementos={ELEMENTOS.asociacionesComercios} titulo={'asociaciones/comercios'} user={user}/>} />
               </Route>
               {!loading ? (
-                <Route element={<PrivateRoutes user={user} roles={['admin', 'comercio', 'superadmin']}/>}>
+                <Route element={<PrivateRoutes user={user} roles={['admin', 'superadmin']}/>}>
                   <Route path="transacciones/listar" element={<Listado user={user} titulo={"transacciones"}/>} />
                   <Route path="transacciones/agregar" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'} user={user} />}  />
                   <Route path="transacciones/editar/:id" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'}/>} user={user} />

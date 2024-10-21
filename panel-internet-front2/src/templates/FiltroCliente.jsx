@@ -104,6 +104,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
     }, [dato])
     
     useEffect(() => {
+        console.log("GHAOOAG")
         setLoading(true)
 
         listarByEmail('comercios', user.email)
