@@ -50,7 +50,7 @@ export const Login = () => {
     useEffect(() => {
         PerfilAuth().then((result) => {
             if(auth && result.message.role == "comercio") {
-                navigate("/transacciones/agregar")
+                navigate("/transaccionesComercio/agregar")
             } else if(auth) {
                 navigate("/")
             }

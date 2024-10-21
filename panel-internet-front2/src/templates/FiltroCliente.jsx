@@ -42,7 +42,7 @@ export const FiltroCliente = ({data, titulo, values = {}, user = {}}) => {
             return;
         }
 
-        listarUno("cliente", id)
+        listarUno("clientes", id)
         .then(datos => {
             if(!datos || datos.length == 0) {
                 setCliente(null)
