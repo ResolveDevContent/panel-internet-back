@@ -63,13 +63,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         if(e.target.checked) {
           const clientesZona = await listarByZona(e.target.value);
           if(clientesZona && clientesZona.length > 0) {
-            newArr.concat(clientesZona);
+            console.log(clientesZona)
+            newArr.push(clientesZona.ID_Cliente);
           }
         } else {
           const clientesZona = await listarByZona(e.target.value);
           if(clientesZona && clientesZona.length > 0) {
             clientesZona.forEach(doc => {
-              newArr = newArr.filter(row => row != doc.zona);
+              newArr = newArr.filter(row => row != doc.ID_Cliente);
             })
           }
           console.log(newArr)
