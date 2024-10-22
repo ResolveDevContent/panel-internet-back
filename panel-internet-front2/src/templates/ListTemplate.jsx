@@ -159,7 +159,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   
   useEffect(() => {
       setLoading(true)
-
+    console.log("AFDSFAF")
       const controller = new AbortController();
       const signal = controller.signal;
 
@@ -336,7 +336,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                     </ul>
                   </div>
               ) : null}
-            <input type="hidden" name={nombre} value={JSON.stringify(datos)} required/>
+            <input type="hidden" name={zona == "zonas" ? "ID_Zona" : nombre} value={JSON.stringify(datos)} required/>
             { state.text ? <Toast texto={state.text} res={state.res} /> : null }
         </li>
     )
