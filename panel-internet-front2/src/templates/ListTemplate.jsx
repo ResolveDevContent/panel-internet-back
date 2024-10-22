@@ -211,6 +211,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
+              console.log(datos)
               if(zona == 'zonas') {
                 zonaList(datos)
               } else {
