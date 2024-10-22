@@ -383,6 +383,25 @@ router.get("/clientes/listar/:id", authenticate, async (req, res) => {
     }
 });
 
+router.get("/clientes/listar/zona/:zona", authenticate, async (req, res) => {
+    const { zona } = req.params;
+  
+    try {
+      // Obtener el registro del cliente por ID
+      const result = await selectOneRecord("clientes", "zona", zona);
+  
+      // Verificar si se encontró el cliente
+      if (result.length === 0) {
+        return res.status(404).json({ error: "Cliente no encontrado." });
+      }
+  
+      res.send(result);
+    } catch (err) {
+      console.error('Error retrieving client record:', err);
+      res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 // Obtener clientes por ID de comercio
 router.get("/clientes/listar/comercio/:id", authenticate, async (req, res) => {
     const { id } = req.params;

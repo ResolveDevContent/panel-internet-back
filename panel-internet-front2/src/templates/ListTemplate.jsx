@@ -61,10 +61,12 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           ...datos
         ]
         if(e.target.checked) {
+          console.log(e.target.value)
           const clientesZona = await listarByZona(e.target.value);
           if(clientesZona && clientesZona.length > 0) {
             console.log(clientesZona)
-            newArr.push(clientesZona.ID_Cliente);
+            const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
+            newArr.concat(clientesId);
           }
         } else {
           const clientesZona = await listarByZona(e.target.value);
