@@ -66,6 +66,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           if(clientesZona && clientesZona.length > 0) {
             console.log(clientesZona)
             const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
+            console.log(clientesId)
             newArr.concat(clientesId);
             console.log(newArr)
           }
@@ -118,6 +119,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         if(zona == "zonas") {
           listar("clientes")
           .then((cliente) => {
+            console.log(cliente)
             newArr = cliente.map((row) => row.ID_Cliente);
           })
         } else {
