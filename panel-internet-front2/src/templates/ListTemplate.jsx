@@ -92,6 +92,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         } else {
           newArr = datos.filter(row => row != e.target.value);
         }
+        setLoading(false)
+        setDatos(newArr);
       }
       console.log("AAAA")
 
@@ -274,6 +276,9 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       return () => controller.abort()
     }, [values])
   
+    useEffect(() => {
+      console.log(sortedListado)
+    }, [sortedListado])
     return (
         <li className="list-template">
             <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
