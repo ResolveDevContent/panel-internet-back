@@ -57,9 +57,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       let newArr = [];
 
       if(zona == 'zonas') {
-        newArr = [
-          ...datos
-        ]
         if(e.target.checked) {
           console.log(e.target.value)
           const clientesZona = await listarByZona(e.target.value);
@@ -67,14 +64,17 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
             console.log(clientesZona)
             const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
             console.log(clientesId)
-            newArr.concat(clientesId);
+            newArr = [
+              ...datos,
+              clientesId
+            ]
             console.log(newArr)
           }
         } else {
           const clientesZona = await listarByZona(e.target.value);
           if(clientesZona && clientesZona.length > 0) {
             clientesZona.forEach(doc => {
-              newArr = newArr.filter(row => row != doc.ID_Cliente);
+              newArr = datos.filter(row => row != doc.ID_Cliente);
             })
           }
           console.log(newArr)
@@ -131,7 +131,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
             }
           })
         }
-
+        console.log(newArr)
         setDatos(newArr)
       } else {
         setDatos([]);
