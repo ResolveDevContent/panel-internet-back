@@ -388,7 +388,7 @@ router.get("/clientes/listar/zona/:zona", authenticate, async (req, res) => {
   
     try {
       // Obtener el registro del cliente por ID
-      const result = await selectOneRecord("clientes", "zona", zona);
+      const result = await selectAsociaciones("clientes", {first: "zona", second: "activo"}, {first: zona, second: 1});
   
       // Verificar si se encontró el cliente
       if (result.length === 0) {
