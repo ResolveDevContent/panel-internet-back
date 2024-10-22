@@ -61,14 +61,13 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           console.log(e.target.value)
           const clientesZona = await listarByZona(e.target.value);
           if(clientesZona && clientesZona.length > 0) {
-            console.log(clientesZona)
             const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
-            console.log(clientesId)
+
             newArr = [
               ...datos,
               ...clientesId
             ]
-            console.log(newArr)
+
             setLoading(false)
             setDatos(newArr);
           }
@@ -79,7 +78,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               newArr = datos.filter(row => row != doc.ID_Cliente);
             })
           }
-          console.log(newArr)
+
           setLoading(false)
           setDatos(newArr);
         }
@@ -95,7 +94,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         setLoading(false)
         setDatos(newArr);
       }
-      console.log("AAAA")
 
       if(values) {
         let arr = datosMostrar
@@ -123,7 +121,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         if(zona == "zonas") {
           listar("clientes")
           .then((cliente) => {
-            console.log(cliente)
             newArr = cliente.map((row) => row.ID_Cliente);
             setDatos(newArr)
           })
@@ -166,15 +163,13 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
             return acc;
         }, []);
 
-        console.log(result);
-
         setSortedListado(result);
         originalListado.current = result;
     }
   
   useEffect(() => {
       setLoading(true)
-    console.log("AFDSFAF")
+
       const controller = new AbortController();
       const signal = controller.signal;
 
@@ -226,7 +221,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              console.log(datos)
               if(zona == 'zonas') {
                 zonaList(datos)
               } else {
@@ -276,9 +270,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       return () => controller.abort()
     }, [values])
   
-    useEffect(() => {
-      console.log(sortedListado)
-    }, [sortedListado])
     return (
         <li className="list-template">
             <label htmlFor={nombre} className="text-capitalize">{zona == "" ? placeholder : zona}</label>
