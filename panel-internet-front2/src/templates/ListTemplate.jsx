@@ -66,9 +66,11 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
             console.log(clientesId)
             newArr = [
               ...datos,
-              clientesId
+              ...clientesId
             ]
             console.log(newArr)
+            setLoading(false)
+            setDatos(newArr);
           }
         } else {
           const clientesZona = await listarByZona(e.target.value);
@@ -78,6 +80,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
             })
           }
           console.log(newArr)
+          setLoading(false)
+          setDatos(newArr);
         }
       } else {
         if(e.target.checked) {
@@ -90,8 +94,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         }
       }
       console.log("AAAA")
-      setLoading(false)
-      setDatos(newArr);
 
       if(values) {
         let arr = datosMostrar
@@ -121,6 +123,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           .then((cliente) => {
             console.log(cliente)
             newArr = cliente.map((row) => row.ID_Cliente);
+            setDatos(newArr)
           })
         } else {
           newArr = sortedListado.map(function(row) { 
@@ -130,9 +133,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               return row.ID_Comercio
             }
           })
+          setDatos(newArr)
         }
-        console.log(newArr)
-        setDatos(newArr)
       } else {
         setDatos([]);
       }
