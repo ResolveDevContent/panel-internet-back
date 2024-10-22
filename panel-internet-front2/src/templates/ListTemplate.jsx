@@ -67,6 +67,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
             console.log(clientesZona)
             const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
             newArr.concat(clientesId);
+            console.log(newArr)
           }
         } else {
           const clientesZona = await listarByZona(e.target.value);
@@ -87,7 +88,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           newArr = datos.filter(row => row != e.target.value);
         }
       }
-
+      console.log("AAAA")
       setLoading(false)
       setDatos(newArr);
 
@@ -113,13 +114,21 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
     const handleChangeAll = e => {
       if(e.target.checked) {
-        const newArr = sortedListado.map(function(row) { 
-          if(placeholder == "clientes") {
-            return row.ID_Cliente
-          } else {
-            return row.ID_Comercio
-          }
-        })
+        let newArr = []
+        if(zona == "zonas") {
+          listar("clientes")
+          .then((cliente) => {
+            newArr = cliente.map((row) => row.ID_Cliente);
+          })
+        } else {
+          newArr = sortedListado.map(function(row) { 
+            if(placeholder == "clientes") {
+              return row.ID_Cliente
+            } else {
+              return row.ID_Comercio
+            }
+          })
+        }
 
         setDatos(newArr)
       } else {
