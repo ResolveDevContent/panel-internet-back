@@ -976,8 +976,6 @@ router.post("/asociaciones/comercios/agregar", authenticate, async (req, res) =>
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user.nombre ? nombre_user.nombre : nombre_user.nombre_comercio + " agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             }
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
-        } else {
-            return res.status(500).json({ error: "Algunas asociaciones no se pudieron crear correctamente!" });
         }
     } catch (err) {
         return res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
