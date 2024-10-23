@@ -13,7 +13,6 @@ export const UserTemplate = () => {
         const signal = controller.signal;
 
         PerfilAuth(signal).then((result) => {
-            console.log(result)
             setUserObj(result.message)
         }).finally((res) => {
             setLoading(false)

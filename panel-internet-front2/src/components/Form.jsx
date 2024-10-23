@@ -32,7 +32,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
         let dataObj = {}
 
         for(let [name, value] of formData) {
-            console.log(name, value)
             if(name == "puntos_pago" && value == "") {
                 value = 0
             }
@@ -45,7 +44,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             titulo == "asociaciones/clientes" && name != "user" ||
             (titulo == "asociaciones/comercios" && name != "user") ||
             (titulo == "comercios/pagos" && name == "ID_Comercio")) { 
-                console.log(name, value)
                 value = JSON.parse(value)    
             }
 

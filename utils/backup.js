@@ -28,7 +28,6 @@ function backupDatabase() {
             console.error(`Error: ${stderr}`);
             return;
         }
-        console.log(`Backup creado exitosamente: ${backupFile}`);
     });
 }
 
@@ -47,7 +46,6 @@ function restoreDatabase(backupFile) {
             console.error(`Error: ${stderr}`);
             return;
         }
-        console.log(`Base de datos restaurada exitosamente desde: ${backupFile}`);
     });
 }
 
@@ -62,7 +60,6 @@ async function listBackups() {
         }
 
         const backups = files.filter(file => file.startsWith('backup_') && file.endsWith('.sql'));
-        console.log('Archivos de backup encontrados:');
         backups.forEach(file => console.log(file));
         return backups
     });
