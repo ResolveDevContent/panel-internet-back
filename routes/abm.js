@@ -902,16 +902,16 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
         return res.status(500).json({ error: "No se puede realizar una asociación sin completar todos los datos." });
     }
 
-    if (ID_Zonas.length && ID_Cliente.length) {
+    if (ID_Zonas.length > 0 && ID_Cliente.length > 0) {
         return res.status(500).json({ error: "No se puede realizar una asociación con clientes y zonas" });
     }
 
     try {
-        const datos = req.body.ID_Cliente.length ? req.body.ID_Cliente : req.body.ID_Zonas
+        const datos = ID_Cliente.length > 0 ? ID_Cliente : ID_Zonas
         const resultados = await multipleAsociaciones(datos, ID_Comercio, true);
 
         if (resultados.every(result => result)) {
-            const comercio = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
+            const comercio = await selectOneRecord("comercio", 'ID_Comercio', ID_Comercio);
             const date = new Date().toLocaleString()
             let nombre_user = '';
             let nombre_superadmin = '';
