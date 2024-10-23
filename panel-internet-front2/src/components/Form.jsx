@@ -10,6 +10,7 @@ import { Loading } from "./Loading"
 import { PermisosTemplate } from "../templates/permisosTemplate";
 import { UserTemplate } from "../templates/UserTemplate";
 import { FiltroCliente } from "../templates/FiltroCliente";
+import { ZonasTemplate } from "../templates/ZonasTemplate";
 
 export const Form = ({elementos = [], titulo = '', user = {}}) => {
     const [ data, setData ] = useState({})
@@ -162,6 +163,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == "filtroCliente") {return <FiltroCliente key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "user") {return <UserTemplate key={idx} />}
+                                    if(row.element == "zonas") {return <ZonasTemplate key={idx} titulo={titulo} data={row} user={user}/>}
                                 })}
                                 <li className="mt-4 p-2 text-end">
                                     <button className="btn btn-success">Confirmar</button>
