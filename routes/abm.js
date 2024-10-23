@@ -96,57 +96,64 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
     delete req.body.user;
 
     delete req.body.password;
-    insertRecord("comercio", {...req.body, activo: 1, puntos_totales: 0})
-    .then((results) => {
-        bcrypt.genSalt(10).then((salt) => {
-            bcrypt.hash(password, salt).then((hashedPassword) => {
-                const addUser = {
-                    userId: uuidv4(),
-                    email: email,
-                    password: hashedPassword,
-                    role: "comercio"
-                };
-                
-                try {
-                    checkRecordExists("users", "email", email)
-                    .then((exist) => {
-                        const userAlreadyExists = exist;
-                        if (userAlreadyExists) {
-                            res.status(409).json({ error: "Email ya existente" });
-                        } else {
-                            insertRecord("users", addUser)
-                            .then( async (insert) => {
-                                const date = new Date().toLocaleString()
-                                let nombre_user = '';
-                                let nombre_superadmin = '';
-                                if(user.role == 'admin') {
-                                    nombre_user = await selectOneRecord('admins', 'email', user.email)
-                                } else if(user.role == 'comercio') {
-                                    nombre_user = await selectOneRecord('comercios', 'email', user.email)
-                                } else {
-                                    nombre_superadmin = user.email
-                                }
+    checkRecordExists("comercio", "email", email)
+    .then((comercioExist) => {
+        if(comercioExist) {
+            res.status(409).json({ error: "Comercio ya existente" });
+        }
 
-                                if(nombre_superadmin) {
-                                    await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
-                                } else {
-                                    await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user.nombre ? nombre_user.nombre : nombre_user.nombre_comercio + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
-                                }
-                                res.status(201).json({ message: "Comercio creado correctamente!" });
-                            })
-                            .catch((err) => {
-                                res.status(500).json({ error: "No se puedo crear correctamente!" })
-                            })
-                        }
-                    })
-                    .catch((err) => {
+        insertRecord("comercio", {...req.body, activo: 1, puntos_totales: 0})
+        .then((results) => {
+            bcrypt.genSalt(10).then((salt) => {
+                bcrypt.hash(password, salt).then((hashedPassword) => {
+                    const addUser = {
+                        userId: uuidv4(),
+                        email: email,
+                        password: hashedPassword,
+                        role: "comercio"
+                    };
+                    
+                    try {
+                        checkRecordExists("users", "email", email)
+                        .then((exist) => {
+                            const userAlreadyExists = exist;
+                            if (userAlreadyExists) {
+                                res.status(409).json({ error: "Email ya existente" });
+                            } else {
+                                insertRecord("users", addUser)
+                                .then( async (insert) => {
+                                    const date = new Date().toLocaleString()
+                                    let nombre_user = '';
+                                    let nombre_superadmin = '';
+                                    if(user.role == 'admin') {
+                                        nombre_user = await selectOneRecord('admins', 'email', user.email)
+                                    } else if(user.role == 'comercio') {
+                                        nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                                    } else {
+                                        nombre_superadmin = user.email
+                                    }
+
+                                    if(nombre_superadmin) {
+                                        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
+                                    } else {
+                                        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user.nombre ? nombre_user.nombre : nombre_user.nombre_comercio + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
+                                    }
+                                    res.status(201).json({ message: "Comercio creado correctamente!" });
+                                })
+                                .catch((err) => {
+                                    res.status(500).json({ error: "No se puedo crear correctamente!" })
+                                })
+                            }
+                        })
+                        .catch((err) => {
+                            res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+                        })
+                    } catch (error) {
                         res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                    })
-                } catch (error) {
-                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
-                }
-            }).catch((err) => {
-                res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
+                    }
+                }).catch((err) => {
+                    res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente."});
+                })
             })
         })
     })
