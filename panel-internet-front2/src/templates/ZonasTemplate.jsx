@@ -21,6 +21,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
         })
         : originalListado.current
 
+        console.log("1")
         setLoading(false)
         setSortedListado(newArr)
     }, [nombreZona])
@@ -72,6 +73,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
             return acc;
         }, []);
 
+        console.log("2")
         setSortedListado(result);
         originalListado.current = result;
     }
@@ -82,6 +84,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
       const controller = new AbortController();
       const signal = controller.signal;
 
+      console.log("3")
       setSortedListado([])
       originalListado.current = [];
 
@@ -89,6 +92,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
           listar(placeholder, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
+                console.log("4")
                   setSortedListado([])
                   originalListado.current = [];
                   return;
@@ -114,6 +118,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
           listarByAdmin(placeholder, user.email, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
+                console.log("5")
                   setSortedListado([])
                   originalListado.current = [];
                   return;
