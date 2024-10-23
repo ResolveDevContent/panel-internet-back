@@ -37,12 +37,11 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                     ...datos,
                     ...clientesId
                 ]
-                setDatos(newArr);
             }
         } else {
             newArr = datos.filter(item => clientesZona.map(x => x.ID_Cliente).includes(item));
         }
-
+        setDatos(newArr)
     }
 
     const handleChangeRadio = e => {
