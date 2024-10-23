@@ -161,7 +161,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                       {sortedListado.map((row, idx) => (
                             <li key={idx}>
                             <label>
-                                <input type={tipo} id={row} name={tipo == "radio" ? "list" : row} value={row} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
+                                <input type={tipo} id={row} value={row} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
                                 <span className="text-ellipsis">{row}</span>
                             </label>
                             </li> 
@@ -172,7 +172,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                 }
                 </div>
               : null}
-            <input type="hidden" name={nombre} value={JSON.stringify(datos)} required/>
+            <input type="hidden" name={"ID_Zonas"} value={JSON.stringify(datos)} required/>
             { state.text ? <Toast texto={state.text} res={state.res} /> : null }
         </li>
     )

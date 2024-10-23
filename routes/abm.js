@@ -894,20 +894,20 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
 
 // Ruta para agregar asociaciones entre clientes y comercios
 router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => {
-    const { ID_Cliente, ID_Comercio } = req.body;
+    const { ID_Cliente, ID_Comercio, ID_Zonas } = req.body;
     const user = req.body.user;
     delete req.body.user;
 
-    if ((!zonas.length && !ID_Cliente.length) || !ID_Comercio.length) {
+    if ((!ID_Zonas.length && !ID_Cliente.length) || !ID_Comercio.length) {
         return res.status(500).json({ error: "No se puede realizar una asociación sin completar todos los datos." });
     }
 
-    if (zonas.length && ID_Cliente.length) {
+    if (ID_Zonas.length && ID_Cliente.length) {
         return res.status(500).json({ error: "No se puede realizar una asociación con clientes y zonas" });
     }
 
     try {
-        const datos = req.body.ID_Cliente.length ? req.body.ID_Cliente : req.body.zonas
+        const datos = req.body.ID_Cliente.length ? req.body.ID_Cliente : req.body.ID_Zonas
         const resultados = await multipleAsociaciones(datos, ID_Comercio, true);
 
         if (resultados.every(result => result)) {
