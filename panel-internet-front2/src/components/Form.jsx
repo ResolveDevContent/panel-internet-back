@@ -42,7 +42,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             }
 
             if((titulo == "admins" && name == "ID_Comercio") ||
-            titulo == "asociaciones/clientes" ||
             (titulo == "asociaciones/comercios" && name == "ID_Comercio") || (titulo == "asociaciones/comercios" && name == "ID_Cliente") ||
             (titulo == "comercios/pagos" && name == "ID_Comercio")) { 
                 console.log(name, value)
