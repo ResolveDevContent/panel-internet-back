@@ -26,12 +26,10 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
     }, [nombreZona])
 
     const handleChange = async e => {
-        // setLoading(true)
         let newArr = [];
+        const clientesZona = await listarByZona(e.target.value);
 
         if(e.target.checked) {
-            console.log(e.target.value)
-            const clientesZona = await listarByZona(e.target.value);
             if(clientesZona && clientesZona.length > 0) {
                 const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
 
@@ -39,11 +37,11 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                     ...datos,
                     ...clientesId
                 ]
-                console.log("a")
-                // setLoading(false)
                 setDatos(newArr);
             }
-        } 
+        } else {
+            newArr = datos.filter(item => clientesZona.map(x => x.ID_Cliente).includes(item));
+        }
 
     }
 
