@@ -26,7 +26,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
     }, [nombreZona])
 
     const handleChange = async e => {
-        setLoading(true)
+        // setLoading(true)
         let newArr = [];
 
         if(e.target.checked) {
@@ -40,7 +40,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                     ...clientesId
                 ]
                 console.log("a")
-                setLoading(false)
+                // setLoading(false)
                 setDatos(newArr);
             }
         } 
