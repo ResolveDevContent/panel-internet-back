@@ -128,7 +128,7 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                                     if(user.role == 'admin') {
                                         nombre_user = await selectOneRecord('admins', 'email', user.email)
                                     } else if(user.role == 'comercio') {
-                                        nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                                        nombre_user = await selectOneRecord('comercio', 'email', user.email)
                                     } else {
                                         nombre_superadmin = user.email
                                     }
@@ -179,7 +179,7 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
                 if(user.role == 'admin') {
                     nombre_user = await selectOneRecord('admins', 'email', user.email)
                 } else if(user.role == 'comercio') {
-                    nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                    nombre_user = await selectOneRecord('comercio', 'email', user.email)
                 } else {
                     nombre_superadmin = user.email
                 }
@@ -247,7 +247,7 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
             if(user.role == 'admin') {
                 nombre_user = await selectOneRecord('admins', 'email', user.email)
             } else if(user.role == 'comercio') {
-                nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                nombre_user = await selectOneRecord('comercio', 'email', user.email)
             } else {
                 nombre_superadmin = user.email
             }
@@ -300,14 +300,14 @@ router.put("/comercios/pagos/modificar/:id", authenticate, async (req, res) => {
     try {
         // Actualizar el registro
         const results = await updateRecord("pagos", req.body, "ID_Pagos", id);
-        const comercio = await selectOneRecord('comercios', 'ID_Comercio', id)
+        const comercio = await selectOneRecord('comercio', 'ID_Comercio', id)
         const date = new Date().toLocaleString()
         let nombre_user = '';
         let nombre_superadmin = '';
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -341,7 +341,7 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -469,7 +469,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
             if(user.role == 'admin') {
                 nombre_user = await selectOneRecord('admins', 'email', user.email)
             } else if(user.role == 'comercio') {
-                nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                nombre_user = await selectOneRecord('comercio', 'email', user.email)
             } else {
                 nombre_superadmin = user.email
             }
@@ -510,7 +510,7 @@ router.post("/clientes/agregar", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -539,7 +539,7 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -817,7 +817,7 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -883,7 +883,7 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -925,7 +925,7 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
             if(user.role == 'admin') {
                 nombre_user = await selectOneRecord('admins', 'email', user.email)
             } else if(user.role == 'comercio') {
-                nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                nombre_user = await selectOneRecord('comercio', 'email', user.email)
             } else {
                 nombre_superadmin = user.email
             }
@@ -965,7 +965,7 @@ router.post("/asociaciones/comercios/agregar", authenticate, async (req, res) =>
             if(user.role == 'admin') {
                 nombre_user = await selectOneRecord('admins', 'email', user.email)
             } else if(user.role == 'comercio') {
-                nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                nombre_user = await selectOneRecord('comercio', 'email', user.email)
             } else {
                 nombre_superadmin = user.email
             }
@@ -998,7 +998,7 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -1031,7 +1031,7 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -1161,7 +1161,7 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
             if(user.role == 'admin') {
                 nombre_user = await selectOneRecord('admins', 'email', user.email)
             } else if(user.role == 'comercio') {
-                nombre_user = await selectOneRecord('comercios', 'email', user.email)
+                nombre_user = await selectOneRecord('comercio', 'email', user.email)
             } else {
                 nombre_superadmin = user.email
             }
@@ -1229,7 +1229,7 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
@@ -1267,7 +1267,7 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercios', 'email', user.email)
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
