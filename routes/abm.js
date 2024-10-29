@@ -738,7 +738,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
         } else {
             nombre_superadmin = user.email
         }
-        console.log(nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio)
+        console.log(cliente[0], comercio[0])
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " +  nombre_superadmin + " agrego una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         }else {
