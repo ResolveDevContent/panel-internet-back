@@ -501,7 +501,7 @@ export const Listado = ({titulo, user = {}}) => {
                 </>
                 : null
             }
-            <Tabla titulo={titulo} datos={sortedListado} />
+            <Tabla titulo={titulo} datos={sortedListado} user={user}/>
             { state.text ? <Toast texto={state.text} res={state.res}/> : null }
         </>
     )
