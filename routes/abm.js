@@ -1036,6 +1036,8 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
             nombre_superadmin = user.email
         }
 
+        console.log(nombre_user, nombre_superadmin, cliente, comercio)
+
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
