@@ -1025,6 +1025,7 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', asociacion[0].ID_Cliente);
         const comercio = await selectOneRecord("comercio", 'ID_Comercio', asociacion[0].ID_Comercio);
         const results = await deleteRecord("asociaciones", "ID_asociacion", id);
+        console.log(cliente, comercio, user)
         const date = new Date().toLocaleString()
         let nombre_user = '';
         let nombre_superadmin = '';
