@@ -143,6 +143,9 @@ export const Listado = ({titulo, user = {}}) => {
                     }
 
                     row.ID_Cliente = cliente[0].nombre
+                    row.apellido = cliente[0].apellido
+                    row.email = cliente[0].email
+                    row.direccion_principal = cliente[0].direccion_principal
                 }
 
                 return row;
@@ -339,6 +342,10 @@ export const Listado = ({titulo, user = {}}) => {
                         return;
                     }
 
+                    if(titulo == 'clientes') {
+                        totales(datos);
+                    }
+
                     if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
                         formatToNombres(datos)
                     } else {
@@ -381,6 +388,10 @@ export const Listado = ({titulo, user = {}}) => {
                             setListado([])
                             originalListado.current = [];
                             return;
+                        }
+
+                        if(titulo == 'clientes') {
+                            totales(datos);
                         }
 
                         if(titulo == "transacciones") {
