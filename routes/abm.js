@@ -136,7 +136,8 @@ router.post("/comercios/agregar", authenticate, (req,res) => {
                                     if(nombre_superadmin) {
                                         await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
                                     } else {
-                                        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
+                                        const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+                                        await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego el comercio " + nombre_comercio, fecha: new Date(date).getTime()});
                                     }
                                     res.status(201).json({ message: "Comercio creado correctamente!" });
                                 })
@@ -187,7 +188,7 @@ router.put("/comercios/modificar/:id", authenticate, (req,res) => {
                 if(nombre_superadmin) {
                     await insertRecord('historial', {message: "El" + user.role +  " " + nombre_superadmin + " modifico el comercio " + req.body.nombre_comercio, fecha: new Date(date).getTime()});
                 } else {
-                    await insertRecord('historial', {message: "El" + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " modifico el comercio " + req.body.nombre_comercio, fecha: new Date(date).getTime()});
+                    await insertRecord('historial', {message: "El" + user.role +  " " + nombre + " modifico el comercio " + req.body.nombre_comercio, fecha: new Date(date).getTime()});
                 }
                 res.status(200).json(results);
             })
@@ -255,7 +256,8 @@ router.post("/comercios/pagos/agregar", authenticate, async (req, res) => {
             if(nombre_superadmin) {
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
             } else {
-                await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+                const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+                await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
             }
             return res.status(201).json({ message: "El pago se ha agregado correctamente." });
         } else {
@@ -315,7 +317,8 @@ router.put("/comercios/pagos/modificar/:id", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " modifico un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " modifico un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " modifico un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         }
         res.status(200).json(results);
     } catch (err) {
@@ -349,7 +352,8 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " borro un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro un pago del comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         }
         res.status(200).json(result);
     } catch (err) {
@@ -477,7 +481,8 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
             if(nombre_superadmin) {
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             } else {
-                await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
+                const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+                await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             }
             res.status(201).json({ message: "Clientes creados/editados correctamente!" });
         } else {
@@ -518,7 +523,8 @@ router.post("/clientes/agregar", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         }
         res.status(201).json({ message: "Cliente creado correctamente!" });
     } catch (err) {
@@ -547,7 +553,8 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " modifico el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " modifico el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " modifico el cliente " + req.body.nombre, fecha: new Date(date).getTime()});
         }
         res.status(200).json(results);
     } catch (err) {
@@ -826,7 +833,8 @@ router.delete("/transacciones/borrar/:id", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         }
         res.status(200).json(results);
     } catch (err) {
@@ -892,7 +900,8 @@ router.post("/asociaciones/agregar", authenticate, async (req, res) => {
         if(nombre_superadmin){
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego una asociacion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: new Date(date).getTime()});
         }
         res.status(201).json({ message: "Asociación creada correctamente." });
     } catch (err) {
@@ -934,7 +943,8 @@ router.post("/asociaciones/clientes/agregar", authenticate, async (req, res) => 
             if(nombre_superadmin) {
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
             } else {
-                await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+                const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+                await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego asociaciones de clientes al comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
             }
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         } else {
@@ -974,7 +984,8 @@ router.post("/asociaciones/comercios/agregar", authenticate, async (req, res) =>
             if(nombre_superadmin) {
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             } else {
-                await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
+                const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+                await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agregaron asociaciones de comercios al cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             }
             return res.status(201).json({ message: "Asociaciones creadas correctamente!" });
         }
@@ -1007,7 +1018,8 @@ router.put("/asociaciones/modificar/:id", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " modifico la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         }
         res.status(200).json(results);
     } catch (err) {
@@ -1041,7 +1053,8 @@ router.delete("/asociaciones/borrar/:id", authenticate, async (req, res) => {
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         } else {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro la asociaciones del cliente " + cliente[0].nombre + " con el comercio " + comercio[0].nombre_comercio, fecha: new Date(date).getTime()});
         }
         res.status(200).json(results);
     } catch (err) {
@@ -1171,7 +1184,8 @@ router.post("/admins/agregar", authenticate, async (req, res) => {
             if(nombre_superadmin) {
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin+ " agrego el admin " + nombre, fecha: new Date(date).getTime()});
             }else {
-                await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " agrego el admin " + nombre, fecha: new Date(date).getTime()});
+                const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+                await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego el admin " + nombre, fecha: new Date(date).getTime()});
 
             }
             res.status(201).json({ message: "Admin creado correctamente!" });
@@ -1239,8 +1253,8 @@ router.put("/admins/modificar/:id", authenticate, async (req, res) => {
             await insertRecord('historial', {message: "El " + user.role +  " " +nombre_superadmin + " actualizo el admin " + req.body.nombre, fecha: new Date(date).getTime()});
 
         }else {
-
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " actualizo el admin " + req.body.nombre, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " actualizo el admin " + req.body.nombre, fecha: new Date(date).getTime()});
         }
         res.status(200).json(updateAdmin);
     } catch (err) {
@@ -1278,8 +1292,8 @@ router.delete("/admins/borrar/:id", authenticate, async (req, res) => {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro el admin " + admins[0].nombre, fecha: new Date(date).getTime()});
 
         } else {
-
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio + " borro el admin " + admins[0].nombre, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro el admin " + admins[0].nombre, fecha: new Date(date).getTime()});
         }
         res.status(200).json(result);
     } catch (err) {
