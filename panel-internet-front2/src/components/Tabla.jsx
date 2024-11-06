@@ -124,7 +124,7 @@ const borrarDatos = (e, id, email) => {
                 })
             })    
       } else {
-            borrar(titulo, id).then(result => {
+            borrar(titulo, id, {user: user.message}).then(result => {
                 if(result.error) {
                     setState({
                         text: result.error,
