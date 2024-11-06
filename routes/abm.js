@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, deleteRecordByAdmin } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, deleteRecordByAdmin, selectZonaByAdmin } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -362,6 +362,36 @@ router.delete("/comercios/pagos/borrar/:id", authenticate, async (req, res) => {
     }
 });
 
+//CRUD: ZONAS ---------------------------------------------------------------------------------
+
+router.get("/zonas/listar", async (req,res) => {
+    try {
+        const results = await selectTable("zonas");
+        res.send(results);
+    } catch (err) {
+        res.status(500).send({ error: 'Se ha producido un error, intentelo nuevamente.' });
+    }
+});
+
+// Endpoint para agregar pagos
+router.post("/zonas/agregar", authenticate, async (req, res) => {
+    try {
+        await insertRecord("pagos", body);
+
+        let nombre_user = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else {
+            nombre_user = user.email
+        }
+        
+        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " agrego una zona", fecha: new Date(date).getTime()});
+        return res.status(201).json({ message: "La zona se ha agregado correctamente." });
+    } catch (err) {
+      return res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 //CRUD: CLIENTES ---------------------------------------------------------------------------------
 
 router.get("/clientes/listar", async (req, res) => {
@@ -410,6 +440,27 @@ router.get("/clientes/listar/zona/:zona", authenticate, async (req, res) => {
     } catch (err) {
       console.error('Error retrieving client record:', err);
       res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.get("/clientes/listar/zona/admin/:email", authenticate, async (req, res) => {
+    const { email } = req.params;
+    const { zona } = req.query
+  
+    try {
+        // Obtener el registro del cliente por ID
+        const permisos = await selectPermisos(email);
+        const result = await selectZonaByAdmin("clientes", 'ID_Cliente', permisos, zona);
+    
+        // Verificar si se encontró el cliente
+        if (result.length === 0) {
+            return res.status(404).json({ error: "Cliente no encontrado." });
+        }
+    
+        res.send(result);
+    } catch (err) {
+        console.error('Error retrieving client record:', err);
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
 });
 
@@ -611,6 +662,122 @@ async function agregarClientes(datos) {
 
     return resultados;
 }
+
+//CRUD: COBRANZAS ---------------------------------------------------------------------------------
+
+router.get("/cobranzas/listar", async (req, res) => {
+    try {
+        const results = await selectTable("cobranzas");
+        res.send(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+// Obtener transacción por ID
+router.get("/cobranzas/listar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const results = await selectOneRecord("cobranzas", "ID_Cobranzas", id);
+        res.send(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.post("/cobranzas/agregar", authenticate, async (req, res) => {
+    const user = req.body.user;
+    delete req.body.user;
+
+    req.body.ID_Cliente = JSON.parse(req.body.ID_Cliente)
+
+    if (req.body.ID_Cliente.length === 0) {
+        return res.status(500).json({ error: "No se puede realizar una transacción sin completar todos los datos." });
+    }
+
+    try {
+        if(!req.body.puntos_pago || req.body.puntos_pago == '') {
+            req.body.puntos_pago = 0;
+        }
+
+        const currentDate = Date.now(); 
+
+        // SACAR CUANDO SE HAGA LA VERSION 2
+        const body = { ...req.body, fecha: currentDate};
+
+        if (Number(req.body.puntos_pago) > 0) {
+            const totales = await calcularPuntosTotales('puntos', 'ID_Cliente', 'puntos', req.body.ID_Cliente);
+            if (Number(req.body.puntos_pago) > totales[0].total) {
+                return res.status(500).json({ error: "El cliente no posee esos puntos." });
+            } else {
+                const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
+
+                let result = 0;
+                let flag = false;
+                puntos.forEach(async row => {
+                    result = currentPay - Number(row.puntos);
+                    if(!flag) {
+                        if(result >= 0) {
+                            if(result == 0) {
+                                flag = true;
+                            }
+                            await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+                            currentPay -= Number(row.puntos);
+                        } else {
+                            await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
+                            flag = true;
+                        }
+                    }
+                });
+            }
+        }
+
+        const results = await insertRecord("cobranzas", body);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+        const date = new Date().toLocaleString()
+        let nombre_user = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else {
+            nombre_user = user.email
+        }
+
+        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo un cobro del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
+        res.status(201).json({ message: "Transacción creada correctamente." });
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const user = req.body.user;
+    delete req.body.user;
+
+    try {
+        const cobranza = await selectOneRecord("cobranzas", "ID_Transaccion", id);
+        const cliente = await selectOneRecord("clientes", 'ID_Cliente', cobranza[0].ID_Cliente);
+
+        if(cobranza[0].puntos_pago && cobranza[0].puntos_pago > 0) {
+            await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pago, fecha: currentDate});
+        }
+
+        const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
+        const date = new Date().toLocaleString()
+        let nombre_user = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else {
+            nombre_user = user.email
+        }
+
+        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " borro un cobro del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
+
+        res.status(200).json(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
 

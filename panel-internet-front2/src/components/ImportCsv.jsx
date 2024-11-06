@@ -1,10 +1,12 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { importarCSV } from "../services/abm"
 import { useNavigate } from "react-router-dom"
+import { ListTemplate } from "../templates/ListTemplate"
 
-export const ImportCsv = ({titulo}) => {
+export const ImportCsv = ({titulo, user = {}}) => {
     const [ fileName, setFileName ] = useState("")
     const [ csvFile, setCsvFile ] = useState()
+    const [ idZona, setIdZona ] = useState()
     const [ state, setState ] = useState({
         text: "",
         res: ""
@@ -21,6 +23,15 @@ export const ImportCsv = ({titulo}) => {
   
     const handlesubmit = (e) => {
         e.preventDefault();
+
+        const form = evt.target
+        const formData = new FormData(form)
+        for(let [name, value] of formData) {
+            if(name == "ID_Zona") {
+                setIdZona(value)
+            }
+        }
+
         const input = csvFile;
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -39,10 +50,11 @@ export const ImportCsv = ({titulo}) => {
                     }
                 }
 
+                obj.zona = idZona;
                 result.push(obj);
             }
 
-            const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Apellido', 'Direccion Principal', 'Email');
+            const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Apellido', 'Direccion Principal', 'Email', 'zona');
             importarCSV(titulo, filteredData)
             .then(data => {
                 if(data.error) {
@@ -60,7 +72,7 @@ export const ImportCsv = ({titulo}) => {
         reader.readAsText(input);
     };
 
-    function filterKeys(array, key1, key2, key3, key4, key5) {
+    function filterKeys(array, key1, key2, key3, key4, key5, key6, key7) {
         return array.map(item => {
             return {
                 [key1]: item[key1],
@@ -68,7 +80,8 @@ export const ImportCsv = ({titulo}) => {
                 [key3]: item[key3],
                 [key4]: item[key4],
                 [key5]: item[key5],
-
+                [key5]: item[key6],
+                [key5]: item[key7]
             };
         });
     }
@@ -78,6 +91,9 @@ export const ImportCsv = ({titulo}) => {
             <strong className="p-3 text-capitalize">{titulo} - {"Agregar"}</strong>
 
             <form className="card mt-3" onSubmit={handlesubmit}>
+                <ul>
+                    <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} />
+                </ul>
                 <div className="custom-file">
                     <label className="custom-file-label d-flex align-center" htmlFor="input-file">
                         <input type="file" id="input-file" name="input-file" accept=".csv" onChange={change}/>

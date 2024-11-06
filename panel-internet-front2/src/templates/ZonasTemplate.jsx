@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react";
-import { listarByZona, listar, listarByAdmin } from "../services/abm";
+import { listarByZona, listar, listarByAdmin, listaZonaByAdmin } from "../services/abm";
 import { Toast } from "../components/Toast";
 
 export const ZonasTemplate = ({data, titulo, user = {}}) => {
@@ -11,13 +11,13 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
 
     const originalListado = useRef([])
 
-    const { nombre, placeholder, tipo, lista, zona } = data;
+    const { tipo } = data;
 
     const filteredZona = useMemo(() => {
         setLoading(true)
         const newArr = nombreZona != null && nombreZona.length > 0
         ? originalListado.current.filter(row => {
-            return row.toLowerCase().includes(nombreZona.toLowerCase())
+            return row.zona.toLowerCase().includes(nombreZona.toLowerCase())
         })
         : originalListado.current
 
@@ -27,7 +27,13 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
 
     const handleChange = async e => {
         let newArr = [];
-        const clientesZona = await listarByZona(e.target.value);
+        let clientesZona = [];
+        if(user && user.role == 'superadmin') {
+            clientesZona = await listarByZona(e.target.value);
+        } else {
+            clientesZona = await listaZonaByAdmin(e.target.value, user.email);
+        }
+
         if(e.target.checked) {
             if(clientesZona && clientesZona.length > 0) {
                 const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
@@ -43,33 +49,48 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
         setDatos(newArr)
     }
 
-    const handleChangeRadio = e => {
-      setDatos(e.target.value);
-    }
-
     const handleChangeAll = e => {
       if(e.target.checked) {
         let newArr = []
-        listar("clientes")
-        .then((cliente) => {
-        newArr = cliente.map((row) => row.ID_Cliente);
-        setDatos(newArr)
-        })
+        if(user && user.role == "superadmin") {
+            listar("clientes")
+            .then((cliente) => {
+                newArr = cliente.map((row) => row.ID_Cliente);
+                setDatos(newArr)
+            })
+        } else {
+            listarByAdmin('clientes', user.email, signal)
+            .then(datos => {
+                if(!datos || datos.length == 0) {
+                    setState({
+                      text: "Este admin no posee clientes en la zonas seleccionada", 
+                      res: "danger"
+                    })
+                    setDatos([])
+                    return;
+                }
+
+                if(datos.error) {
+                  setState({
+                    text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                    res: "danger"
+                  })
+                  return;
+                }
+
+                newArr = datos.map((row) => row.ID_Cliente);
+                setDatos(newArr)
+            }).catch(err => {
+                setState({
+                    text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                    res: "secondary"
+                })
+            })
+            .finally(setLoading(false))
+        }
       } else {
         setDatos([]);
       }
-    }
-
-    const zonaList = newArr => {
-        const result = newArr.reduce((acc, row) => {
-            if(!acc.includes(row.zona)) {
-              acc.push(row.zona)
-            }
-            return acc;
-        }, []);
-
-        setSortedListado(result);
-        originalListado.current = result;
     }
   
     useEffect(() => {
@@ -81,63 +102,37 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
       setSortedListado([])
       originalListado.current = [];
 
-      if(user && user.role == "superadmin") {
-          listar(placeholder, signal)
-          .then(datos => {
-              if(!datos || datos.length == 0) {
-                  setSortedListado([])
-                  originalListado.current = [];
-                  return;
-              }
+      listar('zonas', signal)
+      .then(datos => {
+          if(!datos || datos.length == 0) {
+              setSortedListado([])
+              originalListado.current = [];
+              return;
+          }
 
-              if(datos.error) {
-                setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
-                })
-              }
+          if(datos.error) {
+            setState({
+              text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+              res: "danger"
+            })
+          }
 
-            zonaList(datos)
+        zonaList(datos)
+      })
+      .catch(err => {
+          setState({
+              text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+              res: "danger"
           })
-          .catch(err => {
-              setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
-              })
-          })
-          .finally(setLoading(false))
-      } else {
-          listarByAdmin(placeholder, user.email, signal)
-          .then(datos => {
-              if(!datos || datos.length == 0) {
-                  setSortedListado([])
-                  originalListado.current = [];
-                  return;
-              }
-
-              if(datos.error) {
-                setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
-                })
-              }
-
-            zonaList(datos)
-          }).catch(err => {
-              setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "secondary"
-              })
-          })
-          .finally(setLoading(false))
-      }
+      })
+      .finally(setLoading(false))
 
       return () => controller.abort()
     }, [])
   
     return (
         <li className="list-template">
-            <label htmlFor={nombre} className="text-capitalize">{zona}</label>
+            <label htmlFor={nombre} className="text-capitalize">zonas</label>
              <div className='buscador-field'>
                 <input type="text" onChange={e => {
                     setNombreZona(e.target.value)
@@ -150,29 +145,26 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                         <div className="list-loading"></div>
                     </div>
                   : <>
-                    { tipo != 'radio'
-                      ? <label>
-                          <input type="checkbox" value={'todos'} onChange={handleChangeAll}/>
-                          <span>Seleccionar todos ({sortedListado.length})</span>
-                        </label>
-                      : null
-                    }
-                    <ul>
-                      {sortedListado.map((row, idx) => (
-                            <li key={idx}>
-                            <label>
-                                <input type={tipo} id={row} value={row} onChange={tipo == 'checkbox' ? handleChange : handleChangeRadio}/>
-                                <span className="text-ellipsis">{row}</span>
-                            </label>
-                            </li> 
-                        )
-                      )}
-                    </ul>
-                  </>
+                      <label>
+                        <input type="checkbox" value={'todos'} onChange={handleChangeAll}/>
+                        <span>Seleccionar todos ({sortedListado.length})</span>
+                      </label>
+                      <ul>
+                        {sortedListado.map((row, idx) => (
+                              <li key={idx}>
+                              <label>
+                                  <input type={tipo} id={row.id} value={row.id} onChange={handleChange}/>
+                                  <span className="text-ellipsis">{row-zona}</span>
+                              </label>
+                              </li> 
+                          )
+                        )}
+                      </ul>
+                    </>
                 }
                 </div>
               : null}
-            <input type="hidden" name={"ID_Zonas"} value={JSON.stringify(datos)} required/>
+            <input type="hidden" name={"ID_Zona"} value={JSON.stringify(datos)} required/>
             { state.text ? <Toast texto={state.text} res={state.res} /> : null }
         </li>
     )

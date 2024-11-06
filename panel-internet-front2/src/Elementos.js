@@ -92,12 +92,11 @@ export const ELEMENTOS = {
             mensaje: "",
         },
         {
-            element: 'input',
-            tipo: 'text',
-            nombre: 'zona',
-            placeholder: 'Zona',
-            valor: '',
-            mensaje: "",
+            element: 'list',
+            nombre: 'ID_Zona',
+            placeholder: "zonas",
+            tipo: 'radio',
+            lista: false,
         },
         {
             element: 'input',
@@ -268,6 +267,32 @@ export const ELEMENTOS = {
             element: "user"
         }
     ],
+    cobranzas: [
+        {
+            element: 'list',
+            nombre: 'ID_Cliente',
+            placeholder: 'clientes',
+            tipo: 'radio',
+            lista: false
+        },
+        {
+            element: 'input',
+            tipo: 'number',
+            nombre: 'monto_parcial',
+            placeholder: 'Monto',
+            valor: '',
+            mensaje: "",
+        },
+        {
+            element: "user"
+        },
+        {
+            element: 'input',
+            tipo: 'number',
+            nombre: 'puntos_pago',
+            placeholder: 'Pago con puntos'
+        },    
+    ],
     asociacionesClientes: [
         {
             element: 'list',
@@ -278,10 +303,7 @@ export const ELEMENTOS = {
         },
         {
             element: 'zonas',
-            nombre: 'ID_Cliente',
-            placeholder: "clientes",
             tipo: 'checkbox',
-            lista: false,
         },
         {
             element: 'list',

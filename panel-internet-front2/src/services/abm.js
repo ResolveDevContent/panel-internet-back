@@ -45,6 +45,21 @@ export const listarByZona = (zona, signal) => {
     )
 }
 
+export const listaZonaByAdmin = (zona, email, signal) => {
+    const token = Cookies.get("token");
+    return (
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/clientes/listar/zona/admin/${email}?zona=${zona}`, {
+            signal,
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    )
+}
+
 export const listarByComercio = (model, id, signal) => {
     const token = Cookies.get("token");
     return (

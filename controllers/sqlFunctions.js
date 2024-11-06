@@ -83,6 +83,18 @@ const selectByAdmin = async (tableName, column, values) => {
   }
 }
 
+const selectZonaByAdmin = async (tableName, column, values, zona) => {
+  const query = `SELECT * FROM ${tableName} WHERE ${column} IN (${values.map(row => `${row.ID_Comercio}`).join(", ")}) AND zona = ? AND activo = 1;`;
+
+  try {
+    const [results] = await pool.query(query, [zona]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+}
+
 const selectByAdminPermisos = async (values) => {
   const query = `SELECT DISTINCT clientes.* FROM clientes
             LEFT OUTER JOIN asociaciones on clientes.ID_Cliente = asociaciones.ID_Cliente
@@ -216,6 +228,7 @@ module.exports = {
   selectComercio,
   selectPermisos,
   selectByAdmin,
+  selectZonaByAdmin,
   selectOneRecord,
   selectAsociaciones,
   selectFechaLimite,

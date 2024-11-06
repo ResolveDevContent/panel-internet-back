@@ -63,7 +63,7 @@ function App() {
                 <Route path="historial/listar" element={<Listado user={user} titulo={"historial"}/>} />
                 <Route path="historial/ver/:id" element={<Ver elementos={ELEMENTOS.historial} titulo={"historial"}/>} />
                 <Route path="cambiarcontraseña" element={<ChangePassword titulo={"users"} />} />
-                <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} />} />
+                <Route path="clientes/importarcsv" element={<ImportCsv titulo={"clientes"} user={user} />} />
                 <Route path="clientes/agregar" element={<Form elementos={ELEMENTOS.clientes} user={user} titulo={"clientes"} />} />
                 <Route path="admins/listar" element={<Listado user={user} titulo={"admins"}/>} />
                 <Route path="admins/agregar" element={<Form elementos={ELEMENTOS.admins} user={user} titulo={'admins'}/>} />
@@ -91,6 +91,11 @@ function App() {
                   <Route path="transacciones/editar/:id" element={<Form elementos={ELEMENTOS.transacciones} titulo={'transacciones'}/>} user={user} />
                 </Route>
               ) : null}
+              <Route element={<PrivateRoutes user={user} roles={['admin', 'superadmin', 'cobrador']}/>}>
+                  <Route path="cobranzas/listar" element={<Listado user={user} titulo={"cobranzas"}/>} />
+                  <Route path="cobranzas/agregar" element={<Form elementos={ELEMENTOS.cobranzas} titulo={'cobranzas'} user={user} />}  />
+                  <Route path="cobranzas/editar/:id" element={<Form elementos={ELEMENTOS.cobranzas} titulo={'cobranzas'}/>} user={user} />
+              </Route>
               {!loading ? (
                 <Route element={<PrivateRoutes user={user} roles={['comercio']}/>}>
                   <Route path="transaccionesComercio/listar" element={<Listado user={user} titulo={"transacciones"}/>} />
