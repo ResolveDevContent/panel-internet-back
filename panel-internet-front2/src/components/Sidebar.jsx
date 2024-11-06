@@ -2,7 +2,7 @@ import "../assets/css/sidebar.css";
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LogoutAuth } from "../services/auth";
 import AuthContext from "../context/Auth";
-import { Admin, Coin, HamburgerMenu, History, Location, LogOut, Money, Notepad, Save, Shop, User, Wallet } from "../assets/icons/icons";
+import { Admin, Coin, Dolar, HamburgerMenu, History, Location, LogOut, Money, Notepad, Save, Shop, User, Wallet } from "../assets/icons/icons";
 import { useContext, useState, useEffect } from "react";
 import { Toast } from "./Toast";
 import { PerfilAuth } from "../services/auth";
@@ -244,6 +244,23 @@ export const Sidebar = ({user}) => {
                 </ul>
               </li>
             </>
+          ) : null}
+          {user && (user.role == "admin" || user.role == "superadmin" || user.role == "cobrador") ? (
+              <li>
+                <input type="radio" id="clientes" name="solapa"/>
+                <label htmlFor="clientes">
+                  <Dolar />
+                  <span>Cobranzas</span>
+                </label>
+                <ul>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cobranzas/listar">Listar</NavLink>
+                  </li>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cobranzas/agregar">Agregar</NavLink>
+                  </li>
+                </ul>
+              </li>
           ) : null}
           {user && (user.role == "admin" || user.role == "superadmin") ? (
             <li>
