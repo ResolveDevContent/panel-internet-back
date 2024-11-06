@@ -2,7 +2,7 @@ import "../assets/css/sidebar.css";
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LogoutAuth } from "../services/auth";
 import AuthContext from "../context/Auth";
-import { Admin, Coin, HamburgerMenu, History, LogOut, Money, Notepad, Save, Shop, User, Wallet } from "../assets/icons/icons";
+import { Admin, Coin, HamburgerMenu, History, Location, LogOut, Money, Notepad, Save, Shop, User, Wallet } from "../assets/icons/icons";
 import { useContext, useState, useEffect } from "react";
 import { Toast } from "./Toast";
 import { PerfilAuth } from "../services/auth";
@@ -134,28 +134,45 @@ export const Sidebar = ({user}) => {
             </>
           ) : null}
           {user && (user.role == "admin" || user.role == "superadmin") ? (
-            <li>
-              <input type="radio" id="clientes" name="solapa"/>
-              <label htmlFor="clientes">
-                <User />
-                <span>Clientes</span>
-              </label>
-              <ul>
-                <li>
-                  <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/listar">Listar</NavLink>
-                </li>
-                {user.role == "superadmin" ? (
-                  <>
-                    <li>
-                      <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/importarcsv">Importar CSV</NavLink>
-                    </li>
-                    <li>
-                      <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/agregar">Agregar</NavLink>
-                    </li>
-                  </>
-                ) : null}
-              </ul>
-            </li>
+            <>
+              <li>
+                <input type="radio" id="clientes" name="solapa"/>
+                <label htmlFor="clientes">
+                  <Location />
+                  <span>Zonas</span>
+                </label>
+                <ul>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="zonas/listar">Listar</NavLink>
+                  </li>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="zonas/agregar">Agregar</NavLink>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <input type="radio" id="clientes" name="solapa"/>
+                <label htmlFor="clientes">
+                  <User />
+                  <span>Clientes</span>
+                </label>
+                <ul>
+                  <li>
+                    <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/listar">Listar</NavLink>
+                  </li>
+                  {user.role == "superadmin" ? (
+                    <>
+                      <li>
+                        <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/importarcsv">Importar CSV</NavLink>
+                      </li>
+                      <li>
+                        <NavLink className={({isActive}) => isActive ? 'active' : ''} to="clientes/agregar">Agregar</NavLink>
+                      </li>
+                    </>
+                  ) : null}
+                </ul>
+              </li>
+            </>
           ) : null}
           {user && (user.role == "admin" || user.role == "superadmin") ? (
             <>

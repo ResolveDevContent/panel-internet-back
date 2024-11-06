@@ -124,17 +124,18 @@ const borrarDatos = (e, id, email) => {
                 })
             })    
       } else {
-          borrar(titulo, id).then(result => {
-              if(result.error) {
-                  setState({
-                      text: result.error,
-                      res: "secondary"
-                  })
-                  return;
-              }
-              setState({text: result.message, res: "primary"})
-              location.reload()
-          })
+            borrar(titulo, id).then(result => {
+                if(result.error) {
+                    setState({
+                        text: result.error,
+                        res: "secondary"
+                    })
+                    return;
+                }
+                setState({text: result.message, res: "primary"})
+
+                setTable(prevState => ({...prevState, rows: prevState.rows.filter(row => row.id != id)}));
+            })
       }
   })
 

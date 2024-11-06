@@ -48,6 +48,16 @@ export const ELEMENTOS = {
             element: "user"
         }
     ],
+    zonas: [
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'zona',
+            placeholder: 'Zona',
+            valor: '',
+            mensaje: "",
+        },
+    ],
     clientes: [
         {
             element: 'input',
