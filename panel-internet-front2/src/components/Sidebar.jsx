@@ -136,8 +136,8 @@ export const Sidebar = ({user}) => {
           {user && (user.role == "admin" || user.role == "superadmin") ? (
             <>
               <li>
-                <input type="radio" id="clientes" name="solapa"/>
-                <label htmlFor="clientes">
+                <input type="radio" id="zonas" name="solapa"/>
+                <label htmlFor="zonas">
                   <Location />
                   <span>Zonas</span>
                 </label>
@@ -247,8 +247,8 @@ export const Sidebar = ({user}) => {
           ) : null}
           {user && (user.role == "admin" || user.role == "superadmin" || user.role == "cobrador") ? (
               <li>
-                <input type="radio" id="clientes" name="solapa"/>
-                <label htmlFor="clientes">
+                <input type="radio" id="cobranzas" name="solapa"/>
+                <label htmlFor="cobranzas">
                   <Dolar />
                   <span>Cobranzas</span>
                 </label>
