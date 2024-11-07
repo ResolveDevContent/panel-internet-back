@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { listarFacturas } from "../services/Mikrowisp";
+import { listarFacturas, pagarFacturas } from "../services/Mikrowisp";
 import { Loading } from "./Loading";
+import { listarUno, agregar, listar, listarByAdmin } from '../services/abm'
+import { puntosTotales } from '../services/totales'
+import { Toast } from '../components/Toast'
+import { useNavigate } from 'react-router-dom'
 
-export const Cobranzas = ({user = {}}) => {
+export const Cobranzas = ({placeholder, user = {}}) => {
     const [ ID_Cliente, setID_Cliente ] = useState('');
     const [ clienteId, setClienteId ] = useState('');
     const [ loading, setLoading ] = useState(false);
@@ -14,6 +18,7 @@ export const Cobranzas = ({user = {}}) => {
 
     const totalFacturasRef = useRef(0)
     const originalListado = useRef([])
+    const navigate = useNavigate();
 
     const filteredNombre = useMemo(() => {
         setLoading(true)
