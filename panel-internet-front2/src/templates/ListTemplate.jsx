@@ -107,7 +107,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       }
     }
 
-  
   useEffect(() => {
       setLoading(true)
 

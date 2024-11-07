@@ -18,6 +18,7 @@ import { ChangePassword } from './components/ChangePassword.jsx'
 import { PuntosFecha } from './components/PuntosFecha.jsx'
 import { Backups } from './components/Backups.jsx'
 import { Ver } from './components/Ver.jsx'
+import { Cobranzas } from './components/Cobranzas.jsx'
 
 function App() {
   const [auth, setAuth] = useState(false);
@@ -93,8 +94,7 @@ function App() {
               ) : null}
               <Route element={<PrivateRoutes user={user} roles={['admin', 'superadmin', 'cobrador']}/>}>
                   <Route path="cobranzas/listar" element={<Listado user={user} titulo={"cobranzas"}/>} />
-                  <Route path="cobranzas/agregar" element={<Form elementos={ELEMENTOS.cobranzas} titulo={'cobranzas'} user={user} />}  />
-                  <Route path="cobranzas/editar/:id" element={<Form elementos={ELEMENTOS.cobranzas} titulo={'cobranzas'}/>} user={user} />
+                  <Route path="cobranzas/agregar" element={<Cobranzas />} user={user} />
               </Route>
               {!loading ? (
                 <Route element={<PrivateRoutes user={user} roles={['comercio']}/>}>

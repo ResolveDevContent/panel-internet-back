@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { listarFacturas } from "../services/Mikrowisp";
 import { Loading } from "./Loading";
 
-export const Cobranzas = () => {
+export const Cobranzas = ({user = {}}) => {
     const [ ID_Cliente, setID_Cliente ] = useState('');
     const [ clienteId, setClienteId ] = useState('');
     const [ loading, setLoading ] = useState(false);
@@ -10,8 +10,22 @@ export const Cobranzas = () => {
     const [ state, setState ] = useState({text: '', res: ''});
     const [ clienteObj, setClienteObj ] = useState(null);
     const [ totalFacturas, setTotalFacturas ] = useState(0);
+    const [ sortedListado, setSortedListado ] = useState([]);
 
     const totalFacturasRef = useRef(0)
+    const originalListado = useRef([])
+
+    const filteredNombre = useMemo(() => {
+        setLoading(true)
+        const newArr = nombreCliente != null && nombreCliente.length > 0
+            ? originalListado.current.filter(row => {
+                return row.nombre.toLowerCase().includes(nombreCliente.toLowerCase())
+            })
+            : originalListado.current
+
+        setLoading(false)
+        setSortedListado(newArr)
+    }, [nombreCliente])
 
     const handleChange = e => {
         const values = e.target.value.split('-');
@@ -102,6 +116,71 @@ export const Cobranzas = () => {
             }, 6000)
         }
     }
+
+  useEffect(() => {
+      setLoading(true)
+
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      setSortedListado([])
+      originalListado.current = [];
+
+      if(user && user.role == "superadmin") {
+          listar(placeholder, signal)
+          .then(datos => {
+              if(!datos || datos.length == 0) {
+                  setSortedListado([])
+                  originalListado.current = [];
+                  return;
+              }
+
+              if(datos.error) {
+                setState({
+                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                  res: "danger"
+                })
+              }
+
+              setSortedListado(datos)
+              originalListado.current = datos;
+          })
+          .catch(err => {
+              setState({
+                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                  res: "danger"
+              })
+          })
+          .finally(setLoading(false))
+      } else {
+          listarByAdmin(placeholder, user.email, signal)
+          .then(datos => {
+              if(!datos || datos.length == 0) {
+                  setSortedListado([])
+                  originalListado.current = [];
+                  return;
+              }
+
+              if(datos.error) {
+                setState({
+                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                  res: "danger"
+                })
+              }
+
+                setSortedListado(datos)
+                originalListado.current = datos;
+          }).catch(err => {
+              setState({
+                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                  res: "secondary"
+              })
+          })
+          .finally(setLoading(false))
+      }
+
+      return () => controller.abort()
+  }, [])
 
   useEffect(() => {
     if(ID_Cliente != '') {
