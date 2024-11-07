@@ -27,7 +27,7 @@ export const Listado = ({titulo, user = {}}) => {
 
     const filteredNombre = useMemo(() => {
         let newArr = [];
-        if(titulo != "asociaciones" && titulo != "transacciones" && titulo != "historial" && titulo != "comercios" && titulo != "comercios/pagos" && titulo != "admins" && titulo != "historial/transacciones") {
+        if(titulo == "clientes") {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
                     return row.nombre.toLowerCase().includes(nombre.toLowerCase())
@@ -429,7 +429,7 @@ export const Listado = ({titulo, user = {}}) => {
                             ? <div className='buscador w-100'>
                                     <em>B&uacute;squeda</em>
                                     <div>
-                                        {titulo == "clientes" || titulo == "asociaciones" || titulo == "transacciones" 
+                                        {titulo == "clientes" || titulo == "asociaciones" || titulo == "transacciones" || titulo == 'cobranzas'
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setNombre(e.target.value)
@@ -439,7 +439,7 @@ export const Listado = ({titulo, user = {}}) => {
                                                 </span>
                                             </div>
                                         : null}
-                                        {titulo != "clientes" && titulo != "historial" && titulo != "historial/transacciones"
+                                        {titulo != "clientes" && titulo != "historial" && titulo != "historial/transacciones" && titulo != "cobranzas"
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setnombreComercio(e.target.value)
@@ -462,7 +462,8 @@ export const Listado = ({titulo, user = {}}) => {
                                     </div>
                                 </div>
                             : null}
-                            {titulo == "transacciones" || titulo == 'comercios/pagos' || titulo == "historial" || titulo == "historial/transacciones"
+                            {titulo == "transacciones" || titulo == 'comercios/pagos' || titulo == "historial" || 
+                            titulo == "historial/transacciones" || titulo == 'cobranzas'
                                 ? <div className='fechas'>
                                         <em>B&uacute;squeda por fecha</em>
                                         <div>

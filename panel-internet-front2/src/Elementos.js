@@ -267,32 +267,6 @@ export const ELEMENTOS = {
             element: "user"
         }
     ],
-    cobranzas: [
-        {
-            element: 'list',
-            nombre: 'ID_Cliente',
-            placeholder: 'clientes',
-            tipo: 'radio',
-            lista: false
-        },
-        {
-            element: 'input',
-            tipo: 'number',
-            nombre: 'monto_parcial',
-            placeholder: 'Monto',
-            valor: '',
-            mensaje: "",
-        },
-        {
-            element: "user"
-        },
-        {
-            element: 'input',
-            tipo: 'number',
-            nombre: 'puntos_pago',
-            placeholder: 'Pago con puntos'
-        },    
-    ],
     asociacionesClientes: [
         {
             element: 'list',
