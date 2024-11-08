@@ -92,7 +92,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
 
             <form className="card mt-3" onSubmit={handlesubmit}>
                 <ul>
-                    {/* <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} /> */}
+                    <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} />
                 </ul>
                 <div className="custom-file">
                     <label className="custom-file-label d-flex align-center" htmlFor="input-file">
