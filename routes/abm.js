@@ -375,6 +375,8 @@ router.get("/zonas/listar", async (req,res) => {
 
 // Endpoint para agregar zonas
 router.post("/zonas/agregar", authenticate, async (req, res) => {
+    const user = req.body.user;
+    
     try {
         await insertRecord("zonas", req.body);
 
