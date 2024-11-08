@@ -378,17 +378,19 @@ router.post("/zonas/agregar", authenticate, async (req, res) => {
     const user = req.body.user;
     delete req.body.user;
     
+    const date = new Date().toLocaleString()
     try {
         await insertRecord("zonas", req.body);
 
-        let nombre_user = {};
+        let nombre_user = '';
+        let nombre_superadmin = '';
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
         } else {
-            nombre_user.nombre = user.email
+            nombre_superadmin = user.email
         }
         
-        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user.nombre + " agrego una zona", fecha: new Date(date).getTime()});
+        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user != "" ? nombre_user.nombre : nombre_superadmin + " agrego una zona", fecha: new Date(date).getTime()});
         return res.status(201).json({ message: "La zona se ha agregado correctamente." });
     } catch (err) {
       return res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
