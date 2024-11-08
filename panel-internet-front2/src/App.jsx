@@ -94,7 +94,7 @@ function App() {
               ) : null}
               <Route element={<PrivateRoutes user={user} roles={['admin', 'superadmin', 'cobrador']}/>}>
                   <Route path="cobranzas/listar" element={<Listado user={user} titulo={"cobranzas"}/>} />
-                  <Route path="cobranzas/agregar" element={<Cobranzas />} user={user} />
+                  <Route path="cobranzas/agregar" element={<Cobranzas user={user}/>} user={user} />
               </Route>
               {!loading ? (
                 <Route element={<PrivateRoutes user={user} roles={['comercio']}/>}>

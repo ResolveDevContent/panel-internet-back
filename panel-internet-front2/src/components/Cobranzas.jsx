@@ -6,14 +6,14 @@ import { puntosTotales } from '../services/totales'
 import { Toast } from '../components/Toast'
 import { useNavigate } from 'react-router-dom'
 
-export const Cobranzas = ({placeholder, user = {}}) => {
+export const Cobranzas = ({user = {}}) => {
     const [ ID_Cliente, setID_Cliente ] = useState('');
     const [ clienteId, setClienteId ] = useState('');
     const [ loading, setLoading ] = useState(false);
-    const [ facturasList, setFacturasList ] = useState(null);
+    const [ facturasList, setFacturasList ] = useState({total: 0, arr: []});
     const [ state, setState ] = useState({text: '', res: ''});
     const [ clienteObj, setClienteObj ] = useState(null);
-    const [ totalFacturas, setTotalFacturas ] = useState(0);
+    const [ totalFacturas, setTotalFacturas ] = useState(null);
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ nombreCliente, setNombreCliente ] = useState('')
 
@@ -39,10 +39,25 @@ export const Cobranzas = ({placeholder, user = {}}) => {
         setClienteId(values[1])
     }
 
-    const buscarCliente = (id) => {
-        if(!id) {
-            return;
+    const handleFacturas = e => {
+        let newArr = [];
+        const values = e.target.value.split('-');
+        if(e.target.checked) {
+            newArr = [
+                ...totalFacturas.arr,
+                values[0]
+            ];
+            setTotalFacturas(prevState => ({total: prevState + Number(values[1]), arr: newArr}))
+            totalFacturasRef.current += Number(values[1]);
+        } else {
+            newArr = totalFacturas.arr.filter(row => row != values[0])
+            setTotalFacturas(prevState => ({total: prevState - Number(values[1]), arr: newArr}))
+            totalFacturasRef.current -= Number(values[1]);
         }
+    } 
+
+    const buscarCliente = id => {
+        if(!id) return;
 
         listarUno("clientes", id)
         .then(datos => {
@@ -67,7 +82,7 @@ export const Cobranzas = ({placeholder, user = {}}) => {
         })
     }
 
-    const handlesubmit = evt => {
+    const handlesubmit = async evt => {
         evt.preventDefault()
 
         const form = evt.target
@@ -78,19 +93,25 @@ export const Cobranzas = ({placeholder, user = {}}) => {
             dataObj[name] = value
         }
 
-        if(dataObj.puntos_pago == 0 || dataObj.puntos_pago <= clienteObj.puntos) {
+        if(totalFacturas.arr > 0 && (dataObj.monto_total > 0 || dataObj.puntos_pago == dataObj.monto_total) &&
+            (dataObj.puntos_pago == 0 || dataObj.puntos_pago <= clienteObj.puntos)) {
             setLoading(true)
 
-            let cantidadTotal = dataObj.monto_total + dataObj.puntos_pago;
-            pagarFacturas('token', {idfactura: 'id', pasarela: 'efectivo', cantidad: cantidadTotal})
-            .then(data => {
-                if(data.error) {
-                    setState({text: data.error, res: "secondary"})
-                    return
-                }
+            const fetchPromises = totalFacturas.arr.map(async row => {
+                pagarFacturas('token', {idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
+                .then(data => {
+                    if(data.error) {
+                        return null
+                    }
 
-                setState({text: "Factura pagada con éxito", res: "primary"})
+                    return true
+                })
+                .catch(() => null)
+            });
 
+            const results = await Promise.all(fetchPromises);
+
+            if(results.every(res => res === true)) {
                 agregar('cobranzas', dataObj)
                 .then(data => {
                     if(data.error) {
@@ -103,24 +124,29 @@ export const Cobranzas = ({placeholder, user = {}}) => {
                     navigate(`/cobranzas/listar`)
                 })
                 .catch(err => {
-                  setState({
-                      text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
-                      res: "secondary"
-                  })
+                    setState({
+                        text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
+                        res: "secondary"
+                    })
                 })
+                .finally(() => setLoading(false))
+            } else {
+                setState({
+                    text: "Ha ocurrido un error con en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
+                    res: "secondary"
+                })
+                setLoading(false)
+            }
+        } else {
+            setState({
+                text: "Verifique que todos los campos ingresados sean correctos",
+                res: "secondary"
             })
-            .catch(err => {
-              setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
-                  res: "secondary"
-              })
-            })
-            .finally(() => setLoading(false))
-
-            setTimeout(() => {
-                setState({text: "", res: ""})
-            }, 6000)
         }
+
+        setTimeout(() => {
+            setState({text: "", res: ""})
+        }, 6000)
     }
 
   useEffect(() => {
@@ -133,7 +159,7 @@ export const Cobranzas = ({placeholder, user = {}}) => {
       originalListado.current = [];
 
       if(user && user.role == "superadmin") {
-          listar(placeholder, signal)
+          listar('clientes', signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
                   setSortedListado([])
@@ -159,7 +185,7 @@ export const Cobranzas = ({placeholder, user = {}}) => {
           })
           .finally(setLoading(false))
       } else {
-          listarByAdmin(placeholder, user.email, signal)
+          listarByAdmin('clientes', user.email, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
                   setSortedListado([])
@@ -200,18 +226,12 @@ export const Cobranzas = ({placeholder, user = {}}) => {
 
       listarFacturas('token', {idcliente: clienteId})
       .then(facturas => {
-          console.log(facturas)
-          if(facturas.length > 0) {
-            let total = 0;
-            facturas.forEach(row => {
-              if(row.estado != 'pagadas') {
-                total += row.total
-              }
-            })
-            setTotalFacturas(total);
-            totalFacturasRef.current = total;
-            setFacturasList(facturas);
-          }
+            console.log(facturas)
+            if(facturas.length > 0) {
+                const newArr = facturas.filter(row => row.estado != 'pagadas')
+                totalFacturasRef.current = total;
+                setFacturasList(newArr);
+            }
       })
       .catch(err => {
           setState({
@@ -270,25 +290,32 @@ export const Cobranzas = ({placeholder, user = {}}) => {
                   </li>
                   <li className="list-template">
                       <label className="text-capitalize">Facturas</label>
-                      <ul>      
-                          {facturasList.length > 0 ? 
-                              facturasList.map((row, idx) => (
-                                <li key={idx}>
-                                  <span>{row.total} - {row.estado}</span>
-                                  <span>Emitido: {row.emitido} - vencimiento: {row.vencimiento}</span>
-                                </li>
-                              ))
-                          : null}
-                      </ul>
+                        {facturasList.length > 0 ? 
+                            <div className="dropdown-list">
+                                <ul>      
+                                    {facturasList.map((row, idx) => (
+                                        <li key={idx}>
+                                            <label>
+                                                <input type="checkbox" id={row.idfactura} name={row.idfactura} value={row.idfactura} onChange={handleFacturas}/>
+                                                <div className="d-flex flex-column ">
+                                                    <span>{row.total} - {row.estado}</span>
+                                                    <span>Emitido: {row.emitido} - vencimiento: {row.vencimiento}</span>
+                                                </div>
+                                            </label>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        : null}
                   </li>
                   <li className="list-template">
                       <label htmlFor="clientes" className="text-capitalize">Utilizar puntos</label>
-                      <input type='number' min="0" step="0.01" className="form-control" id='puntos_pago' name='puntos_pago' defaultValue="0" onInput={e => setTotalFacturas(totalFacturasRef.current - e.target.value)}/>
+                      <input type='number' min="0" step="0.01" className="form-control" id='puntos_pago' name='puntos_pago' defaultValue="0" onInput={e => setTotalFacturas(prevState => ({...prevState, total: totalFacturasRef.current - e.target.value}))}/>
                   </li>
                   <li className="list-template">
                       <label htmlFor="clientes" className="text-capitalize">Monto a pagar</label>
-                      <span>Total a pagar: ${totalFacturas}</span>
-                      <input type='number' min="0" step="0.01" className="form-control" id='monto_total' name='monto_total' required/>
+                      <span>Total a pagar: ${totalFacturas.total}</span>
+                      <input type='hidden' id='monto_total' name='monto_total' value={totalFacturas.total}/>
                   </li>
                   <li className="mt-4 p-2 text-end">
                       <button className="btn btn-success">Confirmar</button>
