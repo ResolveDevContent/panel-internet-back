@@ -373,10 +373,10 @@ router.get("/zonas/listar", async (req,res) => {
     }
 });
 
-// Endpoint para agregar pagos
+// Endpoint para agregar zonas
 router.post("/zonas/agregar", authenticate, async (req, res) => {
     try {
-        await insertRecord("pagos", body);
+        await insertRecord("zonas", body);
 
         let nombre_user = '';
         if(user.role == 'admin') {
