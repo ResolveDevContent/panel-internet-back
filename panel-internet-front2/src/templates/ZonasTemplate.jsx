@@ -11,8 +11,6 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
 
     const originalListado = useRef([])
 
-    const { tipo } = data;
-
     const filteredZona = useMemo(() => {
         setLoading(true)
         const newArr = nombreZona != null && nombreZona.length > 0
@@ -59,7 +57,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                 setDatos(newArr)
             })
         } else {
-            listarByAdmin('clientes', user.email, signal)
+            listarByAdmin('clientes', user.email)
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     setState({
@@ -117,7 +115,8 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
             })
           }
 
-        zonaList(datos)
+        setSortedListado(datos)
+        originalListado.current = datos;
       })
       .catch(err => {
           setState({
@@ -152,10 +151,10 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                       <ul>
                         {sortedListado.map((row, idx) => (
                               <li key={idx}>
-                              <label>
-                                  <input type={tipo} id={row.id} value={row.id} onChange={handleChange}/>
-                                  <span className="text-ellipsis">{row-zona}</span>
-                              </label>
+                                <label>
+                                    <input type="checkbox" id={row.id} value={row.id} onChange={handleChange}/>
+                                    <span className="text-ellipsis">{row.zona}</span>
+                                </label>
                               </li> 
                           )
                         )}

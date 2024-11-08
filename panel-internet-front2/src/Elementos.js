@@ -280,7 +280,6 @@ export const ELEMENTOS = {
         },
         {
             element: 'zonas',
-            tipo: 'checkbox',
         },
         {
             element: 'list',
