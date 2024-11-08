@@ -15,6 +15,7 @@ export const Cobranzas = ({placeholder, user = {}}) => {
     const [ clienteObj, setClienteObj ] = useState(null);
     const [ totalFacturas, setTotalFacturas ] = useState(0);
     const [ sortedListado, setSortedListado ] = useState([]);
+    const [ nombreCliente, setNombreCliente ] = useState('')
 
     const totalFacturasRef = useRef(0)
     const originalListado = useRef([])
