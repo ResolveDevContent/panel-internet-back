@@ -91,7 +91,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
             <strong className="p-3 text-capitalize">{titulo} - {"Agregar"}</strong>
 
             <form className="card mt-3" onSubmit={handlesubmit}>
-                <ul>
+                <ul className="card-body">
                     <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} values={{}} />
                 </ul>
                 <div className="custom-file">
