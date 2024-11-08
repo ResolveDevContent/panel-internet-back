@@ -57,6 +57,9 @@ export const ELEMENTOS = {
             valor: '',
             mensaje: "",
         },
+        {
+            element: "user"
+        }
     ],
     clientes: [
         {
