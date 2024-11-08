@@ -438,7 +438,7 @@ router.get("/clientes/listar/zona/:zona", authenticate, async (req, res) => {
   
       // Verificar si se encontró el cliente
       if (result.length === 0) {
-        return res.status(404).json({ error: "Cliente no encontrado." });
+        return res.status(404).json({ error: "No hay clientes asociados a esa zona." });
       }
   
       res.send(result);

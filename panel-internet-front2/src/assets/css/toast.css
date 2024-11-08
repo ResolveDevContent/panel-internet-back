@@ -12,6 +12,7 @@
   margin: 0 1em 2em 0;
   padding: 1em;
   border-radius: .5em;
+  z-index: 10;
 }
 .toast .toast-body {
   font-weight: 600;

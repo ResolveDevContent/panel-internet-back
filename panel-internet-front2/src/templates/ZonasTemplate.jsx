@@ -34,6 +34,9 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
 
         if(!clientesZona || clientesZona.error) {
           setState({text: clientesZona.error, res: "secondary"})
+          setTimeout(() => {
+            setState({text: "", res: ""})
+          }, 5000)
           return;
         }
 
