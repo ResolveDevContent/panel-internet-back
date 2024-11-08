@@ -132,7 +132,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
   
     return (
         <li className="list-template">
-            <label htmlFor={nombre} className="text-capitalize">zonas</label>
+            <label htmlFor={"zonas"} className="text-capitalize">zonas</label>
              <div className='buscador-field'>
                 <input type="text" onChange={e => {
                     setNombreZona(e.target.value)
