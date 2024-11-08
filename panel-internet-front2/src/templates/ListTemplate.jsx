@@ -123,14 +123,14 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
   useEffect(() => {
       setLoading(true)
 
-      // const controller = new AbortController();
-      // const signal = controller.signal;
+      const controller = new AbortController();
+      const signal = controller.signal;
 
       setSortedListado([])
       originalListado.current = [];
 
       if(user && user.role == "superadmin") {
-          listar(placeholder)
+          listar(placeholder, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
                   setSortedListado([])
@@ -212,7 +212,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           .finally(setLoading(false))
       }
 
-      // return () => controller.abort()
+      return () => controller.abort()
     }, [values])
   
     return (

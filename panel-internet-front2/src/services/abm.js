@@ -1,9 +1,10 @@
 import Cookies from 'js-cookie'
 
-export const listar = (model) => {
+export const listar = (model, signal) => {
     const token = Cookies.get("token");
     return (
         fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar`, {
+            signal,
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
