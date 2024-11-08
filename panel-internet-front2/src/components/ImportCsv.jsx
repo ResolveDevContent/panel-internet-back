@@ -24,7 +24,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
     const handlesubmit = (e) => {
         e.preventDefault();
 
-        const form = evt.target
+        const form = e.target
         const formData = new FormData(form)
         for(let [name, value] of formData) {
             if(name == "ID_Zona") {
