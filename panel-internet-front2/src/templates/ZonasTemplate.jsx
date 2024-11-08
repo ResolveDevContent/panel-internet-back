@@ -32,15 +32,20 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
             clientesZona = await listaZonaByAdmin(e.target.value, user.email);
         }
 
-        if(e.target.checked) {
-            if(clientesZona && clientesZona.length > 0) {
-                const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
+        if(!clientesZona || clientesZona.error) {
+          setState({text: clientesZona.error, res: "secondary"})
+          return;
+        }
 
-                newArr = [
-                    ...datos,
-                    ...clientesId
-                ]
-            }
+        if(e.target.checked) {
+          if(clientesZona && clientesZona.length > 0) {
+              const clientesId = clientesZona.map((cliente => cliente.ID_Cliente))
+
+              newArr = [
+                  ...datos,
+                  ...clientesId
+              ]
+          }
         } else {
             newArr = datos.filter(item => !clientesZona.map(x => x.ID_Cliente).includes(item));
         }
