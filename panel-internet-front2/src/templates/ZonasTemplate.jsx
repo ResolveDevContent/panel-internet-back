@@ -152,7 +152,7 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
                         {sortedListado.map((row, idx) => (
                               <li key={idx}>
                                 <label>
-                                    <input type="checkbox" id={row.id} value={row.id} onChange={handleChange}/>
+                                    <input type="checkbox" id={row.ID_Zona} value={row.ID_Zona} onChange={handleChange}/>
                                     <span className="text-ellipsis">{row.zona}</span>
                                 </label>
                               </li> 
