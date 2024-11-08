@@ -376,7 +376,7 @@ router.get("/zonas/listar", async (req,res) => {
 // Endpoint para agregar zonas
 router.post("/zonas/agregar", authenticate, async (req, res) => {
     try {
-        await insertRecord("zonas", body);
+        await insertRecord("zonas", req.body);
 
         let nombre_user = '';
         if(user.role == 'admin') {
