@@ -294,10 +294,10 @@ export const Cobranzas = ({user = {}}) => {
                   </li>
                   <li className="list-template">
                       <label className="text-capitalize">Facturas</label>
-                        {facturasList.length > 0 ? 
+                        {facturasList.arr.length > 0 ? 
                             <div className="dropdown-list">
                                 <ul>      
-                                    {facturasList.map((row, idx) => (
+                                    {facturasList.arr.map((row, idx) => (
                                         <li key={idx}>
                                             <label>
                                                 <input type="checkbox" id={row.idfactura} name={row.idfactura} value={row.idfactura + '-' + row.total} onChange={handleFacturas}/>
