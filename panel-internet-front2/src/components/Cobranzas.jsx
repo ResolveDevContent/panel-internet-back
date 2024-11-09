@@ -164,21 +164,22 @@ export const Cobranzas = ({user = {}}) => {
       if(user && user.role == "superadmin") {
           listar('clientes', signal)
           .then(datos => {
-              if(!datos || datos.length == 0) {
-                  setSortedListado([])
-                  originalListado.current = [];
-                  return;
-              }
+                console.log(datos)
+                if(!datos || datos.length == 0) {
+                    setSortedListado([])
+                    originalListado.current = [];
+                    return;
+                }
 
-              if(datos.error) {
-                setState({
-                  text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
-                })
-              }
+                if(datos.error) {
+                    setState({
+                    text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                    res: "danger"
+                    })
+                }
 
-              setSortedListado(datos)
-              originalListado.current = datos;
+                setSortedListado(datos)
+                originalListado.current = datos;
           })
           .catch(err => {
               setState({

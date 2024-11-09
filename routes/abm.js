@@ -390,6 +390,8 @@ router.post("/zonas/agregar", authenticate, async (req, res) => {
             nombre_superadmin = user.email
         }
         
+        console.log("message", user.role, nombre_user, nombre_superadmin)
+
         await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user != "" ? nombre_user.nombre : nombre_superadmin + " agrego una zona", fecha: new Date(date).getTime()});
         return res.status(201).json({ message: "La zona se ha agregado correctamente." });
     } catch (err) {

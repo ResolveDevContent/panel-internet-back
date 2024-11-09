@@ -54,7 +54,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
                 result.push(obj);
             }
 
-            const filteredData = filterKeys(result, 'Id', 'Codigo', 'Nombre', 'Apellido', 'Direccion Principal', 'Email', 'zona');
+            const filteredData = filterKeys(result, 'Id', 'Codigo', 'dni', 'nombre', 'apellido', 'direccion_principal', 'email', 'zona');
             importarCSV(titulo, filteredData)
             .then(data => {
                 if(data.error) {
@@ -72,7 +72,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
         reader.readAsText(input);
     };
 
-    function filterKeys(array, key1, key2, key3, key4, key5, key6, key7) {
+    function filterKeys(array, key1, key2, key3, key4, key5, key6, key7, key8) {
         return array.map(item => {
             return {
                 [key1]: item[key1],
@@ -80,15 +80,30 @@ export const ImportCsv = ({titulo, user = {}}) => {
                 [key3]: item[key3],
                 [key4]: item[key4],
                 [key5]: item[key5],
-                [key5]: item[key6],
-                [key5]: item[key7]
+                [key6]: item[key6],
+                [key7]: item[key7],
+                [key8]: item[key8]
             };
         });
     }
+
+    const handleDownload = () => {
+        const link = document.createElement("a");
+        link.href = "../assets/files/plantilla.csv";
+        link.target = "_blank";
+        link.download = "plantilla.csv";
+
+        link.click();
+    };
     
     return (
         <article id="form" className="mt-3 agregar-cliente">
             <strong className="p-3 text-capitalize">{titulo} - {"Agregar"}</strong>
+
+            <div>
+                <p>Descarga la plantilla CSV para poder agregar los clientes correctamente</p>
+                <button onClick={handleDownload} className="btn btn-success">Descargar</button>
+            </div>
 
             <form className="card mt-3" onSubmit={handlesubmit}>
                 <ul className="card-body">
