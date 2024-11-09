@@ -45,12 +45,15 @@ export const Cobranzas = ({user = {}}) => {
         if(e.target.checked) {
             newArr = [
                 ...totalFacturas.arr,
-                values[0]
+                {
+                    id: values[0],
+                    total: values[1]
+                }
             ];
             setTotalFacturas(prevState => ({total: prevState + Number(values[1]), arr: newArr}))
             totalFacturasRef.current += Number(values[1]);
         } else {
-            newArr = totalFacturas.arr.filter(row => row != values[0])
+            newArr = totalFacturas.arr.filter(row => row.id != values[0])
             setTotalFacturas(prevState => ({total: prevState - Number(values[1]), arr: newArr}))
             totalFacturasRef.current -= Number(values[1]);
         }
@@ -296,7 +299,7 @@ export const Cobranzas = ({user = {}}) => {
                                     {facturasList.map((row, idx) => (
                                         <li key={idx}>
                                             <label>
-                                                <input type="checkbox" id={row.idfactura} name={row.idfactura} value={row.idfactura} onChange={handleFacturas}/>
+                                                <input type="checkbox" id={row.idfactura} name={row.idfactura} value={row.idfactura + '-' + row.total} onChange={handleFacturas}/>
                                                 <div className="d-flex flex-column ">
                                                     <span>{row.total} - {row.estado}</span>
                                                     <span>Emitido: {row.emitido} - vencimiento: {row.vencimiento}</span>
