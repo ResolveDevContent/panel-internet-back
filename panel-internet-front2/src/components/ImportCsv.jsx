@@ -182,7 +182,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
                                 {sortedListado.map((row, idx) => (
                                     <li key={idx}>
                                         <label>
-                                            <input type="radio" id={row.ID_Zona} name={row.ID_Zona} onChange={handleChangeRadio}/>
+                                            <input type="radio" id={row.ID_Zona} name={row.ID_Zona}/>
                                             <span className="text-ellipsis">{row.zona}</span>
                                         </label>
                                     </li>
