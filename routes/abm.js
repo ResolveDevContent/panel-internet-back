@@ -519,14 +519,11 @@ router.get("/clientes/puntos/:id", authenticate, async (req, res) => {
 
 // Importar clientes desde CSV
 router.post("/clientes/importarcsv", authenticate, async (req, res) => {
-    console.log(req.body)
     const user = req.body.user;
-    const id_zona = req.body.ID_Zona;
-    delete req.body.ID_Zona;
     delete req.body.user;
 
     try {
-        const result = await agregarClientes(req.body, id_zona);
+        const result = await agregarClientes(req.body);
         if (result.every(r => r !== null)) {
             const date = new Date().toLocaleString()
             let nombre_user = '';
@@ -623,9 +620,8 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
     }
 });
 
-async function agregarClientes(datos, id_zona) {
+async function agregarClientes(datos) {
     // Crear un array de promesas para inserciones y actualizaciones
-    console.log(id_zona)
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
             // Preparar el objeto cliente con valores predeterminados
@@ -638,7 +634,7 @@ async function agregarClientes(datos, id_zona) {
                 direccion_principal: row.direccion_principal || "",
                 email: row.email || "",
                 activo: 1,
-                zona: id_zona
+                zona: row.zona
             };
 
             try {
