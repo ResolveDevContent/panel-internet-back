@@ -1,10 +1,13 @@
-import { useState } from "react"
+import { useState, useRef, useMemo, useEffect } from "react"
 import { importarCSV } from "../services/abm"
 import { useNavigate } from "react-router-dom"
 import { ListTemplate } from "../templates/ListTemplate"
+import { listar } from "../services/abm"
 
 export const ImportCsv = ({titulo, user = {}}) => {
     const [ fileName, setFileName ] = useState("")
+    const [ nombreZona, setNombreZona ] = useState("")
+    const [ sortedListado, setSortedListado ] = useState([]);
     const [ csvFile, setCsvFile ] = useState()
     const [ idZona, setIdZona ] = useState()
     const [ state, setState ] = useState({
@@ -13,6 +16,20 @@ export const ImportCsv = ({titulo, user = {}}) => {
     })
     const [ loading, setLoading ] = useState(false)
     const navigate = useNavigate()
+
+    const originalListado = useRef([])
+
+    const filteredZona = useMemo(() => {
+        setLoading(true)
+        const newArr = nombreZona != null && nombreZona.length > 0
+        ? originalListado.current.filter(row => {
+            return row.zona.toLowerCase().includes(nombreZona.toLowerCase())
+        })
+        : originalListado.current
+  
+        setLoading(false)
+        setSortedListado(newArr)
+    }, [nombreZona])
 
     const change = (e) => {
         setCsvFile(e.target.files[0])
@@ -95,6 +112,45 @@ export const ImportCsv = ({titulo, user = {}}) => {
 
         link.click();
     };
+
+    useEffect(() => {
+        setLoading(true)
+  
+        const controller = new AbortController();
+        const signal = controller.signal;
+  
+        setSortedListado([])
+        originalListado.current = [];
+  
+        listar("zonas", signal)
+        .then(datos => {
+            if(!datos || datos.length == 0) {
+                setSortedListado([])
+                originalListado.current = [];
+                return;
+            }
+
+            if(datos.error) {
+                setState({
+                text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                res: "danger"
+                })
+            }
+
+            setSortedListado(datos)
+            originalListado.current = datos;
+
+        })
+        .catch(err => {
+            setState({
+                text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                res: "danger"
+            })
+        })
+        .finally(setLoading(false))
+  
+        return () => controller.abort()
+    }, [values])
     
     return (
         <article id="form" className="mt-3 agregar-cliente">
@@ -107,7 +163,37 @@ export const ImportCsv = ({titulo, user = {}}) => {
 
             <form className="card mt-3" onSubmit={handlesubmit}>
                 <ul className="card-body">
-                    <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} values={{}} />
+                    {/* <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} values={{}} /> */}
+                    <li className="list-template">
+                        <label htmlFor="zona" className="text-capitalize">Zonas</label>
+                        <div className='buscador-field'>
+                            <input type="text" onChange={e => {
+                                setNombreZona(e.target.value)
+                            }} placeholder='Nombre zona...' />
+                        </div>
+                        {sortedListado.length > 0 
+                        ? <div className="dropdown-list">
+                            {loading 
+                            ? <div className="list-loading-container">
+                                    <div className="list-loading"></div>
+                                </div>
+                            : <>
+                                <ul>
+                                {sortedListado.map((row, idx) => (
+                                    <li key={idx}>
+                                        <label>
+                                            <input type="radio" id={row.ID_Zona} name={row.ID_Zona} onChange={handleChangeRadio}/>
+                                            <span className="text-ellipsis">{row.zona}</span>
+                                        </label>
+                                    </li>
+                                    )
+                                )}
+                                </ul>
+                            </>
+                            }
+                            </div>
+                        : null}
+                    </li>
                 </ul>
                 <div className="custom-file">
                     <label className="custom-file-label d-flex align-center" htmlFor="input-file">
