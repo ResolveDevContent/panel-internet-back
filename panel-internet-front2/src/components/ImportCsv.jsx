@@ -41,12 +41,14 @@ export const ImportCsv = ({titulo, user = {}}) => {
     const handlesubmit = (e) => {
         e.preventDefault();
 
+        let zona = "";
+
         const form = e.target
         const formData = new FormData(form)
         for(let [name, value] of formData) {
             console.log(name, value)
             if(name == "ID_Zona") {
-                setIdZona(value)
+                zona = value
             }
         }
 
@@ -68,11 +70,11 @@ export const ImportCsv = ({titulo, user = {}}) => {
                     }
                 }
 
-                obj.zona = idZona;
+                obj.zona = zona;
                 result.push(obj);
             }
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'dni', 'nombre', 'apellido', 'direccion_principal', 'email', 'zona');
-            console.log(result, filteredData, idZona)
+            console.log(result, filteredData, zona)
             // importarCSV(titulo, filteredData)
             // .then(data => {
             //     if(data.error) {
