@@ -44,6 +44,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
         const form = e.target
         const formData = new FormData(form)
         for(let [name, value] of formData) {
+            console.log(name, value)
             if(name == "ID_Zona") {
                 setIdZona(value)
             }
@@ -182,7 +183,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
                                 {sortedListado.map((row, idx) => (
                                     <li key={idx}>
                                         <label>
-                                            <input type="radio" id={row.ID_Zona} name="ID_Zona"/>
+                                            <input type="radio" id={row.ID_Zona} name="ID_Zona" value={row.ID_Zona}/>
                                             <span className="text-ellipsis">{row.zona}</span>
                                         </label>
                                     </li>
