@@ -624,6 +624,7 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
 
 async function agregarClientes(datos, id_zona) {
     // Crear un array de promesas para inserciones y actualizaciones
+    console.log(id_zona)
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
             // Preparar el objeto cliente con valores predeterminados
@@ -633,7 +634,8 @@ async function agregarClientes(datos, id_zona) {
                 nombre: row.nombre || "",
                 apellido: row.apellido || "",
                 dni: row.dni || "",
-                direccion_principal: row["Direccion Principal"] || "",
+                direccion_principal: row.direccion_principal || "",
+                email: row.email || "",
                 activo: 1,
                 zona: id_zona
             };
