@@ -318,8 +318,8 @@ export const Cobranzas = ({user = {}}) => {
                   </li>
                   <li className="list-template">
                       <label htmlFor="clientes" className="text-capitalize">Monto a pagar</label>
-                      <span>Total a pagar: ${totalFacturas.total}</span>
-                      <input type='hidden' id='monto_total' name='monto_total' value={totalFacturas.total}/>
+                      <span>Total a pagar: ${totalFacturas?.total}</span>
+                      <input type='hidden' id='monto_total' name='monto_total' value={totalFacturas?.total}/>
                   </li>
                   <li className="mt-4 p-2 text-end">
                       <button className="btn btn-success">Confirmar</button>
