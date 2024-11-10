@@ -81,24 +81,24 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             if(dataObj.listCliente) {
                 delete dataObj.listCliente
             }
+            console.log(dataObj)
+            // agregar(titulo, dataObj)
+            // .then(data => {
+            //     if(data.error) {
+            //         setState({text: data.error, res: "secondary"})
+            //         setLoading(false)
+            //         return
+            //     }
+            //     setLoading(false)
 
-            agregar(titulo, dataObj)
-            .then(data => {
-                if(data.error) {
-                    setState({text: data.error, res: "secondary"})
-                    setLoading(false)
-                    return
-                }
-                setLoading(false)
+            //     setState({text: data.message, res: "primary"})
 
-                setState({text: data.message, res: "primary"})
-
-                if(titulo == "asociaciones/clientes" || titulo == "asociaciones/comercios") {
-                    navigate(`/asociaciones/listar`)
-                } else {
-                    navigate(`/${titulo}/listar`)
-                }
-            })
+            //     if(titulo == "asociaciones/clientes" || titulo == "asociaciones/comercios") {
+            //         navigate(`/asociaciones/listar`)
+            //     } else {
+            //         navigate(`/${titulo}/listar`)
+            //     }
+            // })
             form.reset()
         }
 
