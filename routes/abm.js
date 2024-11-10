@@ -519,6 +519,7 @@ router.get("/clientes/puntos/:id", authenticate, async (req, res) => {
 
 // Importar clientes desde CSV
 router.post("/clientes/importarcsv", authenticate, async (req, res) => {
+    console.log(req.body)
     const user = req.body.user;
     const id_zona = req.body.ID_Zona;
     delete req.body.ID_Zona;
