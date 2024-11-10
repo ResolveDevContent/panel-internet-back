@@ -150,7 +150,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
         .finally(setLoading(false))
   
         return () => controller.abort()
-    }, [values])
+    }, [])
     
     return (
         <article id="form" className="mt-3 agregar-cliente">
