@@ -85,7 +85,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
                 [key8]: item[key8]
             };
         });
-    }
+    } 
 
     const handleDownload = () => {
         const link = document.createElement("a");
