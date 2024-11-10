@@ -36,7 +36,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                 value = 0
             }
 
-            if(name == "user" || (name="ID_Zona" && titulo == "clientes")) {
+            if(name == "user" || (name == "ID_Zona" && titulo == "clientes")) {
                 value = JSON.parse(value)
             }
 
