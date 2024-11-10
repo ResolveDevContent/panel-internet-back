@@ -53,21 +53,21 @@ export const ImportCsv = ({titulo, user = {}}) => {
                 obj.zona = idZona;
                 result.push(obj);
             }
-
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'dni', 'nombre', 'apellido', 'direccion_principal', 'email', 'zona');
-            importarCSV(titulo, filteredData)
-            .then(data => {
-                if(data.error) {
-                    setState({text: data.error, res: "secondary"})
-                    setLoading(false)
-                    return
-                }
-                setLoading(false)
+            console.log(result, filteredData, idZona)
+            // importarCSV(titulo, filteredData)
+            // .then(data => {
+            //     if(data.error) {
+            //         setState({text: data.error, res: "secondary"})
+            //         setLoading(false)
+            //         return
+            //     }
+            //     setLoading(false)
 
-                setState({text: data.message, res: "primary"})
+            //     setState({text: data.message, res: "primary"})
 
-                navigate(`/${titulo}/listar`)
-            })
+            //     navigate(`/${titulo}/listar`)
+            // })
         };
         reader.readAsText(input);
     };

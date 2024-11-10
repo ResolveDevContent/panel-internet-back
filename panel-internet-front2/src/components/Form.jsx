@@ -53,20 +53,20 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
         if(id) {
             setLoading(true)
 
-            // modificar(titulo, id, dataObj)
-            // .then(data => {
-            //     if(data.error) {
-            //         setLoading(false)
-            //         setState({
-            //             text: data.error,
-            //             res: "secondary"
-            //         })
-            //         return;
-            //     }
-            //     setLoading(false)
-            //     setState({text: data.message, res: "primary"})
-            //     navigate(`/${titulo}/listar`)
-            // })
+            modificar(titulo, id, dataObj)
+            .then(data => {
+                if(data.error) {
+                    setLoading(false)
+                    setState({
+                        text: data.error,
+                        res: "secondary"
+                    })
+                    return;
+                }
+                setLoading(false)
+                setState({text: data.message, res: "primary"})
+                navigate(`/${titulo}/listar`)
+            })
         } else {
             setLoading(true)
 
@@ -81,24 +81,24 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             if(dataObj.listCliente) {
                 delete dataObj.listCliente
             }
-            console.log(dataObj)
-            // agregar(titulo, dataObj)
-            // .then(data => {
-            //     if(data.error) {
-            //         setState({text: data.error, res: "secondary"})
-            //         setLoading(false)
-            //         return
-            //     }
-            //     setLoading(false)
 
-            //     setState({text: data.message, res: "primary"})
+            agregar(titulo, dataObj)
+            .then(data => {
+                if(data.error) {
+                    setState({text: data.error, res: "secondary"})
+                    setLoading(false)
+                    return
+                }
+                setLoading(false)
 
-            //     if(titulo == "asociaciones/clientes" || titulo == "asociaciones/comercios") {
-            //         navigate(`/asociaciones/listar`)
-            //     } else {
-            //         navigate(`/${titulo}/listar`)
-            //     }
-            // })
+                setState({text: data.message, res: "primary"})
+
+                if(titulo == "asociaciones/clientes" || titulo == "asociaciones/comercios") {
+                    navigate(`/asociaciones/listar`)
+                } else {
+                    navigate(`/${titulo}/listar`)
+                }
+            })
             form.reset()
         }
 
