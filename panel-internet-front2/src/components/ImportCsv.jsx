@@ -46,7 +46,6 @@ export const ImportCsv = ({titulo, user = {}}) => {
         const form = e.target
         const formData = new FormData(form)
         for(let [name, value] of formData) {
-            console.log(name, value)
             if(name == "ID_Zona") {
                 zona = value
             }
@@ -70,24 +69,23 @@ export const ImportCsv = ({titulo, user = {}}) => {
                     }
                 }
 
-                obj.zona = zona;
+                obj.zona = Number(zona);
                 result.push(obj);
             }
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'dni', 'nombre', 'apellido', 'direccion_principal', 'email', 'zona');
-            console.log(result, filteredData, zona)
-            // importarCSV(titulo, filteredData)
-            // .then(data => {
-            //     if(data.error) {
-            //         setState({text: data.error, res: "secondary"})
-            //         setLoading(false)
-            //         return
-            //     }
-            //     setLoading(false)
+            importarCSV(titulo, filteredData)
+            .then(data => {
+                if(data.error) {
+                    setState({text: data.error, res: "secondary"})
+                    setLoading(false)
+                    return
+                }
+                setLoading(false)
 
-            //     setState({text: data.message, res: "primary"})
+                setState({text: data.message, res: "primary"})
 
-            //     navigate(`/${titulo}/listar`)
-            // })
+                navigate(`/${titulo}/listar`)
+            })
         };
         reader.readAsText(input);
     };
