@@ -232,8 +232,9 @@ export const Cobranzas = ({user = {}}) => {
       listarFacturas({token: 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', idcliente: clienteId, estado: 1})
       .then(facturas => {
             console.log(facturas)
-            const textFormat = Object.entries(facturas)
-            console.log(textFormat);
+            const cleanedText = facturas.replace(/[^\x20-\x7E\n\r]/g, ''); // Elimina caracteres no válidos
+            const data = JSON.parse(cleanedText);
+            console.log('Datos parseados:', data);
             if(facturas.length > 0) {
                 const newArr = facturas.filter(row => row.estado != 'pagadas')
                 totalFacturasRef.current = newArr;
