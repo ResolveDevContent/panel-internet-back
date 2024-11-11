@@ -233,6 +233,7 @@ export const Cobranzas = ({user = {}}) => {
       .then(facturas => {
             console.log(facturas)
             const cleanedText = facturas.replace(/[^\x20-\x7E\n\r]/g, ''); // Elimina caracteres no válidos
+            console.log(cleanedText)
             const data = JSON.parse(cleanedText);
             console.log('Datos parseados:', data);
             if(facturas.length > 0) {
