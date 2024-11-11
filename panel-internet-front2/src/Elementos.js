@@ -96,7 +96,7 @@ export const ELEMENTOS = {
         },
         {
             element: 'list',
-            nombre: 'ID_Zona',
+            nombre: 'zona',
             placeholder: "zonas",
             tipo: 'radio',
             lista: false,
