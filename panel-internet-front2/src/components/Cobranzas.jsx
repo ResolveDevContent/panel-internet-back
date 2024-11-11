@@ -225,6 +225,7 @@ export const Cobranzas = ({user = {}}) => {
   },[clienteId])
 
   useEffect(() => {
+    console.log(clienteId)
     if(clienteId != '') {
       setLoading(true)
 
