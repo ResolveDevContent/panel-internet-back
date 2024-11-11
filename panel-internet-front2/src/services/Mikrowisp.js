@@ -9,7 +9,7 @@ export const listarFacturas = (body) => {
             },
             body: JSON.stringify(body)
         })
-        .then((res) => res.formData())
+        .then((res) => res.blob())
         .catch((err) => console.log(err))
     )
 }
