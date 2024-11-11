@@ -228,7 +228,7 @@ export const Cobranzas = ({user = {}}) => {
     if(clienteId != '') {
       setLoading(true)
 
-      listarFacturas('Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', {idcliente: clienteId, estado: 1})
+      listarFacturas({token: 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', idcliente: clienteId, estado: 1})
       .then(facturas => {
             console.log(facturas)
             if(facturas.length > 0) {
