@@ -5,8 +5,9 @@ export const listarFacturas = (body) => {
             method: "POST",
             mode: "no-cors",
             headers: {
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "*",
                 'Content-Type': 'application/json',
-                Accept: 'application/json',
             },
             body: JSON.stringify(body)
         })
@@ -19,9 +20,9 @@ export const pagarFacturas = (body) => {
     return (
         fetch(`https://autogestion.winetinternet.com.ar/api/v1/PaidInvoice`, {
             method: "POST",
+            mode: "no-cors",
             headers: {
                 'Content-Type': 'application/json',
-                Accept: 'application/json',
             },
             body: JSON.stringify(body)
         })
