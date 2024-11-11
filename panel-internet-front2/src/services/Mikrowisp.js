@@ -1,7 +1,7 @@
 export const listarFacturas = (body) => {
     console.log(body)
     return (
-        fetch(`https://private-anon-26a6f2b941-mikrowisp.apiary-mock.com/api/v1/GetInvoices`, {
+        fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -16,7 +16,7 @@ export const listarFacturas = (body) => {
 
 export const pagarFacturas = (body) => {
     return (
-        fetch(`https://private-anon-26a6f2b941-mikrowisp.apiary-mock.com/api/v1/PaidInvoice`, {
+        fetch(`https://autogestion.winetinternet.com.ar/api/v1/PaidInvoice`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
