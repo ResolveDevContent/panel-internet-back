@@ -11,7 +11,7 @@ export const listarFacturas = (body) => {
             },
             body: JSON.stringify(body)
         })
-        .then((res) => console.log(res))
+        .then((res) => res.json())
         .catch((err) => console.log(err))
     )
 }
