@@ -233,9 +233,6 @@ export const Cobranzas = ({user = {}}) => {
       .then(facturas => {
             console.log(facturas)
             const textFormat = Object.entries(facturas)
-            .map(([key, value]) => key + ':' + value)
-            .join('\n');
-            
             console.log(textFormat);
             if(facturas.length > 0) {
                 const newArr = facturas.filter(row => row.estado != 'pagadas')
