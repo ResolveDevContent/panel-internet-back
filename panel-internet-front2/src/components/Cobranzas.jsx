@@ -239,10 +239,11 @@ export const Cobranzas = ({user = {}}) => {
             }
       })
       .catch(err => {
-          setState({
-              text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
-              res: "secondary"
-          })
+        console.log(err)
+        setState({
+            text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
+            res: "secondary"
+        })
       })
       .finally(() => setLoading(false))
     }
