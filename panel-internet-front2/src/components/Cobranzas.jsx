@@ -231,7 +231,12 @@ export const Cobranzas = ({user = {}}) => {
 
       listarFacturas({token: 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', idcliente: clienteId, estado: 1})
       .then(facturas => {
-            console.log(facturas, JSON.parse(facturas))
+            console.log(facturas)
+            const textFormat = Object.entries(facturas)
+            .map(([key, value]) => key + ':' + value)
+            .join('\n');
+            
+            console.log(textFormat);
             if(facturas.length > 0) {
                 const newArr = facturas.filter(row => row.estado != 'pagadas')
                 totalFacturasRef.current = newArr;
