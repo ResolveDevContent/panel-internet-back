@@ -229,15 +229,15 @@ export const Cobranzas = ({user = {}}) => {
     if(clienteId != '') {
       setLoading(true)
 
-      listarFacturas({token: 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', idcliente: clienteId, estado: 1})
-    //   .then(facturas => {
-    //         console.log(facturas)
-    //         if(facturas.length > 0) {
-    //             const newArr = facturas.filter(row => row.estado != 'pagadas')
-    //             totalFacturasRef.current = newArr;
-    //             setFacturasList(newArr);
-    //         }
-    //   })
+      listarFacturas({"token": 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', "idcliente": clienteId, "estado": 1})
+      .then(facturas => {
+            console.log(facturas)
+            if(facturas.length > 0) {
+                const newArr = facturas.filter(row => row.estado != 'pagadas')
+                totalFacturasRef.current = newArr;
+                setFacturasList(newArr);
+            }
+      })
       .catch(err => {
           setState({
               text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",

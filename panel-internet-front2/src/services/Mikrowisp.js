@@ -9,11 +9,7 @@ export const listarFacturas = (body) => {
             },
             body: JSON.stringify(body)
         })
-        .then((res) => res.blob())
-        .then((myBlob) => {
-            const objectURL = URL.createObjectURL(myBlob);
-            console.log(objectURL)
-        })
+        .then((res) => res.json())
         .catch((err) => console.log(err))
     )
 }
