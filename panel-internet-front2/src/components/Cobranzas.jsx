@@ -229,16 +229,16 @@ export const Cobranzas = ({user = {}}) => {
     if(clienteId != '') {
       setLoading(true)
 
-      listarFacturas({token: 'T2tTVlpubTJwNDFzMGdhbUFwZkVHUT09', idcliente: clienteId, estado: 1})
+      listarFacturas({token: 'T2tTVlpubTJwNDFzMGdhbUFwZkVHUT09', idcliente: clienteId})
       .then(facturas => {
             const cleanedText = facturas.replace(/,\s*\.\.\.\s*]/g, ']'); // Elimina caracteres no válidos
             const data = JSON.parse(cleanedText);
             console.log(data)
-            if(data.facturas && data.facturas.length > 0) {
-                const newArr = data.facturas.filter(row => row.estado != 'pagadas')
-                totalFacturasRef.current = newArr;
-                setFacturasList(newArr);
-            }
+            // if(data.facturas && data.facturas.length > 0) {
+            //     const newArr = data.facturas.filter(row => row.estado != 'pagadas')
+            //     totalFacturasRef.current = newArr;
+            //     setFacturasList(newArr);
+            // }
       })
       .catch(err => {
         setState({
