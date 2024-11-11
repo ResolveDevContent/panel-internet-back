@@ -4,11 +4,12 @@ export const listarFacturas = (body) => {
         fetch(`https://private-anon-26a6f2b941-mikrowisp.apiary-mock.com/api/v1/GetInvoices`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
             },
             body: JSON.stringify(body)
         })
-        .then((res) => res.json())
+        .then((res) => console.log(res))
         .catch((err) => console.log(err))
     )
 }
