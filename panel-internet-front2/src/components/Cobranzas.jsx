@@ -229,21 +229,18 @@ export const Cobranzas = ({user = {}}) => {
     if(clienteId != '') {
       setLoading(true)
 
-      listarFacturas({token: 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', idcliente: clienteId, estado: 1})
+      listarFacturas({token: 'T2tTVlpubTJwNDFzMGdhbUFwZkVHUT09', idcliente: clienteId, estado: 1})
       .then(facturas => {
             console.log(facturas)
             const cleanedText = facturas.replace(/,\s*\.\.\.\s*]/g, ']'); // Elimina caracteres no válidos
-            console.log(cleanedText)
             const data = JSON.parse(cleanedText);
-            console.log('Datos parseados:', data);
-            if(facturas.length > 0) {
-                const newArr = facturas.filter(row => row.estado != 'pagadas')
+            if(data.facturas.length > 0) {
+                const newArr = data.facturas.filter(row => row.estado != 'pagadas')
                 totalFacturasRef.current = newArr;
                 setFacturasList(newArr);
             }
       })
       .catch(err => {
-        console.log(err)
         setState({
             text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
             res: "secondary"

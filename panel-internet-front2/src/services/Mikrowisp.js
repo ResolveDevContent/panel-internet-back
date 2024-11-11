@@ -14,13 +14,13 @@ export const listarFacturas = (body) => {
     )
 }
 
-export const pagarFacturas = (token, body) => {
+export const pagarFacturas = (body) => {
     return (
         fetch(`https://private-anon-26a6f2b941-mikrowisp.apiary-mock.com/api/v1/PaidInvoice`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
             },
             body: JSON.stringify(body)
         })
