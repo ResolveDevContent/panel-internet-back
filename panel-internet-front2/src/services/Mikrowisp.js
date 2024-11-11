@@ -3,7 +3,6 @@ export const listarFacturas = (body) => {
     return (
         fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
             method: "POST",
-            mode: "no-cors",
             headers: {
                 "Access-Control-Allow-Headers" : "Content-Type",
                 "Access-Control-Allow-Origin": "*",
