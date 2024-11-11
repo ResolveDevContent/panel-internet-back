@@ -9,8 +9,7 @@ export const listarFacturas = (body) => {
             },
             body: JSON.stringify(body)
         })
-        .then((res) => res.json())
-        .then((res) => console.log(res))
+        .then((res) => res.text())
         .catch((err) => console.log(err))
     )
 }
