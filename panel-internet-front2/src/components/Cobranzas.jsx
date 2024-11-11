@@ -232,7 +232,7 @@ export const Cobranzas = ({user = {}}) => {
       listarFacturas({token: 'Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09', idcliente: clienteId, estado: 1})
       .then(facturas => {
             console.log(facturas)
-            const cleanedText = facturas.replace(/[^\x20-\x7E\n\r]/g, ''); // Elimina caracteres no válidos
+            const cleanedText = facturas.replace(/,\s*\.\.\.\s*]/g, ']'); // Elimina caracteres no válidos
             console.log(cleanedText)
             const data = JSON.parse(cleanedText);
             console.log('Datos parseados:', data);
