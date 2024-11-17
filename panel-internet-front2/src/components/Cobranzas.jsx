@@ -234,7 +234,6 @@ export const Cobranzas = ({user = {}}) => {
             console.log(facturas)
             // if(data.facturas && data.facturas.length > 0) {
             //     const newArr = data.facturas.filter(row => row.estado != 'pagadas')
-            //     totalFacturasRef.current = newArr;
             //     setFacturasList(newArr);
             // }
       })
