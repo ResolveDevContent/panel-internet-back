@@ -1,7 +1,7 @@
 export const listarFacturas = (body) => {
     console.log(body)
     return (
-        fetch(`http://45.170.41.13/api/v1/GetInvoices`, {
+        fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
             method: "POST",
             headers: {
                 "Access-Control-Allow-Headers" : "Content-Type",
@@ -17,7 +17,7 @@ export const listarFacturas = (body) => {
 
 export const pagarFacturas = (body) => {
     return (
-        fetch(`http://45.170.41.13/api/v1/PaidInvoice`, {
+        fetch(`https://autogestion.winetinternet.com.ar/api/v1/PaidInvoice`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
