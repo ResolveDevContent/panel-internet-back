@@ -4,7 +4,7 @@ export const listarFacturas = (body) => {
         fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
             method: "POST",
             headers: {
-                'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(body)
         })
