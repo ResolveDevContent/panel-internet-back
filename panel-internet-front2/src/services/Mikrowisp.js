@@ -4,6 +4,8 @@ export const listarFacturas = (body) => {
         fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
             method: "POST",
             headers: {
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "*",
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(body)
@@ -18,6 +20,8 @@ export const pagarFacturas = (body) => {
         fetch(`https://autogestion.winetinternet.com.ar/api/v1/PaidInvoice`, {
             method: "POST",
             headers: {
+                "Access-Control-Allow-Headers" : "Content-Type",
+                "Access-Control-Allow-Origin": "*",
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(body)
