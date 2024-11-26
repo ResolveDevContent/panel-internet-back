@@ -98,7 +98,7 @@ export const Cobranzas = ({user = {}}) => {
 
         console.log(dataObj)
 
-        if(totalFacturas.arr > 0 && (dataObj.monto_total > 0 || dataObj.puntos_pago == dataObj.monto_total) &&
+        if(totalFacturas.arr.length > 0 && (dataObj.monto_total > 0 || dataObj.puntos_pago == dataObj.monto_total) &&
             (dataObj.puntos_pago == 0 || dataObj.puntos_pago <= clienteObj.puntos)) {
             setLoading(true)
 
