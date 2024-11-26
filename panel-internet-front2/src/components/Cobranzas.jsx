@@ -96,6 +96,8 @@ export const Cobranzas = ({user = {}}) => {
             dataObj[name] = value
         }
 
+        console.log(dataObj)
+        return;
         if(totalFacturas.arr > 0 && (dataObj.monto_total > 0 || dataObj.puntos_pago == dataObj.monto_total) &&
             (dataObj.puntos_pago == 0 || dataObj.puntos_pago <= clienteObj.puntos)) {
             setLoading(true)
@@ -227,10 +229,10 @@ export const Cobranzas = ({user = {}}) => {
         listarFacturas({token: 'T2tTVlpubTJwNDFzMGdhbUFwZkVHUT09', idcliente: clienteId})
         .then(facturas => {
                 console.log(facturas)
-                // if(data.facturas && data.facturas.length > 0) {
-                //     const newArr = data.facturas.filter(row => row.estado != 'pagadas')
-                //     setFacturasList(newArr);
-                // }
+                if(facturas.facturas.length > 0) {
+                    const newArr = facturas.facturas.filter(row => row.estado != 'pagado')
+                    setFacturasList({ total: 0, arr: newArr });
+                }
         })
         .catch(err => {
             setState({
@@ -295,9 +297,9 @@ export const Cobranzas = ({user = {}}) => {
                                     {facturasList.arr.map((row, idx) => (
                                         <li key={idx}>
                                             <label>
-                                                <input type="checkbox" id={row.idfactura} name={row.idfactura} value={row.idfactura + '-' + row.total} onChange={handleFacturas}/>
+                                                <input type="checkbox" id={row.id} name={row.id} value={row.id + '-' + row.total} onChange={handleFacturas}/>
                                                 <div className="d-flex flex-column ">
-                                                    <span>{row.total} - {row.estado}</span>
+                                                    <span>{row.total2} - {row.estado}</span>
                                                     <span>Emitido: {row.emitido} - vencimiento: {row.vencimiento}</span>
                                                 </div>
                                             </label>
