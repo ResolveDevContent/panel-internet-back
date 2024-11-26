@@ -134,7 +134,7 @@ const borrarDatos = (e, id, email) => {
                 }
                 setState({text: result.message, res: "primary"})
 
-                setTable(prevState => ({...prevState, rows: prevState.rows.filter(row => row.id != id)}));
+                setTable(prevState => ({...prevState, rows: prevState.rows.filter(row => !row[0].includes(id))}));
             })
       }
   })
