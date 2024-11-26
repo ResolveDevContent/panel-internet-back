@@ -710,8 +710,6 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
         }
 
         const currentDate = Date.now(); 
-
-        // SACAR CUANDO SE HAGA LA VERSION 2
         const body = { ...req.body, fecha: currentDate};
 
         if (Number(req.body.puntos_pago) > 0) {
@@ -723,6 +721,7 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
 
                 let result = 0;
                 let flag = false;
+                let currentPay = Number(req.body.puntos_pago);
                 puntos.forEach(async row => {
                     result = currentPay - Number(row.puntos);
                     if(!flag) {

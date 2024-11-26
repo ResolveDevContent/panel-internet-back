@@ -107,9 +107,7 @@ export const Cobranzas = ({user = {}}) => {
                 pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
                 .then(data => {
                     console.log(data)
-                    if(data.error) {
-                        return null
-                    }
+
                     return true
                 })
                 .catch((err) => {
@@ -122,24 +120,24 @@ export const Cobranzas = ({user = {}}) => {
 
             if(results.some(res => res === true)) {
                 console.log(results)
-                // agregar('cobranzas', dataObj)
-                // .then(data => {
-                //     if(data.error) {
-                //         setState({text: data.error, res: "secondary"})
-                //         return
-                //     }
+                agregar('cobranzas', dataObj)
+                .then(data => {
+                    if(data.error) {
+                        setState({text: data.error, res: "secondary"})
+                        return
+                    }
 
-                //     setState({text: data.message, res: "primary"})
+                    setState({text: data.message, res: "primary"})
 
-                //     navigate(`/cobranzas/listar`)
-                // })
-                // .catch(err => {
-                //     setState({
-                //         text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
-                //         res: "secondary"
-                //     })
-                // })
-                // .finally(() => setLoading(false))
+                    navigate(`/cobranzas/listar`)
+                })
+                .catch(err => {
+                    setState({
+                        text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
+                        res: "secondary"
+                    })
+                })
+                .finally(() => setLoading(false))
             } else {
                 setState({
                     text: "Ha ocurrido un error con en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
@@ -235,7 +233,7 @@ export const Cobranzas = ({user = {}}) => {
         .then(facturas => {
                 console.log(facturas)
                 if(facturas.facturas.length > 0) {
-                    const newArr = facturas.facturas.filter(row => row.estado != 'pagado')
+                    const newArr = facturas.facturas.filter(row => row.estado != 'pagado' || row.estado != 'anulado')
                     setFacturasList({ total: 0, arr: newArr });
                 }
         })
