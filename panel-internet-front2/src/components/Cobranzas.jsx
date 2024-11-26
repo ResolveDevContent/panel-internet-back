@@ -103,46 +103,47 @@ export const Cobranzas = ({user = {}}) => {
             setLoading(true)
 
             console.log(totalFacturas)
-            // const fetchPromises = totalFacturas.arr.map(async row => {
-            //     pagarFacturas('token', {idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
-            //     .then(data => {
-            //         if(data.error) {
-            //             return null
-            //         }
+            const fetchPromises = totalFacturas.arr.map(async row => {
+                pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
+                .then(data => {
+                    if(data.error) {
+                        return null
+                    }
+                    
+                    return true
+                })
+                .catch(() => null)
+            });
 
-            //         return true
-            //     })
-            //     .catch(() => null)
-            // });
+            const results = await Promise.all(fetchPromises);
 
-            // const results = await Promise.all(fetchPromises);
+            if(results.every(res => res === true)) {
+                console.log(results)
+                // agregar('cobranzas', dataObj)
+                // .then(data => {
+                //     if(data.error) {
+                //         setState({text: data.error, res: "secondary"})
+                //         return
+                //     }
 
-            // if(results.every(res => res === true)) {
-            //     agregar('cobranzas', dataObj)
-            //     .then(data => {
-            //         if(data.error) {
-            //             setState({text: data.error, res: "secondary"})
-            //             return
-            //         }
+                //     setState({text: data.message, res: "primary"})
 
-            //         setState({text: data.message, res: "primary"})
-
-            //         navigate(`/cobranzas/listar`)
-            //     })
-            //     .catch(err => {
-            //         setState({
-            //             text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
-            //             res: "secondary"
-            //         })
-            //     })
-            //     .finally(() => setLoading(false))
-            // } else {
-            //     setState({
-            //         text: "Ha ocurrido un error con en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
-            //         res: "secondary"
-            //     })
-            //     setLoading(false)
-            // }
+                //     navigate(`/cobranzas/listar`)
+                // })
+                // .catch(err => {
+                //     setState({
+                //         text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
+                //         res: "secondary"
+                //     })
+                // })
+                // .finally(() => setLoading(false))
+            } else {
+                setState({
+                    text: "Ha ocurrido un error con en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
+                    res: "secondary"
+                })
+                setLoading(false)
+            }
         } else {
             setState({
                 text: "Verifique que todos los campos ingresados sean correctos",
@@ -227,7 +228,7 @@ export const Cobranzas = ({user = {}}) => {
 
         setLoading(true)
 
-        listarFacturas({token: 'T2tTVlpubTJwNDFzMGdhbUFwZkVHUT09', idcliente: clienteId})
+        listarFacturas({token: import.meta.env.VITE_TOKEN, idcliente: clienteId})
         .then(facturas => {
                 console.log(facturas)
                 if(facturas.facturas.length > 0) {
