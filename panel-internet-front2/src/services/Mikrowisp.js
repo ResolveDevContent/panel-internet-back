@@ -1,14 +1,12 @@
 export const listarFacturas = (body) => {
-    console.log(body)
     return (
-        fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
-            method: "POST",
+        fetch(`https://autogestion.winetinternet.com.ar`, {
+            method: "GET",
             headers: {
                 "Access-Control-Allow-Headers" : "Content-Type",
                 "Access-Control-Allow-Origin": "*",
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body)
+            }
         })
         .then((res) => res.json())
         .catch((err) => console.log(err))

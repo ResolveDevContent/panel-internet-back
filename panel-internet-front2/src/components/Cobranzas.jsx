@@ -220,30 +220,25 @@ export const Cobranzas = ({user = {}}) => {
 
   useEffect(() => {
     if(ID_Cliente != '') {
-      buscarCliente(ID_Cliente)
-    }
-  },[clienteId])
+        buscarCliente(ID_Cliente)
 
-  useEffect(() => {
-    console.log(clienteId)
-    if(clienteId != '') {
-      setLoading(true)
+        setLoading(true)
 
-      listarFacturas({token: 'T2tTVlpubTJwNDFzMGdhbUFwZkVHUT09', idcliente: clienteId})
-      .then(facturas => {
-            console.log(facturas)
-            // if(data.facturas && data.facturas.length > 0) {
-            //     const newArr = data.facturas.filter(row => row.estado != 'pagadas')
-            //     setFacturasList(newArr);
-            // }
-      })
-      .catch(err => {
-        setState({
-            text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
-            res: "secondary"
+        listarFacturas()
+        .then(facturas => {
+                console.log(facturas)
+                // if(data.facturas && data.facturas.length > 0) {
+                //     const newArr = data.facturas.filter(row => row.estado != 'pagadas')
+                //     setFacturasList(newArr);
+                // }
         })
-      })
-      .finally(() => setLoading(false))
+        .catch(err => {
+            setState({
+                text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
+                res: "secondary"
+            })
+        })
+        .finally(() => setLoading(false))
     }
   },[clienteId])
 
