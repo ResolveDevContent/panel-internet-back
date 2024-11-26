@@ -103,23 +103,25 @@ export const Cobranzas = ({user = {}}) => {
             setLoading(true)
 
             console.log(totalFacturas)
-            const fetchPromises = totalFacturas.arr.map(async row => {
-                pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
-                .then(data => {
-                    console.log(data)
+            // const fetchPromises = totalFacturas.arr.map(async row => {
+            //     pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
+            //     .then(data => {
+            //         console.log(data)
 
-                    return true
-                })
-                .catch((err) => {
-                    console.log(err)
-                    return null
-                })
-            });
+            //         return true
+            //     })
+            //     .catch((err) => {
+            //         console.log(err)
+            //         return null
+            //     })
+            // });
 
-            const results = await Promise.all(fetchPromises);
+            // const results = await Promise.all(fetchPromises);
 
             if(results.some(res => res === true)) {
                 console.log(results)
+                dataObj.results = results;
+                dataObj.facturas = totalFacturas.arr
                 agregar('cobranzas', dataObj)
                 .then(data => {
                     if(data.error) {
@@ -247,53 +249,57 @@ export const Cobranzas = ({user = {}}) => {
     }
   },[clienteId])
 
-  return loading 
-      ? <Loading />
-      : <article id="form" className="mt-3">
-          <strong className="p-3 text-capitalize">Cobranzas - Agregar</strong>
-          <form className="card mt-3" onSubmit={handlesubmit}>
-              <ul className="card-body">
-                  <li className="list-template">
-                      <label htmlFor="clientes" className="text-capitalize">Clientes</label>
-                      <div className='buscador-field'>
-                        <input type="text" onChange={e => {
-                            setNombreCliente(e.target.value)
-                        }} placeholder='Nombre cliente...' />
-                      </div>
-                      {sortedListado.length > 0 
-                        ? <div className="dropdown-list">
-                          {loading 
-                            ? <div className="list-loading-container">
-                                  <div className="list-loading"></div>
-                              </div>
-                            : <ul>
-                                {sortedListado.map((row, idx) => (
-                                    <li key={idx}>
-                                      <label>
-                                        <input type='radio' id={row.ID_Cliente} name={row.nombre} value={row.ID_Cliente + '-' + row.Id} onChange={handleChange}/>
-                                        <span className="text-ellipsis">{row.nombre + " " + row.apellido + " - " + row.direccion_principal}</span>
-                                      </label>
-                                    </li>
-                                  )
-                                )}
-                              </ul>
-                          }
-                          </div>
+  return (
+    <>
+        {loading 
+            ? <Loading />
+            : null}
+        <article id="form" className="mt-3">
+            <strong className="p-3 text-capitalize">Cobranzas - Agregar</strong>
+            <form className="card mt-3" onSubmit={handlesubmit}>
+                <ul className="card-body">
+                    <li className="list-template">
+                        <label htmlFor="clientes" className="text-capitalize">Clientes</label>
+                        <div className='buscador-field'>
+                            <input type="text" onChange={e => {
+                                setNombreCliente(e.target.value)
+                            }} placeholder='Nombre cliente...' />
+                        </div>
+                        {sortedListado.length > 0 
+                            ? <div className="dropdown-list">
+                            {loading 
+                                ? <div className="list-loading-container">
+                                    <div className="list-loading"></div>
+                                </div>
+                                : <ul>
+                                    {sortedListado.map((row, idx) => (
+                                        <li key={idx}>
+                                        <label>
+                                            <input type='radio' id={row.ID_Cliente} name={row.nombre} value={row.ID_Cliente + '-' + row.Id} onChange={handleChange}/>
+                                            <span className="text-ellipsis">{row.nombre + " " + row.apellido + " - " + row.direccion_principal}</span>
+                                        </label>
+                                        </li>
+                                    )
+                                    )}
+                                </ul>
+                            }
+                            </div>
+                            : null}
+                        <input type="hidden" name='ID_Cliente' value={JSON.stringify(ID_Cliente)} required/>
+                    </li>
+                    <li className="list-template">
+                        {clienteObj != null ?
+                            <div className="info-cliente">
+                                <strong>Nombre y apellido: {clienteObj.nombre + " " + clienteObj.apellido}</strong>
+                                <p>Direccion: {clienteObj.direccion_principal}</p>
+                                <p>Email: {clienteObj.email}</p>
+                                <p>Puntos: {!clienteObj.puntos ? "Sin puntos" : clienteObj.puntos}</p>
+                                <input type="hidden" name="nombre" value={clienteObj.nombre}/>
+                            </div>
                         : null}
-                      <input type="hidden" name='ID_Cliente' value={JSON.stringify(ID_Cliente)} required/>
-                  </li>
-                  <li className="list-template">
-                      {clienteObj != null ?
-                          <div className="info-cliente">
-                              <strong>Nombre y apellido: {clienteObj.nombre + " " + clienteObj.apellido}</strong>
-                              <p>Direccion: {clienteObj.direccion_principal}</p>
-                              <p>Email: {clienteObj.email}</p>
-                              <p>Puntos: {!clienteObj.puntos ? "Sin puntos" : clienteObj.puntos}</p>
-                          </div>
-                      : null}
-                  </li>
-                  <li className="list-template">
-                      <label className="text-capitalize">Facturas</label>
+                    </li>
+                    <li className="list-template">
+                        <label className="text-capitalize">Facturas</label>
                         {facturasList.arr.length > 0 ? 
                             <div className="dropdown-list">
                                 <ul>      
@@ -311,8 +317,8 @@ export const Cobranzas = ({user = {}}) => {
                                 </ul>
                             </div>
                         : null}
-                  </li>
-                  <li>
+                    </li>
+                    <li>
                         <select name="pasarela">
                             <option value="Efectivo Oficina/Sucursal">Efectivo Oficina/Sucursal</option>
                             <option value="Depósito bancario">Depósito bancario</option>
@@ -330,21 +336,24 @@ export const Cobranzas = ({user = {}}) => {
                             <option value="Flow">Flow</option>
                             <option value="PayPal/Visa/Mastercard">PayPal/Visa/Mastercard</option>
                         </select> 
-                  </li>
-                  <li className="list-template">
-                      <label htmlFor="clientes" className="text-capitalize">Utilizar puntos</label>
-                      <input type='number' min="0" step="0.01" className="form-control" id='puntos_pago' name='puntos_pago' defaultValue="0" onInput={e => setTotalFacturas(prevState => ({...prevState, total: totalFacturasRef.current - e.target.value}))}/>
-                  </li>
-                  <li className="list-template">
-                      <label htmlFor="clientes" className="text-capitalize">Monto a pagar</label>
-                      <span>Total a pagar: ${totalFacturas?.total}</span>
-                      <input type='hidden' id='monto_total' name='monto_total' value={totalFacturas?.total}/>
-                  </li>
-                  <li className="mt-4 p-2 text-end">
-                      <button className="btn btn-success">Confirmar</button>
-                  </li>
-              </ul>
-          </form>
-          { state.text ? <Toast texto={state.text} res={state.res}/> : null }
+                    </li>
+                    <li className="list-template">
+                        <label htmlFor="clientes" className="text-capitalize">Utilizar puntos</label>
+                        <input type='number' min="0" step="0.01" className="form-control" id='puntos_pago' name='puntos_pago' defaultValue="0" onInput={e => setTotalFacturas(prevState => ({...prevState, total: totalFacturasRef.current - e.target.value}))}/>
+                    </li>
+                    <li className="list-template">
+                        <label htmlFor="clientes" className="text-capitalize">Monto a pagar</label>
+                        <span>Total a pagar: ${totalFacturas?.total}</span>
+                        <input type='hidden' id='monto_total' name='monto_total' value={totalFacturas?.total}/>
+                    </li>
+                    <li className="mt-4 p-2 text-end">
+                        <button className="btn btn-success">Confirmar</button>
+                    </li>
+                </ul>
+                <input type="hidden" name="cobrador" value={user.nombre ? user.nombre : user.mail}/>
+            </form>
+            { state.text ? <Toast texto={state.text} res={state.res}/> : null }
         </article>
+    </>
+    )
 }
