@@ -210,10 +210,18 @@ input.disabled {
 
 .info-cliente {
   padding: 1em;
-  border: 1px solid #000;
+  border: 1px solid grey;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+}
+
+.list-template .info-cliente span {
+  font-size: .9em;
+}
+
+.bolder {
+  font-weight: 600;
 }
 
 @media (min-width: 768px) {

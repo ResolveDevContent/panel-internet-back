@@ -5,6 +5,7 @@ import { listarUno, agregar, listar, listarByAdmin } from '../services/abm'
 import { puntosTotales } from '../services/totales'
 import { Toast } from '../components/Toast'
 import { useNavigate } from 'react-router-dom'
+import { EmptyState } from "./EmptyState";
 
 export const Cobranzas = ({user = {}}) => {
     const [ ID_Cliente, setID_Cliente ] = useState('');
@@ -142,7 +143,7 @@ export const Cobranzas = ({user = {}}) => {
                 .finally(() => setLoading(false))
             } else {
                 setState({
-                    text: "Ha ocurrido un error con en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
+                    text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                     res: "secondary"
                 })
                 setLoading(false)
@@ -233,15 +234,17 @@ export const Cobranzas = ({user = {}}) => {
 
         listarFacturas({token: import.meta.env.VITE_TOKEN, idcliente: clienteId})
         .then(facturas => {
-                console.log(facturas)
-                if(facturas.facturas.length > 0) {
-                    const newArr = facturas.facturas.filter(row => row.estado != 'pagado' || row.estado != 'anulado')
-                    setFacturasList({ total: 0, arr: newArr });
-                }
+            console.log(facturas)
+            let newArr = [];            
+            if(facturas.facturas.length > 0) {
+                newArr = facturas.facturas.filter(row => row.estado != 'pagado' && row.estado != 'anulado')
+            }
+            setFacturasList({ total: 0, arr: newArr });
         })
         .catch(err => {
+            setFacturasList({ total: 0, arr: newArr }); 
             setState({
-                text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros",
+                text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                 res: "secondary"
             })
         })
@@ -267,11 +270,12 @@ export const Cobranzas = ({user = {}}) => {
                         </div>
                         {sortedListado.length > 0 
                             ? <div className="dropdown-list">
-                            {loading 
-                                ? <div className="list-loading-container">
-                                    <div className="list-loading"></div>
-                                </div>
-                                : <ul>
+                                {loading 
+                                    ? <div className="list-loading-container">
+                                        <div className="list-loading"></div>
+                                    </div>
+                                    : null}
+                                <ul>
                                     {sortedListado.map((row, idx) => (
                                         <li key={idx}>
                                         <label>
@@ -282,7 +286,6 @@ export const Cobranzas = ({user = {}}) => {
                                     )
                                     )}
                                 </ul>
-                            }
                             </div>
                             : null}
                         <input type="hidden" name='ID_Cliente' value={JSON.stringify(ID_Cliente)} required/>
@@ -290,11 +293,11 @@ export const Cobranzas = ({user = {}}) => {
                     <li className="list-template">
                         {clienteObj != null ?
                             <div className="info-cliente">
-                                <strong>Nombre y apellido: {clienteObj.nombre + " " + clienteObj.apellido}</strong>
-                                <p>Direccion: {clienteObj.direccion_principal}</p>
-                                <p>Email: {clienteObj.email}</p>
-                                <p>Puntos: {!clienteObj.puntos ? "Sin puntos" : clienteObj.puntos}</p>
-                                <input type="hidden" name="nombre" value={clienteObj.nombre}/>
+                                <p><span className="bolder">Nombre y apellido: </span>{clienteObj.nombre + " " + clienteObj.apellido}</p>
+                                <p><span className="bolder">Direccion: </span>{clienteObj.direccion_principal}</p>
+                                <p><span className="bolder">Email: </span>{clienteObj.email}</p>
+                                <p><span className="bolder">Puntos: </span>{!clienteObj.puntos ? "Sin puntos" : clienteObj.puntos}</p>
+                                <input type="hidden" name="nombre" value={clienteObj.nombre + " " + clienteObj.apellido}/>
                             </div>
                         : null}
                     </li>
@@ -304,46 +307,50 @@ export const Cobranzas = ({user = {}}) => {
                             <div className="dropdown-list">
                                 <ul>      
                                     {facturasList.arr.map((row, idx) => (
-                                        <li key={idx}>
+                                        <li key={idx} className="facturas">
                                             <label>
                                                 <input type="checkbox" id={row.id} name={row.id} value={row.id + '-' + row.total} onChange={handleFacturas}/>
-                                                <div className="d-flex flex-column ">
-                                                    <span>{row.total2} - {row.estado}</span>
-                                                    <span>Emitido: {row.emitido} - vencimiento: {row.vencimiento}</span>
+                                                <div className="d-flex flex-column">
+                                                    <span>{row.estado} - {row.total2}</span>
+                                                    <span><span className="bolder">vencimiento:</span> {row.vencimiento}</span>
                                                 </div>
                                             </label>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
-                        : null}
-                    </li>
-                    <li>
-                        <select name="pasarela">
-                            <option value="Efectivo Oficina/Sucursal">Efectivo Oficina/Sucursal</option>
-                            <option value="Depósito bancario">Depósito bancario</option>
-                            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
-                            <option value="Mercadopago">Mercadopago</option>
-                            <option value="Oxxo Pay">Oxxo Pay</option>
-                            <option value="Conekta">Conekta</option>
-                            <option value="Pagofácil">Pagofácil</option>
-                            <option value="Kushki">Kushki</option>
-                            <option value="khipu">khipu</option>
-                            <option value="Webpay">Webpay</option>
-                            <option value="Epayco">Epayco</option>
-                            <option value="Cobro Digital">Cobro Digital</option>
-                            <option value="Cuenta Digital">Cuenta Digital</option>
-                            <option value="Flow">Flow</option>
-                            <option value="PayPal/Visa/Mastercard">PayPal/Visa/Mastercard</option>
-                        </select> 
+                        : <EmptyState texto="No hay facturas disponible" />}
                     </li>
                     <li className="list-template">
-                        <label htmlFor="clientes" className="text-capitalize">Utilizar puntos</label>
-                        <input type='number' min="0" step="0.01" className="form-control" id='puntos_pago' name='puntos_pago' defaultValue="0" onInput={e => setTotalFacturas(prevState => ({...prevState, total: totalFacturasRef.current - e.target.value}))}/>
+                        <div>
+                            <select name="pasarela">
+                                <option value="Efectivo Oficina/Sucursal">Efectivo Oficina/Sucursal</option>
+                                <option value="Depósito bancario">Depósito bancario</option>
+                                <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                                <option value="Mercadopago">Mercadopago</option>
+                                <option value="Oxxo Pay">Oxxo Pay</option>
+                                <option value="Conekta">Conekta</option>
+                                <option value="Pagofácil">Pagofácil</option>
+                                <option value="Kushki">Kushki</option>
+                                <option value="khipu">khipu</option>
+                                <option value="Webpay">Webpay</option>
+                                <option value="Epayco">Epayco</option>
+                                <option value="Cobro Digital">Cobro Digital</option>
+                                <option value="Cuenta Digital">Cuenta Digital</option>
+                                <option value="Flow">Flow</option>
+                                <option value="PayPal/Visa/Mastercard">PayPal/Visa/Mastercard</option>
+                            </select> 
+                        </div>
+                    </li>
+                    <li className="list-template">
+                        <div>
+                            <label htmlFor="clientes" className="text-capitalize">Utilizar puntos</label>
+                            <input type='number' min="0" step="0.01" className="form-control" id='puntos_pago' name='puntos_pago' defaultValue="0" onInput={e => setTotalFacturas(prevState => ({...prevState, total: totalFacturasRef.current - e.target.value}))}/>
+                        </div>
                     </li>
                     <li className="list-template">
                         <label htmlFor="clientes" className="text-capitalize">Monto a pagar</label>
-                        <span>Total a pagar: ${totalFacturas?.total}</span>
+                        <span>${totalFacturas?.total}</span>
                         <input type='hidden' id='monto_total' name='monto_total' value={totalFacturas?.total}/>
                     </li>
                     <li className="mt-4 p-2 text-end">

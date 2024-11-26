@@ -54,11 +54,7 @@ const formatearDatos = (datos) => {
         }
 
         if(titulo == 'admins' && data.permisos) {
-            if(Boolean(data.permisos)) {
-                data.permisos = "Activo"
-            } else {
-                data.permisos = "Inactivo"
-            }
+            data.permisos = Boolean(data.permisos) ? "Activo" : "Inactivo";
         }
 
         if((titulo == 'transacciones' || titulo == "historial/transacciones")) {

@@ -242,7 +242,7 @@ input[type="password"]::placeholder {
 #form .card-body > li button:hover {
     background-color: var(--color-2);
 }
-#form .card-body .list-template .dropdown-list {
+#form .card-body .list-template .buscador-field + .dropdown-list {
     padding: 1em;
     background-color: #fff;
     border-left: 1px solid gray;
@@ -251,6 +251,10 @@ input[type="password"]::placeholder {
     max-height: 10em;
     overflow: auto;
     position: relative;
+}
+#form .card-body .list-template .dropdown-list {
+    border-top: 1px solid gray;
+    margin-top: .25em;
 }
 #form .card-body .list-template .dropdown-list label {
     display: flex;
@@ -265,6 +269,15 @@ input[type="password"]::placeholder {
 #form .card-body .list-template .dropdown-list span {
     margin-left: .25em;
     font-size: .9em;
+    text-transform: uppercase;
+}
+#form .card-body .list-template .dropdown-list .facturas {
+    box-shadow: 0px 0px 10px 0px #00000030;
+    padding: .5em;
+    border-radius: .5em;
+}
+#form .card-body .list-template .dropdown-list .facturas div {
+    margin-left: .5em;
 }
 #form .dropdown-list label + ul {
     margin-top: .5em;
