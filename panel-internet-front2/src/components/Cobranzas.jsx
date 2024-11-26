@@ -50,11 +50,11 @@ export const Cobranzas = ({user = {}}) => {
                     total: values[1]
                 }
             ];
-            setTotalFacturas(prevState => ({total: prevState + Number(values[1]), arr: newArr}))
+            setTotalFacturas(prevState => ({total: prevState.total + Number(values[1]), arr: newArr}))
             totalFacturasRef.current += Number(values[1]);
         } else {
             newArr = totalFacturas.arr.filter(row => row.id != values[0])
-            setTotalFacturas(prevState => ({total: prevState - Number(values[1]), arr: newArr}))
+            setTotalFacturas(prevState => ({total: prevState.total - Number(values[1]), arr: newArr}))
             totalFacturasRef.current -= Number(values[1]);
         }
     } 
