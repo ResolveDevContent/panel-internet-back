@@ -117,7 +117,7 @@ export const Cobranzas = ({user = {}}) => {
 
             const results = await Promise.all(fetchPromises);
 
-            if(results.every(res => res === true)) {
+            if(results.some(res => res === true)) {
                 console.log(results)
                 // agregar('cobranzas', dataObj)
                 // .then(data => {
@@ -310,6 +310,25 @@ export const Cobranzas = ({user = {}}) => {
                                 </ul>
                             </div>
                         : null}
+                  </li>
+                  <li>
+                        <select name="pasarela">
+                            <option value="Efectivo Oficina/Sucursal">Efectivo Oficina/Sucursal</option>
+                            <option value="Depósito bancario">Depósito bancario</option>
+                            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                            <option value="Mercadopago">Mercadopago</option>
+                            <option value="Oxxo Pay">Oxxo Pay</option>
+                            <option value="Conekta">Conekta</option>
+                            <option value="Pagofácil">Pagofácil</option>
+                            <option value="Kushki">Kushki</option>
+                            <option value="khipu">khipu</option>
+                            <option value="Webpay">Webpay</option>
+                            <option value="Epayco">Epayco</option>
+                            <option value="Cobro Digital">Cobro Digital</option>
+                            <option value="Cuenta Digital">Cuenta Digital</option>
+                            <option value="Flow">Flow</option>
+                            <option value="PayPal/Visa/Mastercard">PayPal/Visa/Mastercard</option>
+                        </select> 
                   </li>
                   <li className="list-template">
                       <label htmlFor="clientes" className="text-capitalize">Utilizar puntos</label>
