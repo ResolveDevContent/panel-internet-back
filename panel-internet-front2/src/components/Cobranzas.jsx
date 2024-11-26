@@ -13,7 +13,7 @@ export const Cobranzas = ({user = {}}) => {
     const [ facturasList, setFacturasList ] = useState({total: 0, arr: []});
     const [ state, setState ] = useState({text: '', res: ''});
     const [ clienteObj, setClienteObj ] = useState(null);
-    const [ totalFacturas, setTotalFacturas ] = useState(null);
+    const [ totalFacturas, setTotalFacturas ] = useState({total: 0, arr: []});
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ nombreCliente, setNombreCliente ] = useState('')
 
