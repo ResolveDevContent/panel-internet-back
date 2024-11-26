@@ -106,13 +106,16 @@ export const Cobranzas = ({user = {}}) => {
             const fetchPromises = totalFacturas.arr.map(async row => {
                 pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
                 .then(data => {
+                    console.log(data)
                     if(data.error) {
                         return null
                     }
-                    
                     return true
                 })
-                .catch(() => null)
+                .catch((err) => {
+                    console.log(err)
+                    return null
+                })
             });
 
             const results = await Promise.all(fetchPromises);
