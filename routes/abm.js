@@ -1531,6 +1531,169 @@ async function addPermisos(datos, email) {
     }
 }
 
+// COBRADORES ------------------------------------------------------------------------------------------
+
+router.get("/cobradores/listar", async (req, res) => {
+    try {
+        const results = await selectTable("cobradores");
+        res.send(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+// Obtener administrador por ID
+router.get("/cobradores/listar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const results = await selectOneRecord("cobradores", "ID_Cobrador", id);
+        res.send(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.get("/cobradores/listarByEmail/:email", authenticate, async (req,res) => {
+    const { email } = req.params;
+    try {
+        const results = await selectOneRecord("cobradores", "email", email)
+        res.send(results)
+    }
+    catch(err){
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    }
+});
+
+// Agregar administrador
+router.post("/cobradores/agregar", authenticate, async (req, res) => {
+    const { email, password, ID_Comercio, nombre, apellido, permisos } = req.body;
+    const user = req.body.user;
+    delete req.body.user;
+
+    try {
+        const existingUser = await checkRecordExists("cobradores", "email", email);
+        if (existingUser) {
+            return res.status(409).json({ error: "Email ya existente" });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = {
+            userId: uuidv4(),
+            email: email,
+            password: hashedPassword,
+            role: "cobrador"
+        };
+
+        const result = await insertRecord("users", user);
+        const result2 = await insertRecord("cobradores", {nombre, apellido, email, permisos});
+
+        const date = new Date().toLocaleString()
+        let nombre_user = '';
+        let nombre_superadmin = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else if(user.role == 'comercio') {
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
+        } else {
+            nombre_superadmin = user.email
+        }
+        
+        if(nombre_superadmin) {
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin+ " agrego el cobrador " + nombre, fecha: new Date(date).getTime()});
+        }else {
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego el cobrador " + nombre, fecha: new Date(date).getTime()});
+
+        }
+        res.status(201).json({ message: "Cobrador creado correctamente!" });
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+router.put("/cobradores/modificar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const user = req.body.user;
+    delete req.body.user
+    const cobrador = {
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        email: req.body.email,
+        permisos: req.body.permisos
+    }
+    
+    try {
+        const updateCobrador = await updateRecord("cobradores", cobrador, "ID_Cobrador", id);
+        
+        if(req.body.password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        
+            const newPassword = {
+                password: hashedPassword
+            }
+            
+            const updateUser = await updateRecord("users", newPassword, "email", req.body.email);
+        }
+
+        const date = new Date().toLocaleString()
+        let nombre_user = '';
+        let nombre_superadmin = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else if(user.role == 'comercio') {
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
+        } else {
+            nombre_superadmin = user.email
+        }
+        if(nombre_superadmin) {
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " actualizo el cobrador " + req.body.nombre, fecha: new Date(date).getTime()});
+
+        }else {
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " actualizo el cobrador " + req.body.nombre, fecha: new Date(date).getTime()});
+        }
+        res.status(200).json(updateAdmin);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
+// Borrar administrador
+router.delete("/cobradores/borrar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const user = req.body.user;
+    delete req.body.user;
+    try {
+        const cobrador = await selectOneRecord("cobradores", 'ID_Cobrador', id);
+
+        const users = await deleteRecord("users", "email", cobrador[0].email);
+        const result = await deleteRecord("cobradores", "ID_Cobrador", id);
+        const date = new Date().toLocaleString()
+        let nombre_user = '';
+        let nombre_superadmin = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else if(user.role == 'comercio') {
+            nombre_user = await selectOneRecord('comercio', 'email', user.email)
+        } else {
+            nombre_superadmin = user.email
+        }
+
+        if(nombre_superadmin) {
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro el cobrador " + admins[0].nombre, fecha: new Date(date).getTime()});
+        } else {
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro el cobrador " + admins[0].nombre, fecha: new Date(date).getTime()});
+        }
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 // FECHA PUNTOS ------------------------------------------------------------------------------------------
 
 router.post("/puntos/fecha/agregar", authenticate, async (req, res) => {

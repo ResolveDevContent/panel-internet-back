@@ -1,4 +1,4 @@
-export const deleteRecordMikrowisp = async (body) => {
+const deleteRecordMikrowisp = async (body) => {
   try {
     fetch(`https://autogestion.winetinternet.com.ar/api/v1/GetInvoices`, {
         method: "POST",
@@ -12,4 +12,8 @@ export const deleteRecordMikrowisp = async (body) => {
   } catch (err) {
     return ({error: "Ha ocurrido un error en la API de Mikorwisp."})
   }
+}
+
+module.exports = {
+  deleteRecordMikrowisp
 }
