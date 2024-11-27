@@ -11,7 +11,7 @@ export const listarFacturas = (body) => {
         .catch((err) => console.log(err))
     )
 }
-
+ 
 export const pagarFacturas = (body) => {
     return (
         fetch(`https://autogestion.winetinternet.com.ar/api/v1/PaidInvoice`, {
