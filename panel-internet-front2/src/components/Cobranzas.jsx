@@ -119,7 +119,11 @@ export const Cobranzas = ({user = {}}) => {
                 })
             });
 
+console.log(fetchPromises);
+
             const results = await Promise.all(fetchPromises);
+
+            console.log(results)
 
             const resultArr = results.map((row, idx) => {
                 if(row === true) {
