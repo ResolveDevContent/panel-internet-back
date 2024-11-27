@@ -19,6 +19,8 @@ export const Listado = ({titulo, user = {}}) => {
     const [ loading, setLoading ] = useState(false)
     const [ nombre, setNombre ] = useState(null);
     const [ rubro, setRubro ] = useState(null);
+    const [ cobrador, setCobrador ] = useState(null);
+    const [ factura, setFactura ] = useState(null);
     const [ nombreComercio, setnombreComercio ] = useState(null);
     const [ date, setDate ] = useState({first: "", second: ""});
     const [ calculosTotales, setcalculosTotales ] = useState(null);
@@ -72,6 +74,27 @@ export const Listado = ({titulo, user = {}}) => {
 
         setSortedListado(newArr)
     }, [rubro])
+
+    const filteredCobrador = useMemo(() => {
+        const newArr = cobrador != null && cobrador.length > 0
+        ? listado.filter(row => {
+            return row.cobrador.toLowerCase().includes(cobrador.toLowerCase())
+        })
+        : listado
+
+        setSortedListado(newArr)
+    }, [cobrador])
+
+
+    const filteredFactura = useMemo(() => {
+        const newArr = factura != null && factura.length > 0
+        ? listado.filter(row => {
+            return row.ID_Factura.toLowerCase().includes(factura.toLowerCase())
+        })
+        : listado
+
+        setSortedListado(newArr)
+    }, [factura])
 
     const handleDates = () => {
         if(date.first == '' || date.second == '') {
@@ -433,7 +456,7 @@ export const Listado = ({titulo, user = {}}) => {
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setNombre(e.target.value)
-                                                }} placeholder='Nombre...' />
+                                                }} placeholder='Nombre cliente...' />
                                                 <span>
                                                     <Search />
                                                 </span>
@@ -458,6 +481,26 @@ export const Listado = ({titulo, user = {}}) => {
                                                     <Search />
                                                 </span>
                                             </div>
+                                        : null}
+                                        {titulo == 'cobranzas'
+                                            ? <>
+                                                <div className='buscador-field'>
+                                                    <input type="text" onChange={e => {
+                                                        setCobrador(e.target.value)
+                                                    }} placeholder='Cobrador...' />
+                                                    <span>
+                                                        <Search />
+                                                    </span>
+                                                </div>
+                                                <div className='buscador-field'>
+                                                    <input type="text" onChange={e => {
+                                                        setFactura(e.target.value)
+                                                    }} placeholder='Nro factura...' />
+                                                    <span>
+                                                        <Search />
+                                                    </span>
+                                                </div>
+                                            </>
                                         : null}
                                     </div>
                                 </div>
