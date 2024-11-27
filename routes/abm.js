@@ -1576,7 +1576,7 @@ router.get("/cobradores/listarByEmail/:email", authenticate, async (req,res) => 
 
 // Agregar administrador
 router.post("/cobradores/agregar", authenticate, async (req, res) => {
-    const { email, password, ID_Comercio, nombre, apellido, permisos } = req.body;
+    const { email, password, nombre, apellido, permisos } = req.body;
     const user = req.body.user;
     delete req.body.user;
 
