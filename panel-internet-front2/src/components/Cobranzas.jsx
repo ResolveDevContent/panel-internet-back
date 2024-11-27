@@ -131,8 +131,10 @@ export const Cobranzas = ({user = {}}) => {
 
             if(resultArr.length > 0) {
                 console.log(results)
-                dataObj.results = results;
+                dataObj.results = resultArr;
                 dataObj.facturas = totalFacturas.arr
+
+                console.log(dataObj)
                 agregar('cobranzas', dataObj)
                 .then(data => {
                     if(data.error) {
