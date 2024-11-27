@@ -97,7 +97,7 @@ export const Cobranzas = ({user = {}}) => {
             dataObj[name] = value
         }
 
-        console.log(dataObj)
+        console.log(dataObj, totalFacturas)
 
         if(totalFacturas.arr.length > 0 && (Number(dataObj.monto_total) > 0 || Number(dataObj.puntos_pago) == Number(dataObj.monto_total)) &&
             (Number(dataObj.puntos_pago) == 0 || Number(dataObj.puntos_pago) <= Number(clienteObj.puntos))) {
@@ -105,7 +105,7 @@ export const Cobranzas = ({user = {}}) => {
 
             console.log(totalFacturas)
             // const fetchPromises = totalFacturas.arr.map(async row => {
-            //     pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: 'efectivo', cantidad: row.total})
+            //     pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
             //     .then(data => {
             //         console.log(data)
 
@@ -309,8 +309,8 @@ export const Cobranzas = ({user = {}}) => {
                                             <label>
                                                 <input type="checkbox" id={row.id} name={row.id} value={row.id + '-' + row.total} onChange={handleFacturas}/>
                                                 <div className="d-flex">
-                                                    <span>{row.estado} - {row.total2}</span>
-                                                    <span><span className="bolder">vencimiento:</span> {row.vencimiento}</span>
+                                                    <span>{row.total2}</span>
+                                                    <span className="d-flex align-center"><span className="bolder">vencimiento:</span> {row.vencimiento}</span>
                                                 </div>
                                             </label>
                                         </li>

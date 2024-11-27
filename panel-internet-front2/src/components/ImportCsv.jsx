@@ -164,7 +164,6 @@ export const ImportCsv = ({titulo, user = {}}) => {
 
             <form className="card mt-3" onSubmit={handlesubmit}>
                 <ul className="card-body">
-                    {/* <ListTemplate titulo="zona" data={{nombre: 'ID_Zona', placeholder: 'zonas', tipo: 'radio', lista: false}} user={user} values={{}} /> */}
                     <li className="list-template">
                         <label htmlFor="zona" className="text-capitalize">Zonas</label>
                         <div className='buscador-field'>

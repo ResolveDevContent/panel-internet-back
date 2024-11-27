@@ -224,6 +224,7 @@ input.disabled {
 
 .bolder {
   font-weight: 600;
+  margin-right: .25em;
 }
 
 @media (min-width: 768px) {

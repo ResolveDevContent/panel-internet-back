@@ -709,49 +709,52 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
             req.body.puntos_pago = 0;
         }
 
-        const currentDate = Date.now(); 
-        const body = { ...req.body, fecha: currentDate};
-
         if (Number(req.body.puntos_pago) > 0) {
             const totales = await calcularPuntosTotales('puntos', 'ID_Cliente', 'puntos', req.body.ID_Cliente);
             if (Number(req.body.puntos_pago) > totales[0].total) {
                 return res.status(500).json({ error: "El cliente no posee esos puntos." });
-            } else {
-                const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
-
-                let result = 0;
-                let flag = false;
-                let currentPay = Number(req.body.puntos_pago);
-                puntos.forEach(async row => {
-                    result = currentPay - Number(row.puntos);
-                    if(!flag) {
-                        if(result >= 0) {
-                            if(result == 0) {
-                                flag = true;
-                            }
-                            await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
-                            currentPay -= Number(row.puntos);
-                        } else {
-                            await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
-                            flag = true;
-                        }
-                    }
-                });
             }
         }
 
-        const results = await insertRecord("cobranzas", body);
-        const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
-        const date = new Date().toLocaleString()
-        let nombre_user = '';
-        if(user.role == 'admin') {
-            nombre_user = await selectOneRecord('admins', 'email', user.email)
-        } else {
-            nombre_user = user.email
-        }
+        const results = await agregarCobros(req.body.result, req.body.facturas, req.body.puntos_pago);
 
-        await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo un cobro del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
-        res.status(201).json({ message: "Transacción creada correctamente." });
+        if(results.every(row => row === true)) {
+            const currentDate = Date.now(); 
+            const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
+
+            let result = 0;
+            let flag = false;
+            let currentPay = Number(req.body.puntos_pago);
+            puntos.forEach(async row => {
+                result = currentPay - Number(row.puntos);
+                if(!flag) {
+                    if(result >= 0) {
+                        if(result == 0) {
+                            flag = true;
+                        }
+                        await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+                        currentPay -= Number(row.puntos);
+                    } else {
+                        await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
+                        flag = true;
+                    }
+                }
+            });
+
+            const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
+            const date = new Date().toLocaleString()
+            let nombre_user = '';
+            if(user.role == 'admin') {
+                nombre_user = await selectOneRecord('admins', 'email', user.email)
+            } else {
+                nombre_user = user.email
+            }
+
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo un cobro del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
+            res.status(201).json({ message: "Cobros creados correctamente." });
+        } else {
+            return res.status(500).json({ error: "Algunos cobros no se crearon correctamente." });
+        }
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
@@ -786,6 +789,10 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
 });
+
+async function agregarCobros(result, facturas, puntos_pago) {
+
+}
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------
 
