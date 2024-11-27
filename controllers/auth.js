@@ -109,7 +109,7 @@ const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}; 
 
 const loginCliente = async (req, res) => {
   const { id, password } = req.body;
