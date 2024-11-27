@@ -161,7 +161,7 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == 'multiple') { return <MultipleSelectTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}}/> }
                                     if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "filtroCliente") {return <FiltroCliente key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
-                                    if(row.element == "permisos") {return <PermisosTemplate key={idx} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
+                                    if(row.element == "permisos") {return <PermisosTemplate key={idx} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "user") {return <UserTemplate key={idx} />}
                                     if(row.element == "zonas") {return <ZonasTemplate key={idx} titulo={titulo} data={row} user={user}/>}
                                 })}
