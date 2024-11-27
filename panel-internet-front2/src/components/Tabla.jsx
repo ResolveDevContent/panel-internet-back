@@ -146,8 +146,9 @@ useEffect(() => {
     const signal = controller.signal
     formatearDatos(datos)
     PerfilAuth(signal).then(user => {
-        if(user && user.message.role == 'admin') {
-            listarByEmail('admins', user.message.email, signal)
+        if(user && (user.message.role == 'admin' || user.message.role == 'cobrador')) {
+            const table = user.message.role == 'admin' ? 'admins' : 'cobradores'
+            listarByEmail(table, user.message.email, signal)
             .then(result => {
                 setAdmin(result);
             })
@@ -195,7 +196,9 @@ return (
                                             </li>
                                             : null
                                         }
-                                        {(user.role != "comercio" || titulo != "transacciones") && (admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos' || titulo == 'asociaciones' || titulo == 'clientes')
+                                        {(user.role != "comercio" || titulo != "transacciones") && (admin == null || admin[0].permisos == 1) && 
+                                        (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos' || 
+                                        titulo == 'asociaciones' || titulo == 'clientes' || titulo == 'cobranzas')
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>

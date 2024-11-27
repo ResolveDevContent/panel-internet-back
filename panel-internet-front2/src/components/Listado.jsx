@@ -242,7 +242,7 @@ export const Listado = ({titulo, user = {}}) => {
         originalListado.current = [];
 
         PerfilAuth(signal).then(user => {
-            if(user.message.role == "superadmin" || user.message.role == "cliente") {
+            if(user.message.role == "superadmin" || user.message.role == "cliente" || user.message.role == "cobrador") {
                 if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
                     listarByEmail('clientes', user.message.email, signal)
                     .then(datos => {

@@ -108,15 +108,20 @@ export const Cobranzas = ({user = {}}) => {
 
             console.log(totalFacturas)
             const fetchPromises = totalFacturas.arr.map(async row => {
-                pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
-                .then(data => {
-                    console.log(data)
-                    return true
-                })
-                .catch((err) => {
-                    console.log(err)
+                try {
+                    pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
+                    .then(data => {
+                        console.log(data)
+                        return true
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                        return null
+                    })
+                } catch {
+                    console.log("catch")
                     return null
-                })
+                }
             });
 
 console.log(fetchPromises);
@@ -256,9 +261,11 @@ console.log(fetchPromises);
                 newArr = facturas.facturas.filter(row => row.estado != 'pagado' && row.estado != 'anulado')
             }
             setFacturasList({ total: 0, arr: newArr });
+            setTotalFacturas({ total: 0, arr: newArr });
         })
         .catch(err => {
             setFacturasList({ total: 0, arr: [] }); 
+            setTotalFacturas({ total: 0, arr: [] }); 
             setState({
                 text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                 res: "secondary"

@@ -243,17 +243,18 @@ input[type="password"]::placeholder {
     background-color: var(--color-2);
 }
 #form .card-body .list-template .buscador-field + .dropdown-list {
-    padding: 1em;
-    background-color: #fff;
     border-top: none;
-    max-height: 10em;
-    overflow: auto;
-    position: relative;
     margin-top: 0;
 }
 #form .card-body .list-template .dropdown-list {
     border: 1px solid gray;
     margin-top: .25em;
+    position: relative;
+    padding: 1em;
+    background-color: #fff;
+    border-top: none;
+    max-height: 10em;
+    overflow: auto;
 }
 #form .card-body .list-template .dropdown-list label {
     display: flex;
