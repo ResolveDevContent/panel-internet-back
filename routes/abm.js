@@ -697,6 +697,7 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
     const user = req.body.user;
     delete req.body.user;
     delete req.body.monto_total;
+    delete req.body.pasarela;
 
     req.body.ID_Cliente = JSON.parse(req.body.ID_Cliente)
 
@@ -716,7 +717,7 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
             }
         }
 
-        const results = await agregarCobros(req.body.result, req.body.facturas, req.body.puntos_pago);
+        const results = await agregarCobros(req.body);
 
         if(results.every(row => row === true)) {
             if(req.body.puntos_pago > 0) {
@@ -798,13 +799,19 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
     }
 });
 
-async function agregarCobros(result, facturas, puntos_pago) {
-    let puntos = puntos_pago > 0 ? facturas.length > 0 ? puntos_pago / facturas.length : puntos_pago : 0;
+async function agregarCobros(body) {
+    let puntos = body.puntos_pago > 0 ? body.facturas.length > 0 ? body.puntos_pago / body.facturas.length : body.puntos_pago : 0;
 
-    const promises = result.map(async (row) => {
-        if(facturas[row]) {
+    const cobro = {
+        ID_Cliente: body.ID_Cliente,
+        nombre: body.nombre,
+        cobrador: body.cobrador,
+    };
+
+    const promises = body.result.map(async (row) => {
+        if(body.facturas[row]) {
             try {
-                await insertRecord('cobranzas', {...facturas[row], puntos_pago: puntos, fecha: Date.now()});
+                await insertRecord('cobranzas', {...cobro, ID_Factura: facturas[row].id, monto_total: facturas[row].total, puntos_pago: puntos, fecha: Date.now()});
                 return true;
             } catch {
                 return false;
