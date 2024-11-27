@@ -94,7 +94,10 @@ export const Cobranzas = ({user = {}}) => {
         let dataObj = {}
 
         for(let [name, value] of formData) {
-            dataObj[name] = value
+            if(name == 'ID_Cliente' || name == 'nombre' || name == 'cobrador' || 
+                name == 'puntos_pago' || name == 'monto_total' || name == 'pasarela') {
+                    dataObj[name] = value
+            }
         }
 
         console.log(dataObj, totalFacturas)
@@ -104,20 +107,19 @@ export const Cobranzas = ({user = {}}) => {
             setLoading(true)
 
             console.log(totalFacturas)
-            // const fetchPromises = totalFacturas.arr.map(async row => {
-            //     pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
-            //     .then(data => {
-            //         console.log(data)
+            const fetchPromises = totalFacturas.arr.map(async row => {
+                pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
+                .then(data => {
+                    console.log(data)
+                    return true
+                })
+                .catch((err) => {
+                    console.log(err)
+                    return null
+                })
+            });
 
-            //         return true
-            //     })
-            //     .catch((err) => {
-            //         console.log(err)
-            //         return null
-            //     })
-            // });
-
-            // const results = await Promise.all(fetchPromises);
+            const results = await Promise.all(fetchPromises);
 
             const resultArr = results.map((row, idx) => {
                 if(row === true) {
@@ -296,7 +298,7 @@ export const Cobranzas = ({user = {}}) => {
                                 </ul>
                             </div>
                             : null}
-                        <input type="hidden" name='ID_Cliente' value={JSON.stringify(ID_Cliente)} required/>
+                        <input type="hidden" name='ID_Cliente' value={ID_Cliente} required/>
                     </li>
                     <li className="list-template">
                         <div className="info-cliente">

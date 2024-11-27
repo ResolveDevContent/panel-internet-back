@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, deleteRecordByAdmin, selectZonaByAdmin } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, selectZonaByAdmin } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -696,6 +696,7 @@ router.get("/cobranzas/listar/:id", authenticate, async (req, res) => {
 router.post("/cobranzas/agregar", authenticate, async (req, res) => {
     const user = req.body.user;
     delete req.body.user;
+    delete req.body.monto_total;
 
     req.body.ID_Cliente = JSON.parse(req.body.ID_Cliente)
 

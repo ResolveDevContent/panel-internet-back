@@ -271,7 +271,7 @@ input[type="password"]::placeholder {
     text-transform: uppercase;
 }
 #form .card-body .list-template .dropdown-list .facturas {
-    max-height: 15em;
+    max-height: 12em;
     border: 1px solid grey;
     padding: 1em;
     overflow: auto;
@@ -286,7 +286,7 @@ input[type="password"]::placeholder {
     margin-top: .5em;
 }
 #form .card-body .list-template .dropdown-list .facturas li div {
-    margin-left: .5em;
+    margin-left: .25em;
     align-items: center;
 }
 #form .dropdown-list label + ul {
@@ -446,9 +446,6 @@ input#filtros {
     input:checked ~ .filtros,
     input:checked + .background-menu {
         display: flex;
-    }
-    #form .card-body .list-template .dropdown-list .facturas li div {
-        flex-direction: column;
     }
 }
 
