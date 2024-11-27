@@ -48,6 +48,48 @@ export const ELEMENTOS = {
             element: "user"
         }
     ],
+    cobradores: [
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'nombre',
+            placeholder: 'Nombre',
+            valor: '',
+            mensaje: "",
+        },
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'apellido',
+            placeholder: 'Apellido',
+            valor: '',
+            mensaje: "",
+        },
+        {
+            element: 'input',
+            tipo: 'text',
+            nombre: 'email',
+            placeholder: 'Email',
+            valor: '',
+            mensaje: "",
+        },
+        {
+            element: 'permisos',
+            nombre: 'permisos',
+            placeholder: "Permisos",
+        },
+        {
+            element: "input",
+            tipo: "password", 
+            nombre: "password",
+            placeholder: "Contraseña",
+            valor: '',
+            mensaje: "Volve a escribir la contraseña o inserte una nueva."
+        },
+        {
+            element: "user"
+        }
+    ],
     zonas: [
         {
             element: 'input',

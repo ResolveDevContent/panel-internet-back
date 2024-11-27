@@ -157,9 +157,9 @@ export const ImportCsv = ({titulo, user = {}}) => {
         <article id="form" className="mt-3 agregar-cliente">
             <strong className="p-3 text-capitalize">{titulo} - {"Agregar"}</strong>
 
-            <div>
+            <div className="mt-1">
                 <p>Descarga la plantilla CSV para poder agregar los clientes correctamente</p>
-                <button onClick={handleDownload} className="btn btn-success">Descargar</button>
+                <button onClick={handleDownload} className="btn btn-success mt-1">Descargar</button>
             </div>
 
             <form className="card mt-3" onSubmit={handlesubmit}>

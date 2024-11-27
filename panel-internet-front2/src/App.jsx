@@ -69,6 +69,9 @@ function App() {
                 <Route path="admins/listar" element={<Listado user={user} titulo={"admins"}/>} />
                 <Route path="admins/agregar" element={<Form elementos={ELEMENTOS.admins} user={user} titulo={'admins'}/>} />
                 <Route path="admins/editar/:id" element={<Form elementos={ELEMENTOS.admins} titulo={'admins'} user={user}/>} />
+                <Route path="cobradores/listar" element={<Listado user={user} titulo={"cobradores"}/>} />
+                <Route path="cobradores/agregar" element={<Form elementos={ELEMENTOS.cobradores} user={user} titulo={'cobradores'}/>} />
+                <Route path="cobradores/editar/:id" element={<Form elementos={ELEMENTOS.cobradores} titulo={'cobradores'} user={user}/>} />
                 <Route path="comercios/agregar" element={<Form elementos={ELEMENTOS.comercios} titulo={'comercios'}/>} />
                 <Route path="comercios/editar/:id" element={<Form elementos={ELEMENTOS.comercios} titulo={'comercios'}/>} />
               </Route>

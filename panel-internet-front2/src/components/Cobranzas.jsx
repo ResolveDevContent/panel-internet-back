@@ -242,7 +242,7 @@ export const Cobranzas = ({user = {}}) => {
             setFacturasList({ total: 0, arr: newArr });
         })
         .catch(err => {
-            setFacturasList({ total: 0, arr: newArr }); 
+            setFacturasList({ total: 0, arr: [] }); 
             setState({
                 text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                 res: "secondary"
@@ -279,7 +279,7 @@ export const Cobranzas = ({user = {}}) => {
                                     {sortedListado.map((row, idx) => (
                                         <li key={idx}>
                                         <label>
-                                            <input type='radio' id={row.ID_Cliente} name={row.nombre} value={row.ID_Cliente + '-' + row.Id} onChange={handleChange}/>
+                                            <input type='radio' id={row.ID_Cliente} name="clientes" value={row.ID_Cliente + '-' + row.Id} onChange={handleChange}/>
                                             <span className="text-ellipsis">{row.nombre + " " + row.apellido + " - " + row.direccion_principal}</span>
                                         </label>
                                         </li>
@@ -291,26 +291,24 @@ export const Cobranzas = ({user = {}}) => {
                         <input type="hidden" name='ID_Cliente' value={JSON.stringify(ID_Cliente)} required/>
                     </li>
                     <li className="list-template">
-                        {clienteObj != null ?
-                            <div className="info-cliente">
-                                <p><span className="bolder">Nombre y apellido: </span>{clienteObj.nombre + " " + clienteObj.apellido}</p>
-                                <p><span className="bolder">Direccion: </span>{clienteObj.direccion_principal}</p>
-                                <p><span className="bolder">Email: </span>{clienteObj.email}</p>
-                                <p><span className="bolder">Puntos: </span>{!clienteObj.puntos ? "Sin puntos" : clienteObj.puntos}</p>
-                                <input type="hidden" name="nombre" value={clienteObj.nombre + " " + clienteObj.apellido}/>
-                            </div>
-                        : null}
+                        <div className="info-cliente">
+                            <p><span className="bolder">Nombre y apellido: </span> {clienteObj == null ? '' : clienteObj.nombre + " " + clienteObj.apellido}</p>
+                            <p><span className="bolder">Direccion: </span> {clienteObj == null ? '' : clienteObj.direccion_principal}</p>
+                            <p><span className="bolder">Email: </span> {clienteObj == null ? '' : clienteObj.email}</p>
+                            <p><span className="bolder">Puntos: </span> {clienteObj == null ? '' : !clienteObj.puntos ? "Sin puntos" : clienteObj.puntos}</p>
+                            <input type="hidden" name="nombre" value={clienteObj == null ? '' : clienteObj.nombre + " " + clienteObj.apellido}/>
+                        </div>
                     </li>
                     <li className="list-template">
                         <label className="text-capitalize">Facturas</label>
                         {facturasList.arr.length > 0 ? 
                             <div className="dropdown-list">
-                                <ul>      
+                                <ul className="facturas">      
                                     {facturasList.arr.map((row, idx) => (
-                                        <li key={idx} className="facturas">
+                                        <li key={idx}>
                                             <label>
                                                 <input type="checkbox" id={row.id} name={row.id} value={row.id + '-' + row.total} onChange={handleFacturas}/>
-                                                <div className="d-flex flex-column">
+                                                <div className="d-flex">
                                                     <span>{row.estado} - {row.total2}</span>
                                                     <span><span className="bolder">vencimiento:</span> {row.vencimiento}</span>
                                                 </div>

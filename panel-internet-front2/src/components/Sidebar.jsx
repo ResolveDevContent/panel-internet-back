@@ -2,7 +2,7 @@ import "../assets/css/sidebar.css";
 import { NavLink, useNavigate } from 'react-router-dom'
 import { LogoutAuth } from "../services/auth";
 import AuthContext from "../context/Auth";
-import { Admin, Coin, Dolar, HamburgerMenu, History, Location, LogOut, Money, Notepad, Save, Shop, User, Wallet } from "../assets/icons/icons";
+import { Admin, Coin, Dolar, HamburgerMenu, History, Location, LogOut, Money, Notepad, Save, Shop, Suitcase, User, Wallet } from "../assets/icons/icons";
 import { useContext, useState, useEffect } from "react";
 import { Toast } from "./Toast";
 import { PerfilAuth } from "../services/auth";
@@ -177,21 +177,38 @@ export const Sidebar = ({user}) => {
           {user && (user.role == "admin" || user.role == "superadmin") ? (
             <>
               {user && user.role == "superadmin" ? (
-                <li>
-                  <input type="radio" id="admins" name="solapa"/>
-                  <label htmlFor="admins" >
-                    <Admin />
-                    <span>Admins</span>
-                  </label>
-                  <ul>
-                    <li>
-                      <NavLink className={({isActive}) => isActive ? 'active' : ''} to="admins/listar">Listar</NavLink>
-                    </li>
-                    <li>
-                      <NavLink className={({isActive}) => isActive ? 'active' : ''} to="admins/agregar">Agregar</NavLink>
-                    </li>
-                  </ul>
-                </li>
+                <>
+                  <li>
+                    <input type="radio" id="admins" name="solapa"/>
+                    <label htmlFor="admins" >
+                      <Admin />
+                      <span>Admins</span>
+                    </label>
+                    <ul>
+                      <li>
+                        <NavLink className={({isActive}) => isActive ? 'active' : ''} to="admins/listar">Listar</NavLink>
+                      </li>
+                      <li>
+                        <NavLink className={({isActive}) => isActive ? 'active' : ''} to="admins/agregar">Agregar</NavLink>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <input type="radio" id="cobradores" name="solapa"/>
+                    <label htmlFor="cobradores" >
+                      <Suitcase />
+                      <span>Cobradores</span>
+                    </label>
+                    <ul>
+                      <li>
+                        <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cobradores/listar">Listar</NavLink>
+                      </li>
+                      <li>
+                        <NavLink className={({isActive}) => isActive ? 'active' : ''} to="cobradores/agregar">Agregar</NavLink>
+                      </li>
+                    </ul>
+                  </li>     
+                </>  
               ) : null}
               <li>
                 <input type="radio" id="asoc-comercios" name="solapa"/>

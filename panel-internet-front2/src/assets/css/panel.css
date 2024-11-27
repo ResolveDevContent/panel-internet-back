@@ -216,8 +216,10 @@ input.disabled {
   gap: 0.5em;
 }
 
-.list-template .info-cliente span {
+.list-template .info-cliente p {
   font-size: .9em;
+  display: flex;
+  align-items: center;
 }
 
 .bolder {
