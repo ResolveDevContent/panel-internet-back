@@ -14,6 +14,7 @@ const fs = require('fs');
 const router = express.Router();
 
 const cron = require('node-cron');
+const { deleteRecordMikrowisp } = require("../controllers/Mikrowisp");
 
 //CRUD: HISTORIAL ---------------------------------------------------------------------------------
 
@@ -524,7 +525,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 
     try {
         const result = await agregarClientes(req.body);
-        if (result.every(r => r !== null)) {
+        if (result.every(r => r !== false)) {
             const date = new Date().toLocaleString()
             let nombre_user = '';
             let nombre_superadmin = '';
@@ -661,12 +662,10 @@ async function agregarClientes(datos) {
                 return false;
             }
         } else {
-            // Retornar false si los datos están incompletos
             return false;
         }
     });
 
-    // Esperar a que todas las promesas se resuelvan
     const resultados = await Promise.all(promises);
 
     return resultados;
@@ -719,27 +718,28 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
         const results = await agregarCobros(req.body.result, req.body.facturas, req.body.puntos_pago);
 
         if(results.every(row => row === true)) {
-            const currentDate = Date.now(); 
-            const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
+            if(req.body.puntos_pago > 0) {
+                const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
+                let result = 0;
+                let flag = false;
+                let currentPay = Number(req.body.puntos_pago);
 
-            let result = 0;
-            let flag = false;
-            let currentPay = Number(req.body.puntos_pago);
-            puntos.forEach(async row => {
-                result = currentPay - Number(row.puntos);
-                if(!flag) {
-                    if(result >= 0) {
-                        if(result == 0) {
+                puntos.forEach(async row => {
+                    result = currentPay - Number(row.puntos);
+                    if(!flag) {
+                        if(result >= 0) {
+                            if(result == 0) {
+                                flag = true;
+                            }
+                            await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+                            currentPay -= Number(row.puntos);
+                        } else {
+                            await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
                             flag = true;
                         }
-                        await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
-                        currentPay -= Number(row.puntos);
-                    } else {
-                        await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
-                        flag = true;
                     }
-                }
-            });
+                });
+            }
 
             const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
             const date = new Date().toLocaleString()
@@ -750,7 +750,7 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
                 nombre_user = user.email
             }
 
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo un cobro del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo el cobro de " + req.body.result.length + " factura/s del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             res.status(201).json({ message: "Cobros creados correctamente." });
         } else {
             return res.status(500).json({ error: "Algunos cobros no se crearon correctamente." });
@@ -770,10 +770,17 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', cobranza[0].ID_Cliente);
 
         if(cobranza[0].puntos_pago && cobranza[0].puntos_pago > 0) {
-            await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pago, fecha: currentDate});
+            await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pago, fecha: Date.now()});
         }
 
         const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
+
+        const deleteFactura = await deleteRecordMikrowisp({id: cobranza.ID_Factura});
+
+        if(deleteFactura.error) {
+            res.status(500).json({ error: deleteFactura.error });
+        }
+
         const date = new Date().toLocaleString()
         let nombre_user = '';
         if(user.role == 'admin') {
@@ -791,7 +798,22 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
 });
 
 async function agregarCobros(result, facturas, puntos_pago) {
+    let puntos = puntos_pago > 0 ? facturas.length > 0 ? puntos_pago / facturas.length : puntos_pago : 0;
 
+    const promises = result.map(async (row) => {
+        if(facturas[row]) {
+            try {
+                await insertRecord('cobranzas', {...facturas[row], puntos_pago: puntos, fecha: Date.now()});
+                return true;
+            } catch {
+                return false;
+            }
+        }
+    });
+
+    const PromisesResult = Promise.all(promises)
+
+    return PromisesResult;
 }
 
 //CRUD: TRANSACCION ---------------------------------------------------------------------------------

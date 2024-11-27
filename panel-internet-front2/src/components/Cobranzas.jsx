@@ -119,7 +119,15 @@ export const Cobranzas = ({user = {}}) => {
 
             // const results = await Promise.all(fetchPromises);
 
-            if(results.some(res => res === true)) {
+            const resultArr = results.map((row, idx) => {
+                if(row === true) {
+                    return idx
+                }
+            })
+
+            console.log(resultArr)
+
+            if(resultArr.length > 0) {
                 console.log(results)
                 dataObj.results = results;
                 dataObj.facturas = totalFacturas.arr
@@ -355,7 +363,7 @@ export const Cobranzas = ({user = {}}) => {
                         <button className="btn btn-success">Confirmar</button>
                     </li>
                 </ul>
-                <input type="hidden" name="cobrador" value={user.nombre ? user.nombre : user.mail}/>
+                <input type="hidden" name="cobrador" value={user.nombre_completo ? user.nombre_completo : user.email}/>
             </form>
             { state.text ? <Toast texto={state.text} res={state.res}/> : null }
         </article>
