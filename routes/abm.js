@@ -719,6 +719,8 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
 
         const results = await agregarCobros(req.body);
 
+        console.log(results)
+
         if(results.every(row => row === true)) {
             if(req.body.puntos_pago > 0) {
                 const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
@@ -777,7 +779,7 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
 
         const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
 
-        const deleteFactura = await deleteRecordMikrowisp({id: cobranza.ID_Factura});
+        const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN,id: cobranza.ID_Factura});
 
         if(deleteFactura.error) {
             res.status(500).json({ error: deleteFactura.error });
