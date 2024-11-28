@@ -1589,14 +1589,14 @@ router.post("/cobradores/agregar", authenticate, async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const user = {
+        const userObj = {
             userId: uuidv4(),
             email: email,
             password: hashedPassword,
             role: "cobrador"
         };
 
-        const result = await insertRecord("users", user);
+        const result = await insertRecord("users", userObj);
         const result2 = await insertRecord("cobradores", {nombre, apellido, email, permisos});
 
         const date = new Date().toLocaleString()
@@ -1615,7 +1615,6 @@ router.post("/cobradores/agregar", authenticate, async (req, res) => {
         }else {
             const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego el cobrador " + nombre, fecha: new Date(date).getTime()});
-
         }
         res.status(201).json({ message: "Cobrador creado correctamente!" });
     } catch (err) {

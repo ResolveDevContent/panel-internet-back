@@ -43,9 +43,6 @@ export const ELEMENTOS = {
             placeholder: "Contraseña",
             valor: '',
             mensaje: "Volve a escribir la contraseña o inserte una nueva."
-        },
-        {
-            element: "user"
         }
     ],
     cobradores: [
@@ -85,9 +82,6 @@ export const ELEMENTOS = {
             placeholder: "Contraseña",
             valor: '',
             mensaje: "Volve a escribir la contraseña o inserte una nueva."
-        },
-        {
-            element: "user"
         }
     ],
     zonas: [
@@ -98,9 +92,6 @@ export const ELEMENTOS = {
             placeholder: 'Zona',
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
     ],
     clientes: [
@@ -166,9 +157,6 @@ export const ELEMENTOS = {
             placeholder: 'Codigo',
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
     ],
     comercios: [
@@ -235,9 +223,6 @@ export const ELEMENTOS = {
             placeholder: "Cambiar Contraseña",
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
     ],
     transacciones: [
@@ -255,9 +240,6 @@ export const ELEMENTOS = {
             placeholder: 'Monto',
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
         // {
         //     element: 'input',
@@ -281,9 +263,6 @@ export const ELEMENTOS = {
             placeholder: 'Monto',
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
         // {
         //     element: 'input',
@@ -307,9 +286,6 @@ export const ELEMENTOS = {
             placeholder: 'Monto pagado',
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
     ],
     asociacionesClientes: [
@@ -329,9 +305,6 @@ export const ELEMENTOS = {
             placeholder: "comercios",
             tipo: 'radio',
             lista: false,
-        },
-        {
-            element: "user"
         }
     ],
     asociacionesComercios: [
@@ -348,9 +321,6 @@ export const ELEMENTOS = {
             placeholder: "comercios",
             tipo: 'checkbox',
             lista: false,
-        },
-        {
-            element: "user"
         }
     ],
     historial: [
@@ -369,9 +339,6 @@ export const ELEMENTOS = {
             placeholder: 'Fecha',
             valor: '',
             mensaje: "",
-        },
-        {
-            element: "user"
         }
     ]
 }

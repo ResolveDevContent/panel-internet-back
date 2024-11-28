@@ -100,6 +100,8 @@ export const Cobranzas = ({user = {}}) => {
             }
         }
 
+        dataObj.user = user;
+
         console.log(dataObj, totalFacturas)
 
         if(totalFacturas.arr.length > 0 && (Number(dataObj.monto_total) > 0 || Number(dataObj.puntos_pago) == Number(dataObj.monto_total)) &&
@@ -112,15 +114,15 @@ export const Cobranzas = ({user = {}}) => {
                     pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
                     .then(data => {
                         console.log(data)
-                        return true
+                        return true;
                     })
                     .catch((err) => {
                         console.log(err)
-                        return null
+                        return false;
                     })
                 } catch {
                     console.log("catch")
-                    return null
+                    return false;
                 }
             });
 

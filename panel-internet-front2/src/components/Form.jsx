@@ -50,6 +50,8 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
             dataObj[name] = value
         }
 
+        dataObj.user = user;
+
         if(id) {
             setLoading(true)
 
