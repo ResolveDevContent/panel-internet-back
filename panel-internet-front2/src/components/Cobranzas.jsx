@@ -238,7 +238,7 @@ export const Cobranzas = ({user = {}}) => {
         listarFacturas({token: import.meta.env.VITE_TOKEN, idcliente: clienteId})
         .then(facturas => {
             let newArr = [];    
-
+            console.log(facturas)
             if(facturas.error) {
                 setState({
                     text: facturas.message,
@@ -254,6 +254,7 @@ export const Cobranzas = ({user = {}}) => {
             setTotalFacturas({ total: 0, arr: [] });
         })
         .catch(err => {
+            console.log("catch", err)
             setFacturasList({ total: 0, arr: [] }); 
             setTotalFacturas({ total: 0, arr: [] }); 
             setState({

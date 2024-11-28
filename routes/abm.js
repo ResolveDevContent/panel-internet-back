@@ -717,8 +717,6 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
 
         const results = await agregarCobros(req.body);
 
-        console.log(results)
-
         if(results.every(row => row === true)) {
             if(req.body.puntos_pago > 0) {
                 const puntos = await selectOrderByASC("puntos", "ID_Cliente", "fecha", req.body.ID_Cliente);
@@ -752,8 +750,6 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
                 nombre_user = user.email
             }
 
-            console.log(user, cliente, nombre_user)
-
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo el cobro de " + req.body.results.length + " factura/s del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             res.status(201).json({ message: "Cobros creados correctamente." });
         } else {
@@ -776,14 +772,12 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
             await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pagos, fecha: Date.now()});
         }
         const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
-console.log(process.env.TOKEN, cobranza[0].ID_Factura)
         const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN, factura: cobranza[0].ID_Factura});
 
-console.log(deleteFactura)
         if(deleteFactura.error) {
             res.status(500).json({ error: deleteFactura.error });
         }
-console.log("psa")
+
         const date = new Date().toLocaleString()
         let nombre_user = '';
         if(user.role == 'admin') {
