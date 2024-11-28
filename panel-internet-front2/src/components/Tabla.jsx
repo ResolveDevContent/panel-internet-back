@@ -53,7 +53,7 @@ const formatearDatos = (datos) => {
             data.puntos_totales = new Intl.NumberFormat('es-ES').format(Number(data.puntos_totales))
         }
 
-        if(titulo == 'admins' && data.permisos) {
+        if((titulo == 'cobradores' || titulo == 'admins') && data.permisos) {
             data.permisos = Boolean(data.permisos) ? "Activo" : "Inactivo";
         }
 
@@ -63,6 +63,7 @@ const formatearDatos = (datos) => {
 
         if((titulo == 'cobranzas')) {
             delete data.ID_Cliente
+            delete data.password
         }
 
         const newArr = Object.values(data)
@@ -80,12 +81,15 @@ const formatearDatos = (datos) => {
 
     if(titulo == "transacciones" || titulo == "historial/transacciones") {
         const idx = columns.findIndex(column => column == "puntos_pago");
-        columns.splice(idx, 1)
+        if(idx > -1) columns.splice(idx, 1)
     }
 
     if(titulo == "cobranzas") {
         const idx = columns.findIndex(column => column == "ID_Cliente");
-        columns.splice(idx, 1)
+        if(idx > -1) columns.splice(idx, 1)
+
+        const idxPassword = columns.findIndex(column => column == "password");
+        if(idx > -1) columns.splice(idxPassword, 1)
     }   
 
     setTable({

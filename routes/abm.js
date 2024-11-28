@@ -770,14 +770,14 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
     delete req.body.user;
 
     try {
-        const cobranza = await selectOneRecord("cobranzas", "ID_Transaccion", id);
+        const cobranza = await selectOneRecord("cobranzas", "ID_Cobranza", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', cobranza[0].ID_Cliente);
 
         if(cobranza[0].puntos_pago && cobranza[0].puntos_pago > 0) {
             await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pago, fecha: Date.now()});
         }
 
-        const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
+        const results = await deleteRecord("cobranzas", "ID_Cobranza", id);
 
         const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN,id: cobranza.ID_Factura});
 
@@ -1654,19 +1654,17 @@ router.put("/cobradores/modificar/:id", authenticate, async (req, res) => {
         let nombre_superadmin = '';
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
-        } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
+
         if(nombre_superadmin) {
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " actualizo el cobrador " + req.body.nombre, fecha: new Date(date).getTime()});
-
         }else {
             const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
             await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " actualizo el cobrador " + req.body.nombre, fecha: new Date(date).getTime()});
         }
-        res.status(200).json(updateAdmin);
+        res.status(200).json(updateCobrador);
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
@@ -1687,8 +1685,6 @@ router.delete("/cobradores/borrar/:id", authenticate, async (req, res) => {
         let nombre_superadmin = '';
         if(user.role == 'admin') {
             nombre_user = await selectOneRecord('admins', 'email', user.email)
-        } else if(user.role == 'comercio') {
-            nombre_user = await selectOneRecord('comercio', 'email', user.email)
         } else {
             nombre_superadmin = user.email
         }
