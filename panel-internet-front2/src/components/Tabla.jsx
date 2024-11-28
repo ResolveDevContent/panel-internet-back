@@ -94,8 +94,8 @@ const formatearDatos = (datos) => {
     }
 
     if(titulo == "cobradores") {
-        const idxPassword = columns.findIndex(column => column == "password");
-        if(idx > -1) {columns.splice(idxPassword, 1)}
+        const idx = columns.findIndex(column => column == "password");
+        if(idx > -1) {columns.splice(idx, 1)}
     }   
 
     setTable({
