@@ -263,6 +263,7 @@ console.log(fetchPromises);
         .catch(err => {
             setFacturasList({ total: 0, arr: [] }); 
             setTotalFacturas({ total: 0, arr: [] }); 
+            console.log("error", err)
             setState({
                 text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                 res: "secondary"
