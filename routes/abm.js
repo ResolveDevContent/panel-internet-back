@@ -814,7 +814,7 @@ async function agregarCobros(body) {
 
     console.log(puntos, cobro)
 
-    const promises = body.result.map(async (row) => {
+    const promises = body.results.map(async (row) => {
         console.log(row, body.facturas)
         if(body.facturas[row]) {
             console.log(body.facturas[row])
