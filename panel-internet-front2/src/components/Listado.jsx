@@ -466,6 +466,7 @@ export const Listado = ({titulo, user = {}}) => {
                                             </div>
                                         : null}
                                         {titulo != "clientes" && titulo != "historial" && titulo != "historial/transacciones" && titulo != "cobranzas" && titulo != "zonas"
+                                            && titulo != "cobrador"
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setnombreComercio(e.target.value)
@@ -485,7 +486,7 @@ export const Listado = ({titulo, user = {}}) => {
                                                 </span>
                                             </div>
                                         : null}
-                                        {titulo == 'cobranzas'
+                                        {titulo == 'cobranzas' || titulo == 'cobradores'
                                             ? <>
                                                 <div className='buscador-field'>
                                                     <input type="text" onChange={e => {

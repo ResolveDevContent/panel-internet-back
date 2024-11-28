@@ -779,7 +779,7 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
 
         const results = await deleteRecord("cobranzas", "ID_Cobranza", id);
 
-        const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN,id: cobranza.ID_Factura});
+        const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN, factura: cobranza[0].ID_Factura});
 
         if(deleteFactura.error) {
             res.status(500).json({ error: deleteFactura.error });
@@ -1694,10 +1694,10 @@ router.delete("/cobradores/borrar/:id", authenticate, async (req, res) => {
         }
 
         if(nombre_superadmin) {
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro el cobrador " + admins[0].nombre, fecha: new Date(date).getTime()});
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " borro el cobrador " + cobrador[0].nombre, fecha: new Date(date).getTime()});
         } else {
-            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro el cobrador " + admins[0].nombre, fecha: new Date(date).getTime()});
+            const nombre = nombre_user[0].nombre
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " borro el cobrador " + cobrador[0].nombre, fecha: new Date(date).getTime()});
         }
         res.status(200).json(result);
     } catch (err) {
