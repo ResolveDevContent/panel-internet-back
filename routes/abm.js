@@ -717,6 +717,8 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
             }
         }
 
+        console.log("llega agregar")
+
         const results = await agregarCobros(req.body);
 
         console.log(results)
@@ -810,6 +812,8 @@ async function agregarCobros(body) {
         cobrador: body.cobrador,
     };
 
+    console.log(puntos, cobro)
+
     const promises = body.result.map(async (row) => {
         if(body.facturas[row]) {
             try {
@@ -820,6 +824,8 @@ async function agregarCobros(body) {
             }
         }
     });
+
+    console.log(promises)
 
     const PromisesResult = Promise.all(promises)
 
