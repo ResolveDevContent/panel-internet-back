@@ -8,7 +8,6 @@ import { MultipleSelectTemplate } from '../templates/MultipleSelectTemplate'
 import { ListTemplate } from "../templates/ListTemplate"
 import { Loading } from "./Loading"
 import { PermisosTemplate } from "../templates/permisosTemplate";
-import { UserTemplate } from "../templates/UserTemplate";
 import { FiltroCliente } from "../templates/FiltroCliente";
 import { ZonasTemplate } from "../templates/ZonasTemplate";
 
@@ -36,13 +35,13 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                 value = 0
             }
 
-            if(name == "user" || (name == "zona" && titulo == "clientes")) {
+            if(name == "zona" && titulo == "clientes") {
                 value = JSON.parse(value)
             }
 
             if((titulo == "admins" && name == "ID_Comercio") ||
-            titulo == "asociaciones/clientes" && name != "user" ||
-            (titulo == "asociaciones/comercios" && name != "user") ||
+            titulo == "asociaciones/clientes" ||
+            titulo == "asociaciones/comercios"||
             (titulo == "comercios/pagos" && name == "ID_Comercio")) { 
                 value = JSON.parse(value)    
             }
@@ -164,7 +163,6 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
                                     if(row.element == "list") {return <ListTemplate key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "filtroCliente") {return <FiltroCliente key={idx} user={user} titulo={titulo} data={row} values={id && data.length > 0 ? data[0] : {}} />}
                                     if(row.element == "permisos") {return <PermisosTemplate key={idx} data={row} values={id && data.length > 0 ? data[0] : {}} />}
-                                    if(row.element == "user") {return <UserTemplate key={idx} />}
                                     if(row.element == "zonas") {return <ZonasTemplate key={idx} titulo={titulo} data={row} user={user}/>}
                                 })}
                                 <li className="mt-4 p-2 text-end">
