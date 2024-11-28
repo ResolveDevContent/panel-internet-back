@@ -877,7 +877,7 @@ router.get("/transacciones/listar/admin/:email", authenticate, async (req, res) 
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
 });
-
+ 
 router.get("/historial/transacciones/listar/:id", authenticate, async (req, res) => { 
     const { id } = req.params;
     try {
