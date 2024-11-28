@@ -991,7 +991,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 //         req.body.monto_parcial = Number(req.body.monto_parcial);
 //         const body = { ...req.body }; 
 
-//         if (Number(req.body.puntos_pago) > 0) {
+//         if (Number(req.body.puntos_pago) > 0)  {
 //             const totales = await calculoDePuntos("transacciones", "ID_Cliente", req.body.ID_Cliente);
 //             if (Number(req.body.puntos_pago) > totales[0].puntos_totales) {
 //                 return res.status(500).json({ error: "El cliente no posee esos puntos." });
