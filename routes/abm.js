@@ -776,6 +776,7 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
             await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pagos, fecha: Date.now()});
         }
         const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
+console.log(process.env.TOKEN, cobranza[0].ID_Factura)
         const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN, factura: cobranza[0].ID_Factura});
 
 console.log(deleteFactura)
