@@ -997,7 +997,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 //                 return res.status(500).json({ error: "El cliente no posee esos puntos." });
 //             }
 //         }
-
+ 
 //         const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Clienteo);
 //         const comercioNombre = await selectOneRecord("comercio", 'ID_Comercio', req.body.ID_Comercio);
 //         await insertRecord('historial', {message: "Se modifico una transaccion del cliente " + cliente[0].nombre + " en el comercio " + comercioNombre[0].nombre_comercio, fecha: new Date(date).getTime()});
