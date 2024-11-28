@@ -817,7 +817,7 @@ async function agregarCobros(body) {
     const promises = body.result.map(async (row) => {
         if(body.facturas[row]) {
             try {
-                await insertRecord('cobranzas', {...cobro, ID_Factura: facturas[row].id, monto_total: facturas[row].total, puntos_pago: puntos, fecha: Date.now()});
+                await insertRecord('cobranzas', {...cobro, ID_Factura: facturas[row].id, monto_total: facturas[row].total, puntos_pagos: puntos, fecha: Date.now()});
                 return true;
             } catch {
                 return false;

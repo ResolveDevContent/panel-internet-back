@@ -190,7 +190,7 @@ return (
                                             </li>
                                             : null
                                         }
-                                        {(user.role != "admin" || titulo != "clientes") && (admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins')
+                                        {(user.role != "admin" || titulo != "clientes") && (admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' || titulo == 'cobradores')
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>
@@ -198,7 +198,7 @@ return (
                                         }
                                         {(user.role != "comercio" || titulo != "transacciones") && (admin == null || admin[0].permisos == 1) && 
                                         (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos' || 
-                                        titulo == 'asociaciones' || titulo == 'clientes' || titulo == 'cobranzas')
+                                        titulo == 'asociaciones' || titulo == 'clientes' || titulo == 'cobranzas' || titulo == 'cobradores')
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>
