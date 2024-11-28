@@ -242,6 +242,10 @@ input[type="password"]::placeholder {
 #form .card-body > li button:hover {
     background-color: var(--color-2);
 }
+#form .card-body .list-template .empty-state-card,
+#form .card-body .list-template .empty-state {
+    margin: 0;
+}
 #form .card-body .list-template .buscador-field + .dropdown-list {
     border-top: none;
     margin-top: 0;
