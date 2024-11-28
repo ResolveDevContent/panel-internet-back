@@ -23,6 +23,7 @@ const checkRecordExists = async (tableName, column, value) => {
 const insertRecord = async (tableName, record) => {
   const placeHolder = Object.keys(record).map(() => "?").join(",");
   const query = `INSERT INTO ${tableName} (${Object.keys(record)}) VALUES (${placeHolder})`;
+  console.log(query)
 
   try {
     const [results] = await pool.query(query, Object.values(record));

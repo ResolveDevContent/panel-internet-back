@@ -267,6 +267,10 @@ console.log(fetchPromises);
                 text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                 res: "secondary"
             })
+
+            setTimeout(() => {
+                setState({text: "", res: ""})
+            }, 6000)
         })
         .finally(() => setLoading(false))
     }
