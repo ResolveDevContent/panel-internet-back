@@ -40,7 +40,7 @@ const formatearDatos = (datos) => {
 
     const columns = Object.keys(datos[0]).slice(1, Object.keys(datos[0]).length)
     const rows = datos.map((data) => {
-        if((titulo == 'historial' || titulo == 'transacciones' || titulo == 'comercios/pagos' || titulo == "historial/transacciones") && !data["fecha"].includes("/")) {
+        if((titulo == 'cobranzas' || titulo == 'historial' || titulo == 'transacciones' || titulo == 'comercios/pagos' || titulo == "historial/transacciones") && !data["fecha"].includes("/")) {
             if(!isNaN(Number(data['fecha']))) {
                 let date = new Date(Number(data['fecha']));
                 const fecha = date.toLocaleString();
@@ -61,6 +61,10 @@ const formatearDatos = (datos) => {
             delete data.puntos_pago
         }
 
+        if((titulo == 'cobranzas')) {
+            delete data.ID_Cliente
+        }
+
         const newArr = Object.values(data)
 
         return newArr
@@ -78,6 +82,11 @@ const formatearDatos = (datos) => {
         const idx = columns.findIndex(column => column == "puntos_pago");
         columns.splice(idx, 1)
     }
+
+    if(titulo == "cobranzas") {
+        const idx = columns.findIndex(column => column == "ID_Cliente");
+        columns.splice(idx, 1)
+    }   
 
     setTable({
         columns: columns,

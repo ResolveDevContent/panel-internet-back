@@ -29,7 +29,7 @@ export const Listado = ({titulo, user = {}}) => {
 
     const filteredNombre = useMemo(() => {
         let newArr = [];
-        if(titulo == "clientes") {
+        if(titulo == "clientes" || titulo == "cobranzas") {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
                     return row.nombre.toLowerCase().includes(nombre.toLowerCase())
