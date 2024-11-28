@@ -810,9 +810,8 @@ async function agregarCobros(body) {
 
     const promises = body.results.map(async (row) => {
         if(body.facturas[row]) {
-            console.log({...cobro, ID_Factura: facturas[row].id, monto_total: Number(facturas[row].total), puntos_pagos: puntos, fecha: Date.now()})
             try {
-                await insertRecord('cobranzas', {...cobro, ID_Factura: facturas[row].id, monto_total: Number(facturas[row].total), puntos_pagos: puntos, fecha: Date.now()});
+                await insertRecord('cobranzas', {...cobro, ID_Factura: body.facturas[row].id, monto_total: Number(body.facturas[row].total), puntos_pagos: puntos, fecha: Date.now()});
                 return true;
             } catch {
                 return false;
@@ -821,8 +820,6 @@ async function agregarCobros(body) {
             return false;
         }
     });
-
-    console.log(promises)
 
     const PromisesResult = Promise.all(promises)
 

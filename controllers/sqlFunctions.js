@@ -23,11 +23,9 @@ const checkRecordExists = async (tableName, column, value) => {
 const insertRecord = async (tableName, record) => {
   const placeHolder = Object.keys(record).map(() => "?").join(",");
   const query = `INSERT INTO ${tableName} (${Object.keys(record)}) VALUES (${placeHolder})`;
-  console.log(query)
 
   try {
     const [results] = await pool.query(query, Object.values(record));
-    console.log(results)
     return results;
   } catch (err) {
     console.error('Error executing query:', err); // Manejo de errores
