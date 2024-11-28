@@ -58,6 +58,8 @@ export const Cobranzas = ({user = {}}) => {
             setTotalFacturas(prevState => ({total: prevState.total - Number(values[1]), arr: newArr}))
             totalFacturasRef.current -= Number(values[1]);
         }
+
+        console.log(newArr)
     } 
 
     const buscarCliente = id => {
@@ -111,15 +113,8 @@ export const Cobranzas = ({user = {}}) => {
             console.log(totalFacturas)
             const fetchPromises = totalFacturas.arr.map(async row => {
                 try {
-                    pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
-                    .then(data => {
-                        console.log(data)
-                        return true;
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                        return false;
-                    })
+                    await pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
+                    return true;
                 } catch {
                     console.log("catch")
                     return false;

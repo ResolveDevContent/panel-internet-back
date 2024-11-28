@@ -271,10 +271,7 @@ input[type="password"]::placeholder {
     text-transform: uppercase;
 }
 #form .card-body .list-template .dropdown-list .facturas {
-    max-height: 12em;
-    border: 1px solid grey;
-    padding: 1em;
-    overflow: auto;
+    padding: .25em;
 }
 #form .card-body .list-template .dropdown-list .facturas li {
     box-shadow: 0px 0px 10px 0px #00000030;
