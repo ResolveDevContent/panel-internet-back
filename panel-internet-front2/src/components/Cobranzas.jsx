@@ -258,7 +258,7 @@ console.log(fetchPromises);
                 newArr = facturas.facturas.filter(row => row.estado != 'pagado' && row.estado != 'anulado')
             }
             setFacturasList({ total: 0, arr: newArr });
-            setTotalFacturas({ total: 0, arr: newArr });
+            setTotalFacturas({ total: 0, arr: [] });
         })
         .catch(err => {
             setFacturasList({ total: 0, arr: [] }); 
