@@ -886,7 +886,7 @@ router.get("/historial/transacciones/listar/:id", authenticate, async (req, res)
     } catch (err) {
         res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
     }
-});
+}); 
 
 // Agregar transacción
 router.post("/transacciones/agregar", authenticate, async (req, res) => {
