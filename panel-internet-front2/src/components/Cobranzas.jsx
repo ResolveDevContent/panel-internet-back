@@ -58,8 +58,6 @@ export const Cobranzas = ({user = {}}) => {
             setTotalFacturas(prevState => ({total: prevState.total - Number(values[1]), arr: newArr}))
             totalFacturasRef.current -= Number(values[1]);
         }
-
-        console.log(newArr)
     } 
 
     const buscarCliente = id => {
@@ -104,28 +102,20 @@ export const Cobranzas = ({user = {}}) => {
 
         dataObj.user = user;
 
-        console.log(dataObj, totalFacturas)
-
         if(totalFacturas.arr.length > 0 && (Number(dataObj.monto_total) > 0 || Number(dataObj.puntos_pago) == Number(dataObj.monto_total)) &&
             (Number(dataObj.puntos_pago) == 0 || Number(dataObj.puntos_pago) <= Number(clienteObj.puntos))) {
             setLoading(true)
 
-            console.log(totalFacturas)
             const fetchPromises = totalFacturas.arr.map(async row => {
                 try {
                     await pagarFacturas({token: import.meta.env.VITE_TOKEN, idfactura: row.id, pasarela: dataObj.pasarela, cantidad: row.total})
                     return true;
                 } catch {
-                    console.log("catch")
                     return false;
                 }
             });
 
-console.log(fetchPromises);
-
             const results = await Promise.all(fetchPromises);
-
-            console.log(results)
 
             const resultArr = results.map((row, idx) => {
                 if(row === true) {
@@ -133,14 +123,10 @@ console.log(fetchPromises);
                 }
             })
 
-            console.log(resultArr)
-
             if(resultArr.length > 0) {
-                console.log(results)
                 dataObj.results = resultArr;
                 dataObj.facturas = totalFacturas.arr
 
-                console.log(dataObj)
                 agregar('cobranzas', dataObj)
                 .then(data => {
                     if(data.error) {
@@ -190,7 +176,6 @@ console.log(fetchPromises);
       if(user && user.role == "superadmin" || user.role == "cobrador") {
           listar('clientes', signal)
           .then(datos => {
-                console.log(datos)
                 if(!datos || datos.length == 0) {
                     setSortedListado([])
                     originalListado.current = [];
@@ -252,7 +237,6 @@ console.log(fetchPromises);
 
         listarFacturas({token: import.meta.env.VITE_TOKEN, idcliente: clienteId})
         .then(facturas => {
-            console.log(facturas)
             let newArr = [];            
             if(facturas.facturas.length > 0) {
                 newArr = facturas.facturas.filter(row => row.estado != 'pagado' && row.estado != 'anulado')
@@ -263,7 +247,6 @@ console.log(fetchPromises);
         .catch(err => {
             setFacturasList({ total: 0, arr: [] }); 
             setTotalFacturas({ total: 0, arr: [] }); 
-            console.log("error", err)
             setState({
                 text: "Ha ocurrido un error en la API de Mikrowisp, intente nuevamente o comuniquese con nosotros",
                 res: "secondary"
