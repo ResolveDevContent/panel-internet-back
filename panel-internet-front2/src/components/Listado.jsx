@@ -34,7 +34,9 @@ export const Listado = ({titulo, user = {}}) => {
                 ? listado.filter(row => {
                     return row.nombre.toLowerCase().includes(nombre.toLowerCase())
                 })
-                : []
+                : titulo == 'cobranzas' 
+                    ? listado
+                    : []
         } else {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
@@ -336,6 +338,7 @@ export const Listado = ({titulo, user = {}}) => {
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
+
                             setListado(datos)
                             originalListado.current = datos;
                         }
