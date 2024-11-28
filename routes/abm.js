@@ -752,7 +752,9 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
                 nombre_user = user.email
             }
 
-            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo el cobro de " + req.body.result.length + " factura/s del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
+            console.log(user, cliente, nombre_user)
+
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user + " realizo el cobro de " + req.body.results.length + " factura/s del cliente " + cliente[0].nombre, fecha: new Date(date).getTime()});
             res.status(201).json({ message: "Cobros creados correctamente." });
         } else {
             return res.status(500).json({ error: "Algunos cobros no se crearon correctamente." });
