@@ -983,7 +983,7 @@ router.post("/transacciones/agregar", authenticate, async (req, res) => {
 //         if (comercio.length === 0) {
 //             return res.status(500).json({ error: "Comercio no encontrado." });
 //         }
-
+ 
 //         const row = comercio[0];
 //         const puntos = Number(req.body.monto_parcial) - Number(req.body.puntos_pago);
 //         const puntosFinales = Number(calcularPuntos(row.porcentaje, puntos));
