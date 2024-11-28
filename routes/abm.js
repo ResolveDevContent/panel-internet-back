@@ -816,9 +816,9 @@ async function agregarCobros(body) {
             } catch {
                 return false;
             }
+        } else {
+            return false;
         }
-
-        return false;
     });
 
     console.log(promises)
