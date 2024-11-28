@@ -7,8 +7,12 @@ const deleteRecordMikrowisp = async (body) => {
           },
           body: JSON.stringify(body)
     })
-    .then((res) => ({message: "Se elimino correctamente"}))
-    .catch((err) => ({error: "Ha ocurrido un error en la API de Mikorwisp."}))
+    .then((res) => {
+      return {message: "Se elimino correctamente"}
+    })
+    .catch((err) => {
+      return {error: "Ha ocurrido un error en la API de Mikorwisp."}
+    })
   } catch (err) {
     return ({error: "Ha ocurrido un error en la API de Mikorwisp."})
   }
