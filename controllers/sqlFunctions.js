@@ -26,6 +26,7 @@ const insertRecord = async (tableName, record) => {
 
   try {
     const [results] = await pool.query(query, Object.values(record));
+    console.log(results)
     return results;
   } catch (err) {
     console.error('Error executing query:', err); // Manejo de errores
