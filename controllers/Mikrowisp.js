@@ -1,6 +1,6 @@
 const deleteRecordMikrowisp = async (body) => {
   try {
-    fetch(`https://autogestion.winetinternet.com.ar/api/v1/DeleteTrans`, {
+    fetch(`https://autogestion.winetinternet.com.ar/api/v1/DeleteTransaccion`, {
           method: "POST",
           headers: {
               'Content-Type': 'application/json',

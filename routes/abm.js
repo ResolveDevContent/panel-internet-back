@@ -771,20 +771,18 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
 
     try {
         const cobranza = await selectOneRecord("cobranzas", "ID_Cobranzas", id);
-console.log(cobranza)
+
         if(cobranza[0].puntos_pagos && cobranza[0].puntos_pagos > 0) {
             await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pagos, fecha: Date.now()});
         }
-console.log("entre")
         const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
-console.log("borra")
-
         const deleteFactura = await deleteRecordMikrowisp({token: process.env.TOKEN, factura: cobranza[0].ID_Factura});
 
+console.log(deleteFactura)
         if(deleteFactura.error) {
             res.status(500).json({ error: deleteFactura.error });
         }
-
+console.log("psa")
         const date = new Date().toLocaleString()
         let nombre_user = '';
         if(user.role == 'admin') {
