@@ -180,7 +180,7 @@ return (
         <>
           <article className='d-flex flex-column w-100 h-100 mt-1'>
             <strong className='p-3 text-capitalize'>{titulo} - listado</strong>
-            { !table || table.columns.length == 0 ? (
+            { !table || table.columns.length == 0 || table.rows.length == 0 ? (
                 <EmptyState texto="No hay informacion disponible" />
             ) : (
                 <div className='table-container'>

@@ -237,10 +237,19 @@ export const Cobranzas = ({user = {}}) => {
 
         listarFacturas({token: import.meta.env.VITE_TOKEN, idcliente: clienteId})
         .then(facturas => {
-            let newArr = [];            
+            let newArr = [];    
+
+            if(facturas.error) {
+                setState({
+                    text: facturas.message,
+                    res: "secondary"
+                })
+            }
+
             if(facturas.facturas.length > 0) {
                 newArr = facturas.facturas.filter(row => row.estado != 'pagado' && row.estado != 'anulado')
             }
+
             setFacturasList({ total: 0, arr: newArr });
             setTotalFacturas({ total: 0, arr: [] });
         })
