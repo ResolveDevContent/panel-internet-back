@@ -66,6 +66,10 @@ const formatearDatos = (datos) => {
             delete data.password
         }
 
+        if((titulo == 'cobradores')) {
+            delete data.password
+        }
+
         const newArr = Object.values(data)
 
         return newArr
@@ -81,15 +85,17 @@ const formatearDatos = (datos) => {
 
     if(titulo == "transacciones" || titulo == "historial/transacciones") {
         const idx = columns.findIndex(column => column == "puntos_pago");
-        if(idx > -1) columns.splice(idx, 1)
+        if(idx > -1) {columns.splice(idx, 1)}
     }
 
     if(titulo == "cobranzas") {
         const idx = columns.findIndex(column => column == "ID_Cliente");
-        if(idx > -1) columns.splice(idx, 1)
+        if(idx > -1) {columns.splice(idx, 1)}
+    }
 
+    if(titulo == "cobradores") {
         const idxPassword = columns.findIndex(column => column == "password");
-        if(idx > -1) columns.splice(idxPassword, 1)
+        if(idx > -1) {columns.splice(idxPassword, 1)}
     }   
 
     setTable({
@@ -144,6 +150,7 @@ const borrarDatos = (e, id, email) => {
                 setState({text: result.message, res: "primary"})
 
                 setTable(prevState => ({...prevState, rows: prevState.rows.filter(row => !row[0].includes(id))}));
+                console.log(table)
             })
       }
   })

@@ -773,8 +773,8 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
         const cobranza = await selectOneRecord("cobranzas", "ID_Cobranza", id);
         const cliente = await selectOneRecord("clientes", 'ID_Cliente', cobranza[0].ID_Cliente);
 
-        if(cobranza[0].puntos_pago && cobranza[0].puntos_pago > 0) {
-            await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pago, fecha: Date.now()});
+        if(cobranza[0].puntos_pagos && cobranza[0].puntos_pagos > 0) {
+            await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pagos, fecha: Date.now()});
         }
 
         const results = await deleteRecord("cobranzas", "ID_Cobranza", id);
@@ -788,7 +788,11 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
         const date = new Date().toLocaleString()
         let nombre_user = '';
         if(user.role == 'admin') {
-            nombre_user = await selectOneRecord('admins', 'email', user.email)
+            const result = await selectOneRecord('admins', 'email', user.email)
+            nombre_user = result.nombre
+        } else if(user.role == 'cobrador') {
+            const result = await selectOneRecord('cobradores', 'email', user.email)
+            nombre_user = result.nombre
         } else {
             nombre_user = user.email
         }
