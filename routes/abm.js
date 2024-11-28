@@ -390,8 +390,6 @@ router.post("/zonas/agregar", authenticate, async (req, res) => {
         } else {
             nombre_superadmin = user.email
         }
-        
-        console.log("message", user.role, nombre_user, nombre_superadmin)
 
         await insertRecord('historial', {message: "El " + user.role +  " " + nombre_user != "" ? nombre_user.nombre : nombre_superadmin + " agrego una zona", fecha: new Date(date).getTime()});
         return res.status(201).json({ message: "La zona se ha agregado correctamente." });
@@ -717,8 +715,6 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
             }
         }
 
-        console.log("llega agregar")
-
         const results = await agregarCobros(req.body);
 
         console.log(results)
@@ -804,7 +800,7 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
 });
 
 async function agregarCobros(body) {
-    let puntos = body.puntos_pago > 0 ? body.facturas.length > 0 ? body.puntos_pago / body.facturas.length : body.puntos_pago : 0;
+    let puntos = Number(body.puntos_pago) > 0 ? Number(body.facturas.length) > 0 ? Number(body.puntos_pago) / Number(body.facturas.length) : Number(body.puntos_pago) : 0;
 
     const cobro = {
         ID_Cliente: body.ID_Cliente,
@@ -812,14 +808,10 @@ async function agregarCobros(body) {
         cobrador: body.cobrador,
     };
 
-    console.log(puntos, cobro)
-
     const promises = body.results.map(async (row) => {
-        console.log(row, body.facturas)
         if(body.facturas[row]) {
-            console.log(body.facturas[row])
             try {
-                await insertRecord('cobranzas', {...cobro, ID_Factura: facturas[row].id, monto_total: facturas[row].total, puntos_pagos: puntos, fecha: Date.now()});
+                await insertRecord('cobranzas', {...cobro, ID_Factura: facturas[row].id, monto_total: Number(facturas[row].total), puntos_pagos: puntos, fecha: Date.now()});
                 return true;
             } catch {
                 return false;
