@@ -78,11 +78,20 @@ export const Listado = ({titulo, user = {}}) => {
     }, [rubro])
 
     const filteredCobrador = useMemo(() => {
-        const newArr = cobrador != null && cobrador.length > 0
-        ? listado.filter(row => {
-            return row.cobrador.toLowerCase().includes(cobrador.toLowerCase())
-        })
-        : listado
+        let newArr = [];
+        if(titulo == "cobradores") {
+            newArr = cobrador != null && cobrador.length > 0
+            ? listado.filter(row => {
+                return row.nombre.toLowerCase().includes(cobrador.toLowerCase())
+            })
+            : listado
+        } else {
+            newArr = cobrador != null && cobrador.length > 0
+            ? listado.filter(row => {
+                return row.cobrador.toLowerCase().includes(cobrador.toLowerCase())
+            })
+            : listado
+        }
 
         setSortedListado(newArr)
     }, [cobrador])
