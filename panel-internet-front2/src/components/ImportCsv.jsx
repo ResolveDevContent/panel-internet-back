@@ -107,9 +107,9 @@ export const ImportCsv = ({titulo, user = {}}) => {
 
     const handleDownload = () => {
         const link = document.createElement("a");
-        link.href = "../assets/files/Plantilla.xlsx";
+        link.href = "../assets/files/Plantilla.csv";
         link.target = "_blank";
-        link.download = "Plantilla.xlsx";
+        link.download = "Plantilla.csv";
 
         link.click();
     };
