@@ -466,7 +466,7 @@ export const Listado = ({titulo, user = {}}) => {
                                             </div>
                                         : null}
                                         {titulo != "clientes" && titulo != "historial" && titulo != "historial/transacciones" && titulo != "cobranzas" && titulo != "zonas"
-                                            && titulo != "cobrador"
+                                            && titulo != "cobradores"
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setnombreComercio(e.target.value)
@@ -487,7 +487,7 @@ export const Listado = ({titulo, user = {}}) => {
                                             </div>
                                         : null}
                                         {titulo == 'cobranzas' || titulo == 'cobradores'
-                                            ? <>
+                                            ? 
                                                 <div className='buscador-field'>
                                                     <input type="text" onChange={e => {
                                                         setCobrador(e.target.value)
@@ -496,16 +496,17 @@ export const Listado = ({titulo, user = {}}) => {
                                                         <Search />
                                                     </span>
                                                 </div>
-                                                <div className='buscador-field'>
-                                                    <input type="text" onChange={e => {
-                                                        setFactura(e.target.value)
-                                                    }} placeholder='Nro factura...' />
-                                                    <span>
-                                                        <Search />
-                                                    </span>
-                                                </div>
-                                            </>
                                         : null}
+                                        {titulo == "cobranzas" ? (
+                                            <div className='buscador-field'>
+                                                <input type="text" onChange={e => {
+                                                    setFactura(e.target.value)
+                                                }} placeholder='Nro factura...' />
+                                                <span>
+                                                    <Search />
+                                                </span>
+                                            </div>
+                                        ) : null}
                                     </div>
                                 </div>
                             : null}
