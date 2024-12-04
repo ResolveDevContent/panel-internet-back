@@ -123,6 +123,15 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     }
 
   useEffect(() => {
+      if(!user) {
+        setState({
+          text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+          res: "danger"
+        })
+        setSortedListado([])
+        originalListado.current = [];
+        return;
+      } 
       setLoading(true)
 
       const controller = new AbortController();
@@ -131,7 +140,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setSortedListado([])
       originalListado.current = [];
 
-      if(user && user.role == "superadmin") {
+      if(user.role == "superadmin") {
           listar(placeholder, signal)
           .then(datos => {
               console.log(datos)

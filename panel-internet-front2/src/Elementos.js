@@ -221,8 +221,8 @@ export const ELEMENTOS = {
             tipo: "password",
             nombre: "password",
             placeholder: "Cambiar Contraseña",
-            valor: '',
-            mensaje: "",
+            valor: '',          
+            mensaje: "Volve a escribir la contraseña o inserte una nueva."
         }
     ],
     transacciones: [
