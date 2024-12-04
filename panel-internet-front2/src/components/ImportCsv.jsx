@@ -134,7 +134,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
             if(datos.error) {
                 setState({
                 text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                res: "danger"
+                res: "secondary"
                 })
             }
 
@@ -145,7 +145,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
         .catch(err => {
             setState({
                 text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                res: "danger"
+                res: "secondary"
             })
         })
         .finally(setLoading(false))

@@ -126,10 +126,15 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       if(Object.keys(user).length == 0) {
         setState({
           text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-          res: "danger"
+          res: "secondary"
         })
         setSortedListado([])
         originalListado.current = [];
+
+        setTimeout(() => {
+            setState({text: "", res: ""})
+        }, 6000)
+
         return;
       } 
       setLoading(true)
@@ -154,7 +159,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               if(datos.error) {
                 setState({
                   text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
+                  res: "secondary"
                 })
               }
 
@@ -183,7 +188,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                   .catch(err => {
                       setState({
                           text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                          res: "danger"
+                          res: "secondary"
                       })
                   })
                 } else {
@@ -199,7 +204,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           .catch(err => {
               setState({
                   text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
+                  res: "secondary"
               })
           })
           .finally(setLoading(false))
@@ -215,7 +220,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
               if(datos.error) {
                 setState({
                   text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                  res: "danger"
+                  res: "secondary"
                 })
               }
 

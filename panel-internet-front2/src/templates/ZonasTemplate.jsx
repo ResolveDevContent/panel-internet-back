@@ -56,9 +56,21 @@ export const ZonasTemplate = ({data, titulo, user = {}}) => {
     }
 
     const handleChangeAll = e => {
+      if(Object.keys(user).length == 0) {
+          setState({
+              text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+              res: "secondary"
+          });
+
+        setTimeout(() => {
+            setState({text: "", res: ""})
+        }, 6000)
+        return;
+      } 
+
       if(e.target.checked) {
         let newArr = []
-        if(user && user.role == "superadmin") {
+        if(user.role == "superadmin") {
             listar("clientes")
             .then((cliente) => {
                 newArr = cliente.map((row) => row.ID_Cliente);

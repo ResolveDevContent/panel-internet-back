@@ -4,7 +4,7 @@ import { Toast } from "../components/Toast";
 
 export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) => {
     const [ opciones, setOpciones ] = useState([])
-    const [ otherOpciones, setotherOpciones ] = useState([])
+    const [ otherOpciones, setOtherOpciones ] = useState([])
     const [ nombreCliente, setNombreCliente ] = useState(null);
     const [ nombreComercio, setNombreComercio ] = useState(null);
     const [ state, setState ] = useState({text: "", res: ""})
@@ -31,7 +31,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             : originalOtherOpciones.current
 
         setLoading(false)
-        setotherOpciones(newArr)
+        setOtherOpciones(newArr)
     }, [nombreCliente])
 
     const filteredComercio = useMemo(() => {
@@ -56,7 +56,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
-                    setotherOpciones([])
+                    setOtherOpciones([])
                     return;
                 }
 
@@ -72,7 +72,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
                 })
                 
                 originalOtherOpciones.current = datos;
-                setotherOpciones(datos)
+                setOtherOpciones(datos)
             })
             .catch(err => {
                 setState({
@@ -87,16 +87,30 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
     }, [dato])
     
     useEffect(() => {
+        if(Object.keys(user).length == 0) {
+            setState({
+                text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                res: "secondary"
+            })
+            setOtherOpciones([])
+            originalOtherOpciones.current = [];
+
+            setTimeout(() => {
+                setState({text: "", res: ""})
+            }, 6000)
+
+            return;
+        } 
         const controller = new AbortController()
         const signal = controller.signal
         setLoading(true)
 
-        if(user && user.role == "superadmin") {
+        if(user.role == "superadmin") {
             listar('comercios', signal)
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
-                    setotherOpciones([])
+                    setOtherOpciones([])
                     return;
                 }
 
@@ -122,7 +136,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
-                    setotherOpciones([])
+                    setOtherOpciones([])
                     return;
                 }
 
@@ -140,7 +154,7 @@ export const MultipleSelectTemplate = ({data, titulo, values = {}, user = {}}) =
             .then(datos => {
                 if(!datos || datos.length == 0) {
                     originalOtherOpciones.current = [];
-                    setotherOpciones([])
+                    setOtherOpciones([])
                     return;
                 }
                 setDato([datos[0].ID_Comercio])
