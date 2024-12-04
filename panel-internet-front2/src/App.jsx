@@ -73,7 +73,6 @@ function App() {
                 <Route path="cobradores/agregar" element={<Form elementos={ELEMENTOS.cobradores} user={user} titulo={'cobradores'}/>} />
                 <Route path="cobradores/editar/:id" element={<Form elementos={ELEMENTOS.cobradores} titulo={'cobradores'} user={user}/>} />
                 <Route path="comercios/agregar" element={<Form elementos={ELEMENTOS.comercios} titulo={'comercios'}/>} />
-                <Route path="comercios/editar/:id" element={<Form elementos={ELEMENTOS.comercios} titulo={'comercios'}/>} />
               </Route>
               <Route element={<PrivateRoutes user={user} roles={['admin', 'superadmin']}/>}>
                 <Route path="zonas/listar" element={<Listado user={user} titulo={"zonas"}/>} />
@@ -81,6 +80,7 @@ function App() {
                 <Route path="clientes/listar" element={<Listado user={user} titulo={"clientes"}/>} />
                 <Route path="clientes/editar/:id" element={<Form elementos={ELEMENTOS.clientes} titulo={'clientes'}/>} user={user}/>
                 <Route path="comercios/listar" element={<Listado user={user} titulo={"comercios"}/>} />
+                <Route path="comercios/editar/:id" element={<Form elementos={ELEMENTOS.comercios} titulo={'comercios'}/>} />
                 <Route path="comercios/pagos/listar" element={<Listado user={user} titulo={'comercios/pagos'}/>} />
                 <Route path="comercios/pagos/agregar" element={<Form elementos={ELEMENTOS.pagos} user={user} titulo={'comercios/pagos'}/> } />
                 <Route path="comercios/pagos/editar/:id" element={<Form elementos={ELEMENTOS.pagos} titulo={'comercios/pagos'}/>} />

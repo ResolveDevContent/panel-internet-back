@@ -208,7 +208,7 @@ return (
                                             </li>
                                             : null
                                         }
-                                        {(user.role != "admin" || titulo != "clientes") && (admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' || titulo == 'cobradores')
+                                        {(admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' || titulo == 'cobradores')
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>

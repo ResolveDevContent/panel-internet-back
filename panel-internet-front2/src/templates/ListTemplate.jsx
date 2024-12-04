@@ -94,8 +94,10 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
         newArr = sortedListado.map(function(row) { 
           if(placeholder == "clientes") {
             return row.ID_Cliente
-          } else {
+          } else if(placeholder == "comercios") {
             return row.ID_Comercio
+          } else {
+            return row.ID_Zona
           }
         })
         setDatos(newArr)
@@ -106,10 +108,10 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       if(values) {
         if(e.target.checked) {
           const arr = sortedListado.map(function(row) { 
-            if(placeholder == "clientes") {
-              return row.nombre
-            } else {
+            if(placeholder == "comercios") {
               return row.nombre_comercio
+            } else {
+              return row.nombre
             }
           })
           
@@ -132,6 +134,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       if(user && user.role == "superadmin") {
           listar(placeholder, signal)
           .then(datos => {
+              console.log(datos)
               if(!datos || datos.length == 0) {
                   setSortedListado([])
                   originalListado.current = [];
@@ -145,38 +148,43 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              if(titulo == 'admins' && values) {
-                listarByAdmin("permisos", values.email, signal)
-                .then(permisos => {
-                    if(!permisos || permisos.error|| permisos.length == 0) {
-                        return;
-                    }
-
-                    const idsComercio = [];
-                    const nombresComercio = [];
-                    permisos.forEach(row => {
-                      idsComercio.push(row.ID_Comercio)
-
-                      const comercio = datos.find((_row) => _row.ID_Comercio == row.ID_Comercio)
-                      if(comercio) {
-                        nombresComercio.push(comercio.nombre_comercio)
+              if(values) {
+                if(titulo == 'admins') {
+                  listarByAdmin("permisos", values.email, signal)
+                  .then(permisos => {
+                      if(!permisos || permisos.error|| permisos.length == 0) {
+                          return;
                       }
-                    })
 
-                    setDatos(idsComercio);
-                    setDatosMostrar(nombresComercio)
-                })
-                .catch(err => {
-                    setState({
-                        text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
-                        res: "danger"
-                    })
-                })
+                      const idsComercio = [];
+                      const nombresComercio = [];
+                      permisos.forEach(row => {
+                        idsComercio.push(row.ID_Comercio)
+
+                        const comercio = datos.find((_row) => _row.ID_Comercio == row.ID_Comercio)
+                        if(comercio) {
+                          nombresComercio.push(comercio.nombre_comercio)
+                        }
+                      })
+
+                      setDatos(idsComercio);
+                      setDatosMostrar(nombresComercio)
+                  })
+                  .catch(err => {
+                      setState({
+                          text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+                          res: "danger"
+                      })
+                  })
+                } else {
+                  setDatos(values.zona);
+                  const findZona = datos.find(row => row.ID_Zona == values.zona)
+                  setDatosMostrar(findZona.nombre)
+                }
               }
 
-                setSortedListado(datos)
-                originalListado.current = datos;
-
+              setSortedListado(datos)
+              originalListado.current = datos;
           })
           .catch(err => {
               setState({

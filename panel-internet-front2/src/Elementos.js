@@ -132,7 +132,7 @@ export const ELEMENTOS = {
             nombre: 'zona',
             placeholder: "zonas",
             tipo: 'radio',
-            lista: false,
+            lista: true,
         },
         {
             element: 'input',
