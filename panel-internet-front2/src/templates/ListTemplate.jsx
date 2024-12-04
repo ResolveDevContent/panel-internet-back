@@ -123,7 +123,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
     }
 
   useEffect(() => {
-      if(!user) {
+      if(Object.keys(user).length == 0) {
         setState({
           text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
           res: "danger"
@@ -142,7 +142,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
       console.log(user, values)
       if(user.role == "superadmin") {
-        console.log("superadmin")
           listar(placeholder, signal)
           .then(datos => {
               console.log(datos)
@@ -205,8 +204,6 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       } else {
-        console.log("admin")
-
           listarByAdmin(placeholder, user.email, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {

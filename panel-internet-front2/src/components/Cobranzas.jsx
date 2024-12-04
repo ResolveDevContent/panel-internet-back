@@ -165,6 +165,15 @@ export const Cobranzas = ({user = {}}) => {
     }
 
   useEffect(() => {
+    if(Object.keys(user).length == 0) {
+        setState({
+          text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
+          res: "danger"
+        })
+        setSortedListado([])
+        originalListado.current = [];
+        return;
+    }
       setLoading(true)
 
       const controller = new AbortController();
@@ -173,7 +182,7 @@ export const Cobranzas = ({user = {}}) => {
       setSortedListado([])
       originalListado.current = [];
 
-      if(user && user.role == "superadmin" || user.role == "cobrador") {
+      if(user.role == "superadmin" || user.role == "cobrador") {
           listar('clientes', signal)
           .then(datos => {
                 if(!datos || datos.length == 0) {
