@@ -170,7 +170,7 @@ export const Listado = ({titulo, user = {}}) => {
                     row.ID_Comercio = comercio[0].nombre_comercio
                 }
 
-                if(row.ID_Cliente) {
+                if(titulo != 'clientes' && row.ID_Cliente) {
                     const cliente = await listarUno("clientes", row.ID_Cliente);
                     if(cliente.length <= 0) {
                         return null;
@@ -180,6 +180,15 @@ export const Listado = ({titulo, user = {}}) => {
                     row.apellido = cliente[0].apellido
                     row.email = cliente[0].email
                     row.direccion_principal = cliente[0].direccion_principal
+                }
+
+                if(titulo != 'zonas' && row.ID_Zona) {
+                    const comercio = await listarUno("comercios", row.ID_Comercio);
+                    if(comercio.length <= 0) {
+                        return null;
+                    }
+
+                    row.ID_Comercio = comercio[0].nombre_comercio
                 }
 
                 return row;
@@ -343,11 +352,10 @@ export const Listado = ({titulo, user = {}}) => {
                             totales(datos);
                         }
 
-                        if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
+                        if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" || titulo == 'clientes') {
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
-
                             setListado(datos)
                             originalListado.current = datos;
                         }
@@ -381,7 +389,7 @@ export const Listado = ({titulo, user = {}}) => {
                         totales(datos);
                     }
 
-                    if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos") {
+                    if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" || titulo == 'clientes') {
                         formatToNombres(datos)
                     } else {
                         setLoading(false);
@@ -429,7 +437,7 @@ export const Listado = ({titulo, user = {}}) => {
                             totales(datos);
                         }
 
-                        if(titulo == "transacciones") {
+                        if(titulo == "transacciones" || titulo == 'clientes') {
                             formatToNombres(datos)
                         } else {
                             setLoading(false);

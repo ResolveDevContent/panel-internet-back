@@ -141,6 +141,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       originalListado.current = [];
 
       if(user.role == "superadmin") {
+        console.log("superadmin")
           listar(placeholder, signal)
           .then(datos => {
               console.log(datos)
@@ -203,6 +204,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
           })
           .finally(setLoading(false))
       } else {
+        console.log("admin")
+
           listarByAdmin(placeholder, user.email, signal)
           .then(datos => {
               if(!datos || datos.length == 0) {
