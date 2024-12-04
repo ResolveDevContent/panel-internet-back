@@ -145,11 +145,9 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setSortedListado([])
       originalListado.current = [];
 
-      console.log(user, values)
       if(user.role == "superadmin") {
           listar(placeholder, signal)
           .then(datos => {
-              console.log(datos)
               if(!datos || datos.length == 0) {
                   setSortedListado([])
                   originalListado.current = [];
