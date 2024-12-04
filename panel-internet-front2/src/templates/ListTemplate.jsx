@@ -189,7 +189,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                           res: "secondary"
                       })
                   })
-                } else {
+                } else if(titulo == 'admins') {
                   setDatos(values.zona);
                   const findZona = datos.find(row => row.ID_Zona == values.zona)
                   setDatosMostrar([findZona.nombre])
