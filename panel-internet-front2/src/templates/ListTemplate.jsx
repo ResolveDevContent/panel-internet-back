@@ -68,7 +68,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       setDatos(newArr);
 
       if(values) {
-        let arr = datosMostrar
+        let arr = []
         if(e.target.checked) {
           if(!datosMostrar.includes(e.target.name)) {
             arr = [
@@ -192,7 +192,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 } else {
                   setDatos(values.zona);
                   const findZona = datos.find(row => row.ID_Zona == values.zona)
-                  setDatosMostrar(findZona.nombre)
+                  setDatosMostrar([findZona.nombre])
                 }
               }
 
