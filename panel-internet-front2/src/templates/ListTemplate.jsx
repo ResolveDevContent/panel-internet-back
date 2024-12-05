@@ -147,7 +147,7 @@ export const ListTemplate = ({data, titulo, values = {}, user = {}}) => {
       setSortedListado([])
       originalListado.current = [];
 
-      if(user.role == "superadmin") {
+      if(user.role == "superadmin" || placeholder == 'zonas') {
           listar(placeholder, signal)
           .then(datos => {
             console.log(datos)

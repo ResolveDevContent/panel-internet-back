@@ -286,7 +286,7 @@ export const Listado = ({titulo, user = {}}) => {
 
         PerfilAuth(signal).then(user => {
             if(user.message.role == "superadmin" || user.message.role == "cliente" || user.message.role == "cobrador" 
-                || titulo == 'zonas' || titulo == 'cobradores') {
+                || titulo == 'zonas' || titulo == 'cobranzas') {
                 if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
                     listarByEmail('clientes', user.message.email, signal)
                     .then(datos => {
@@ -364,7 +364,7 @@ export const Listado = ({titulo, user = {}}) => {
                 }
             }
 
-            if (user.message.role == "admin" && titulo != 'zonas' && titulo != 'cobradores') {
+            if (user.message.role == "admin" && titulo != 'zonas' && titulo != 'cobranzas') {
                 listarByAdmin(titulo, user.message.email, signal)
                 .then(datos => {
                     if(datos.error) {
