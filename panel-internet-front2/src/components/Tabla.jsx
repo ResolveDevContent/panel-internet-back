@@ -113,7 +113,7 @@ const borrarDatos = (e, id, email) => {
   e.preventDefault()
   PerfilAuth().then(user => {
       if((user.message.role == "admin" || user.message.role == "superadmin") && (titulo == "comercios" || titulo == "clientes")) {
-          modificar(titulo, id, {activo: 0})
+          modificar(titulo, id, {activo: 0, user: user.message})
           .then(data => {
                 if(data.error) {
                   setState({
