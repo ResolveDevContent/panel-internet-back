@@ -374,6 +374,17 @@ router.get("/zonas/listar", async (req,res) => {
     }
 });
 
+router.get("/zonas/listar/:id", async (req,res) => {
+    const { id } = req.params;
+    
+    try {
+        const results = await selectOneRecord("zonas", "ID_Zona", id);
+        res.send(results);
+    } catch (err) {
+        res.status(500).send({ error: 'Se ha producido un error, intentelo nuevamente.' });
+    }
+});
+
 // Endpoint para agregar zonas
 router.post("/zonas/agregar", authenticate, async (req, res) => {
     const user = req.body.user;
