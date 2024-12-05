@@ -159,10 +159,8 @@ export const Listado = ({titulo, user = {}}) => {
 
     async function formatToNombres(data) {
         let resultados = []
-        console.log(titulo)
         const actualizaciones = data.map(async (row, idx) => {
             try {
-                console.log(row)
                 if(row.ID_Comercio) {
                     const comercio = await listarUno("comercios", row.ID_Comercio);
                     if(comercio.length <= 0) {
@@ -184,14 +182,13 @@ export const Listado = ({titulo, user = {}}) => {
                     row.direccion_principal = cliente[0].direccion_principal
                 }
 
-                if(titulo != 'zonas' && row.ID_Zona) {
-                    const zona = await listarUno("zonas", row.ID_Zona);
-                    console.log(zona)
+                if(titulo != 'zonas' && row.zona) {
+                    const zona = await listarUno("zonas", row.zona);
                     if(zona.length <= 0) {
                         return null;
                     }
 
-                    row.ID_Zona = zona[0].zona
+                    row.zona = zona[0].zona
                 }
 
                 return row;
