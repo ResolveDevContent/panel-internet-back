@@ -192,8 +192,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 } else if(titulo == 'clientes') {
                   setDatos(values.zona);
                   const findZona = datos.find(row => row.ID_Zona == values.zona)
-                  console.log(datos, findZona)
-                  setDatosMostrar([findZona.nombre])
+                  setDatosMostrar([findZona.zona])
                 }
               }
 
