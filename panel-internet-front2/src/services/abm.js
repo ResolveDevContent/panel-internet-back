@@ -241,7 +241,7 @@ export const downloadFile = () => {
         fetch(`http://vps-4375167-x.dattaweb.com/descargar-archivo`, {
             method: "GET"
         })
-        .then((res) => res.json())
+        .then((res) => res.blob())
         .catch((err) => console.log(err))
     )
 }

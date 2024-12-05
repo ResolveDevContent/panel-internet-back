@@ -108,17 +108,15 @@ export const ImportCsv = ({titulo, user = {}}) => {
     const handleDownload = () => {
         downloadFile()
         .then(file => {
-            console.log(file)
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(file); // Creamos una URL temporal para el archivo
+            link.download = 'plantilla.csv'; // Nombre del archivo que se descargará
+            link.target = "_blank";
+            link.click();
         })
         .catch(err => {
             console.log(err)
         })
-        // const link = document.createElement("a");
-        // link.href = "../assets/files/Plantilla.csv";
-        // link.target = "_blank";
-        // link.download = "Plantilla.csv";
-
-        // link.click();
     };
 
     useEffect(() => {
