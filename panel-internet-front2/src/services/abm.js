@@ -238,7 +238,7 @@ export const restoreBackup = (file, signal) => {
 
 export const downloadFile = () => {
     return(
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/descargar-archivo`, {
+        fetch(`http://vps-4375167-x.dattaweb.com/descargar-archivo`, {
             method: "GET"
         })
         .then((res) => res.json())

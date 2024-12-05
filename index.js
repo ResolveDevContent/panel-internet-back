@@ -23,6 +23,15 @@ app.use(express.static(__dirname + "/panel-internet-front2/dist"))
 app.use("/auth", auth);
 app.use("/abm", abm);
 
+app.get('/descargar-archivo', (req, res) => {
+  const filePath = path.join(__dirname, '/panel-internet-front2/src/assets/files/plantilla.csv');
+  res.download(filePath, 'plantilla.csv', (err) => {
+    if (err) {
+      console.log('Error al descargar el archivo:', err);
+    }
+  });
+});
+
 app.get("/*", async (req,res) => {
   res.sendFile(path.join(__dirname, "/panel-internet-front2/dist/index.html"))
 });
