@@ -235,3 +235,13 @@ export const restoreBackup = (file, signal) => {
         .catch((err) => console.log(err))
     )
 }
+
+export const downloadFile = () => {
+    return(
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/descargar-archivo`, {
+            method: "GET"
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    )
+}

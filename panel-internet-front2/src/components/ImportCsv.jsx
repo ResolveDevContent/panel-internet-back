@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from "react"
-import { importarCSV } from "../services/abm"
+import { downloadFile, importarCSV } from "../services/abm"
 import { useNavigate } from "react-router-dom"
 import { ListTemplate } from "../templates/ListTemplate"
 import { listar } from "../services/abm"
@@ -106,12 +106,19 @@ export const ImportCsv = ({titulo, user = {}}) => {
     } 
 
     const handleDownload = () => {
-        const link = document.createElement("a");
-        link.href = "../assets/files/Plantilla.csv";
-        link.target = "_blank";
-        link.download = "Plantilla.csv";
+        downloadFile()
+        .then(file => {
+            console.log(file)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        // const link = document.createElement("a");
+        // link.href = "../assets/files/Plantilla.csv";
+        // link.target = "_blank";
+        // link.download = "Plantilla.csv";
 
-        link.click();
+        // link.click();
     };
 
     useEffect(() => {

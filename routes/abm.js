@@ -18,6 +18,17 @@ const { deleteRecordMikrowisp } = require("../controllers/Mikrowisp");
 
 //CRUD: HISTORIAL ---------------------------------------------------------------------------------
 
+router.get('/descargar-archivo', (req, res) => {
+  const filePath = path.join(__dirname, '/panel-internet-front2/src/assets/files/plantilla.csv');
+  res.download(filePath, 'plantilla.csv', (err) => {
+    if (err) {
+      console.log('Error al descargar el archivo:', err);
+    }
+  });
+});
+
+//CRUD: HISTORIAL ---------------------------------------------------------------------------------
+
 router.get("/historial/listar", (req,res) => {
     selectTable("historial")
     .then((results) => {
