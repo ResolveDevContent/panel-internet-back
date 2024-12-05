@@ -150,7 +150,6 @@ export const ListTemplate = ({data, titulo, values = {}, user = {}}) => {
       if(user.role == "superadmin" || placeholder == 'zonas') {
           listar(placeholder, signal)
           .then(datos => {
-            console.log(datos)
               if(!datos || datos.length == 0) {
                   setSortedListado([])
                   originalListado.current = [];

@@ -184,6 +184,7 @@ export const Listado = ({titulo, user = {}}) => {
 
                 if(titulo != 'zonas' && row.ID_Zona) {
                     const zona = await listarUno("zonas", row.ID_Zona);
+                    console.log(zona)
                     if(zona.length <= 0) {
                         return null;
                     }
