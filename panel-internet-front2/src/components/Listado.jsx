@@ -191,6 +191,10 @@ export const Listado = ({titulo, user = {}}) => {
                     row.zona = zona[0].zona
                 }
 
+                if(row.activo) {
+                    row.activo = 'Activo'
+                }
+
                 return row;
             } catch (error) {
                 // Maneja el error aquí
