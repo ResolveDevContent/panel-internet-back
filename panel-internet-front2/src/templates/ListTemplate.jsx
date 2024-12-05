@@ -2,7 +2,7 @@ import { useState, useRef, useMemo, useEffect } from "react";
 import { listar, listarByAdmin } from "../services/abm";
 import { Toast } from "../components/Toast";
 
-export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
+export const ListTemplate = ({data, titulo, values = {}, user = {}}) => {
     const [ nombreCliente, setNombreCliente ] = useState(null);
     const [ nombreComercio, setNombreComercio ] = useState(null);
     const [ nombreZona, setNombreZona ] = useState(null);
@@ -164,7 +164,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                 })
               }
 
-              if(values) {
+              if(Object.keys(values).length > 0) {
                 if(titulo == 'admins') {
                   listarByAdmin("permisos", values.email, signal)
                   .then(permisos => {
@@ -197,7 +197,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
                   const findZona = datos.find(row => row.ID_Zona == values.zona)
                   setDatosMostrar([findZona.zona])
                 }
-              }
+              } 
 
               setSortedListado(datos)
               originalListado.current = datos;
