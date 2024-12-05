@@ -54,6 +54,10 @@ export const Form = ({elementos = [], titulo = '', user = {}}) => {
         if(id) {
             setLoading(true)
 
+            if(dataObj.list) {
+                delete dataObj.list
+            }
+
             modificar(titulo, id, dataObj)
             .then(data => {
                 if(data.error) {
