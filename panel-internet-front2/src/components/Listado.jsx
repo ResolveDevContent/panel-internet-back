@@ -183,12 +183,12 @@ export const Listado = ({titulo, user = {}}) => {
                 }
 
                 if(titulo != 'zonas' && row.ID_Zona) {
-                    const comercio = await listarUno("comercios", row.ID_Comercio);
-                    if(comercio.length <= 0) {
+                    const zona = await listarUno("zonas", row.ID_Zona);
+                    if(zona.length <= 0) {
                         return null;
                     }
 
-                    row.ID_Comercio = comercio[0].nombre_comercio
+                    row.ID_Zona = zona[0].zona
                 }
 
                 return row;
@@ -285,7 +285,8 @@ export const Listado = ({titulo, user = {}}) => {
         originalListado.current = [];
 
         PerfilAuth(signal).then(user => {
-            if(user.message.role == "superadmin" || user.message.role == "cliente" || user.message.role == "cobrador") {
+            if(user.message.role == "superadmin" || user.message.role == "cliente" || user.message.role == "cobrador" 
+                || titulo == 'zonas' || titulo == 'cobradores') {
                 if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
                     listarByEmail('clientes', user.message.email, signal)
                     .then(datos => {
@@ -363,7 +364,7 @@ export const Listado = ({titulo, user = {}}) => {
                 }
             }
 
-            if (user.message.role == "admin") {
+            if (user.message.role == "admin" && titulo != 'zonas' && titulo != 'cobradores') {
                 listarByAdmin(titulo, user.message.email, signal)
                 .then(datos => {
                     if(datos.error) {
@@ -398,7 +399,7 @@ export const Listado = ({titulo, user = {}}) => {
                     }
                 })
             } 
-            if(user.message.role == "comercio" ) {
+            if(user.message.role == "comercio") {
                 listarByEmail("comercios", user.message.email, signal)
                 .then((comercio) => {
                     if(comercio.error) {
