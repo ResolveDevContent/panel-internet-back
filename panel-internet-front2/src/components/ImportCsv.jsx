@@ -163,7 +163,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
             <strong className="p-3 text-capitalize">{titulo} - {"Agregar"}</strong>
 
             <div className="mt-1">
-                <p>Descarga la plantilla CSV para poder agregar los clientes correctamente</p>
+                <p>Descarga la plantilla CSV para poder agregar los clientes correctamente. Los datos que se colocan se deben separar por comas como se puede apreciar en los ejemplos de la plantilla.</p>
                 <button onClick={handleDownload} className="btn btn-success mt-1">Descargar</button>
             </div>
 
