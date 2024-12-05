@@ -85,6 +85,8 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
 
     const handleChangeRadio = e => {
       setDatos(e.target.value);
+      const find = originalListado.current.find(row => row.ID_Zona == e.target.value)
+      setDatosMostrar([find.zona])
     }
 
     const handleChangeAll = e => {
@@ -148,6 +150,7 @@ export const ListTemplate = ({data, titulo, values = [], user = {}}) => {
       if(user.role == "superadmin") {
           listar(placeholder, signal)
           .then(datos => {
+            console.log(datos)
               if(!datos || datos.length == 0) {
                   setSortedListado([])
                   originalListado.current = [];
