@@ -225,8 +225,16 @@ export const ListTemplate = ({data, titulo, values = {}, user = {}}) => {
                 })
               }
 
-                setSortedListado(datos)
-                originalListado.current = datos;
+              if(Object.keys(values).length > 0) {
+                if(titulo == 'clientes') {
+                  setDatos(values.zona);
+                  const findZona = datos.find(row => row.ID_Zona == values.zona)
+                  setDatosMostrar([findZona.zona])
+                }
+              } 
+
+              setSortedListado(datos)
+              originalListado.current = datos;
           }).catch(err => {
               setState({
                   text: "Ha ocurrido un error, intente nuevamente o comuniquese con nosotros", 
