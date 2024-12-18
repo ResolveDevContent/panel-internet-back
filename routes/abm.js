@@ -392,7 +392,7 @@ router.post("/zonas/agregar", authenticate, async (req, res) => {
     
     const date = new Date().toLocaleString()
     try {
-        await insertRecord("zonas", req.body);
+        await insertRecord("zonas", {...req.body, activo: 1});
 
         let nombre_user = '';
         let nombre_superadmin = '';
