@@ -691,6 +691,17 @@ router.get("/cobranzas/listar", async (req, res) => {
     }
 });
 
+router.get("/cobranzas/listarByCobrador/:email", authenticate, async (req,res) => {
+    const { email } = req.params;
+    try {
+        const cobranzas = await selectOneRecord("cobranzas", "cobrador", email)
+        res.send(cobranzas)
+    }
+    catch(err){
+        res.status(500).json({ error: "Se ha producido un error, intentelo nuevamente." });
+    }
+});
+
 // Obtener transacción por ID
 router.get("/cobranzas/listar/:id", authenticate, async (req, res) => {
     const { id } = req.params;

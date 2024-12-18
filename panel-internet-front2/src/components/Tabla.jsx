@@ -62,7 +62,8 @@ const formatearDatos = (datos) => {
         }
 
         if((titulo == 'cobranzas')) {
-            delete data.ID_Cliente
+            delete data.ID_Cliente;
+            delete data.tipo;
         }
 
         if((titulo == 'cobradores')) {
@@ -112,7 +113,7 @@ const editar = (e, id) => {
 const borrarDatos = (e, id, email) => {
   e.preventDefault()
   PerfilAuth().then(user => {
-      if((user.message.role == "admin" || user.message.role == "superadmin") && (titulo == "comercios" || titulo == "clientes")) {
+      if((user.message.role == "admin" || user.message.role == "superadmin") && (titulo == "comercios" || titulo == "clientes" || titulo == "zonas")) {
           modificar(titulo, id, {activo: 0, user: user.message})
           .then(data => {
                 if(data.error) {
@@ -123,19 +124,21 @@ const borrarDatos = (e, id, email) => {
                   return;
                 }
               
-                borrar("users", email)
-                .then(result => {
-                    if(result.error) {
-                        setState({
-                            text: result.error,
-                            res: "secondary"
-                        })
-                        return;
-                    }
-                    setState({text: result.message, res: "primary"})
-                    
-                    location.reload()
-                })
+                if(titulo != 'zonas') {
+                    borrar("users", email)
+                    .then(result => {
+                        if(result.error) {
+                            setState({
+                                text: result.error,
+                                res: "secondary"
+                            })
+                            return;
+                        }
+                        setState({text: result.message, res: "primary"})
+                        
+                        location.reload()
+                    })
+                }
             })    
       } else {
             borrar(titulo, id, {user: user.message}).then(result => {
@@ -208,7 +211,7 @@ return (
                                             </li>
                                             : null
                                         }
-                                        {(admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' || titulo == 'cobradores')
+                                        {(admin == null || admin[0].permisos == 1) && (titulo == 'comercios' || titulo == 'clientes' || titulo == 'admins' || titulo == 'cobradores' || titulo == 'zonas')
                                             ? <li>
                                                 <a href="#" className='btn btn-primary' onClick={(e) => editar(e, row[0])}><Edit /></a>
                                             </li>
@@ -216,7 +219,7 @@ return (
                                         }
                                         {(user.role != "comercio" || titulo != "transacciones") && (admin == null || admin[0].permisos == 1) && 
                                         (titulo == 'comercios' || titulo == 'admins' || titulo == 'transacciones' || titulo == 'comercios/pagos' || 
-                                        titulo == 'asociaciones' || titulo == 'clientes' || titulo == 'cobranzas' || titulo == 'cobradores')
+                                        titulo == 'asociaciones' || titulo == 'clientes' || titulo == 'cobranzas' || titulo == 'cobradores' || titulo == 'zonas')
                                             ? <li>
                                                 <a href="#" className='btn btn-danger' onClick={() => setModalState({open: !modalState.open, id: row[0], email: row[4]})}><Delete /></a>
                                             </li>

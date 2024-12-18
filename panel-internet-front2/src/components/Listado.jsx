@@ -191,9 +191,26 @@ export const Listado = ({titulo, user = {}}) => {
                     row.zona = zona[0].zona
                 }
 
+                if(titulo == 'cobranzas' && row.tipo != 'superadmin') {
+                    let newArr = [];
+                    if(row.tipo == 'admin') {
+                        newArr = await listarByEmail("admins", row.cobrador);
+                        if(newArr.length <= 0) {
+                            return null;
+                        }
+                    } else if(row.tipo == 'cobrador') {
+                        newArr = await listarByEmail("cobradores", row.cobrador);
+                        if(newArr.length <= 0) {
+                            return null;
+                        }
+                    }
+
+                    row.direccion_principal = newArr[0].direccion_principal
+                }
+
                 if(row.activo) {
                     row.activo = 'Activo'
-                }
+                } 
 
                 return row;
             } catch (error) {
@@ -289,7 +306,7 @@ export const Listado = ({titulo, user = {}}) => {
         originalListado.current = [];
 
         PerfilAuth(signal).then(user => {
-            if(user.message.role == "superadmin" || user.message.role == "cliente" || user.message.role == "cobrador" 
+            if(user.message.role == "superadmin" || user.message.role == "cliente" 
                 || titulo == 'zonas' || titulo == 'cobranzas') {
                 if(user.message.role == "cliente" && titulo == 'historial/transacciones') {
                     listarByEmail('clientes', user.message.email, signal)
@@ -357,7 +374,8 @@ export const Listado = ({titulo, user = {}}) => {
                             totales(datos);
                         }
 
-                        if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" || titulo == 'clientes') {
+                        if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" 
+                            || titulo == 'clientes' || titulo == "cobranzas") {
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
@@ -450,6 +468,32 @@ export const Listado = ({titulo, user = {}}) => {
                             originalListado.current = datos;
                         }
                     })
+                })
+            }
+
+            if(user.role == "cobrador" && titulo == "cobranzas") {
+                listarByCobrador()
+                .then(datos => {
+                    if(datos.error) {
+                        setLoading(false);
+                        setState({
+                            text: datos.error,
+                            res: "secondary"
+                        })
+                        setTimeout(() => {
+                            setState({text: "", res: ""})
+                        }, 4000)
+                        return;
+                    }
+
+                    if(!datos || datos.length == 0) {
+                        setLoading(false);
+                        setListado([])
+                        originalListado.current = [];
+                        return;
+                    }
+
+                    formatToNombres(datos)
                 })
             }
         })

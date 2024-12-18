@@ -385,7 +385,8 @@ export const Cobranzas = ({user = {}}) => {
                         <button className="btn btn-success">Confirmar</button>
                     </li>
                 </ul>
-                <input type="hidden" name="cobrador" value={user.nombre_completo ? user.nombre_completo : user.email}/>
+                <input type="hidden" name="cobrador" value={user.email}/>
+                <input type="hidden" name="tipo" value={user.role}/>
             </form>
             { state.text ? <Toast texto={state.text} res={state.res}/> : null }
         </article>

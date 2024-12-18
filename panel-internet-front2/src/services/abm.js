@@ -120,6 +120,21 @@ export const listarByEmail = (model, email, signal) => {
     )
 }
 
+export const listarByCobrador = (model, email, signal) => {
+    const token = Cookies.get("token");
+    return (
+        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listarByCobrador/${email}`, {
+            signal,
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+    )
+}
+
 export const importarCSV = (model, body, signal) => {
     const token = Cookies.get("token");
     return (
