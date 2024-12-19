@@ -657,7 +657,7 @@ async function agregarClientes(datos) {
 
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
     const clientesActualizar = clientesParaActualizar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
-    console.log(Object.keys(clientesActualizar[0]).map(key => `${key} = ?`).join(", "))
+    console.log(Object.keys(clientesParaActualizar[0]).map(key => `${key} = ?`).join(", "))
     // try {
     //     if(clientesParaAgregar.length > 0) {
     //         await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
