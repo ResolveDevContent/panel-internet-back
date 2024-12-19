@@ -227,7 +227,6 @@ const batchInsert = async (tableName, cliente, records) => {
     const [results] = await pool.query(query, [records]);
     return results;
   } catch (err) {
-    console.log("error agregar", err)
     console.error('Error executing query:', err); // Manejo de errores
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }
@@ -240,7 +239,6 @@ const batchUpdate = async (tableName, cliente, records) => {
     const [results] = await pool.query(query, [records]);
     return results;
   } catch (err) {
-    console.log("error actualizar", err)
     console.error('Error executing query:', err); // Manejo de errores
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }

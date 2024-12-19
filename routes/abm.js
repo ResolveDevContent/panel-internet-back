@@ -650,13 +650,10 @@ async function agregarClientes(datos) {
             return "false";
         }
     });
-    console.log(promises)
     const resultados = await Promise.all(promises);
 
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
-    console.log("agregar", clientesParaAgregar.length)
-    console.log("actualizar", clientesParaActualizar.length)
 
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
     const clientesActualizar = clientesParaActualizar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
