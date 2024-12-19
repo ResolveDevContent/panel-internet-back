@@ -220,8 +220,8 @@ const updateRecordCliente = async (tableName, update, column, values) => {
   }
 }
 
-const batchInsert = async (tableName, records) => {
-  const query = `INSERT INTO ${tableName} (${Object.keys(records[0])}) VALUES ?`;
+const batchInsert = async (tableName, cliente, records) => {
+  const query = `INSERT INTO ${tableName} (${Object.keys(cliente[0])}) VALUES ?`;
 
   try {
     const [results] = await pool.query(query, [records]);
@@ -233,8 +233,8 @@ const batchInsert = async (tableName, records) => {
   }
 };
 
-const batchUpdate = async (tableName, records) => {
-  const query = `UPDATE ${tableName} SET ${Object.keys(records).map(key => `${key} = ?`).join(", ")} WHERE Id = ? AND Codigo = ?`;
+const batchUpdate = async (tableName, cliente, records) => {
+  const query = `UPDATE ${tableName} SET ${Object.keys(cliente[0]).map(key => `${key} = ?`).join(", ")} WHERE Id = ? AND Codigo = ?`;
 
   try {
     const [results] = await pool.query(query, [records]);

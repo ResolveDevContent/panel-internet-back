@@ -663,11 +663,11 @@ async function agregarClientes(datos) {
 
     try {
         if(clientesParaAgregar.length > 0) {
-            await batchInsert("clientes", clientesAgregar);
+            await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
         }
 
         if(clientesParaActualizar.length > 0) {
-            await batchUpdate("clientes", clientesActualizar);
+            await batchUpdate("clientes", clientesParaActualizar, clientesActualizar);
         }
 
         return clientesParaAgregar.length + clientesParaActualizar.length;
