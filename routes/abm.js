@@ -413,14 +413,9 @@ router.put("/zonas/modificar/:id", authenticate, async (req, res) => {
     const { id } = req.params;
     const user = req.body.user;
     delete req.body.user
-
-    const zona = {
-        zona: req.body.zona,
-        activo: 1
-    }
     
     try {
-        const udpateZona = await updateRecord("zonas", zona, "ID_Zona", id);
+        const udpateZona = await updateRecord("zonas", req.body, "ID_Zona", id);
         
         const date = new Date().toLocaleString()
         let nombre_user = '';
