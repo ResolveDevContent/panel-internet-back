@@ -659,10 +659,12 @@ async function agregarClientes(datos) {
     const resultados = await Promise.all(promises);
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
-
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id,cliente.Codigo,cliente.dni,cliente.nombre,cliente.apellido,cliente.direccion_principal,cliente.email,cliente.zona,cliente.activo]);
+
+    console.log(clientesParaAgregar)
     try {
         if(clientesParaAgregar.length > 0) {
+            console.count("AGREGAR")
             await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
         }
 
