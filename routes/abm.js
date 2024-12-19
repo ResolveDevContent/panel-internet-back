@@ -636,6 +636,7 @@ async function agregarClientes(datos) {
     console.log("ENTRA A AGREGAR")
     const clientes = await selectTable("clientes");
 
+    console.log(datos)
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
