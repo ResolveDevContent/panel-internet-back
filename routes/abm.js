@@ -646,7 +646,11 @@ async function agregarClientes(datos) {
             row.email = row.email || ""
 
             const findClient = clientes.find((doc) => doc.Id == row.Id && doc.Codigo == row.Codigo)
-            console.log(findClient)
+
+            if(findClient && Object.keys(findClient).length > 0 && findClient.activo == 0) {
+                return "false";
+            }
+
             return findClient && Object.keys(findClient).length > 0 ? "actualizar" : "agregar"
         } else {
             return "false";
@@ -657,7 +661,7 @@ async function agregarClientes(datos) {
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
 
-    const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
+    const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.dni,cliente.nombre,cliente.apellido,cliente.direccion_principal,cliente.email,cliente.Id,cliente.Codigo,1]);
     try {
         if(clientesParaAgregar.length > 0) {
             console.count("agregar")
