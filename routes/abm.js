@@ -533,7 +533,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
     delete req.body.user;
     console.log(user)
     try {
-        const result = await agregarClientes(req.body);
+        const result = await agregarClientes(req.body.datos);
         console.log(result)
         if (result !== false) {
             const date = new Date().toLocaleString()
@@ -554,7 +554,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
                 const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             }
-            res.status(201).json({ message: "clientes creados/editados correctamente" });
+            res.status(201).json({ message: result + "/" + req.body.datos.length + "clientes creados/editados correctamente" });
         } else {
             res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
         }
@@ -636,7 +636,6 @@ async function agregarClientes(datos) {
     console.log("ENTRA A AGREGAR")
     const clientes = await selectTable("clientes");
 
-    console.log(datos)
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {

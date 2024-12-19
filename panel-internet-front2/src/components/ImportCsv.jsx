@@ -73,7 +73,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
                 result.push(obj);
             }
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'dni', 'nombre', 'apellido', 'direccion_principal', 'email', 'zona');
-            importarCSV(titulo, {filteredData, user: user})
+            importarCSV(titulo, {datos: filteredData, user: user})
             .then(data => {
                 if(data.error) {
                     setState({text: data.error, res: "secondary"})
