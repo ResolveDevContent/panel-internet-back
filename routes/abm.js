@@ -659,6 +659,7 @@ async function agregarClientes(datos) {
     
     try {
         if(clientesParaAgregar.length > 0) {
+            console.count("agregar")
             await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
         }
 
