@@ -233,13 +233,20 @@ const batchInsert = async (tableName, cliente, records) => {
   }
 };
 
-const batchUpdate = async (tableName, cliente, records) => {
-  console.log("records", records)
-  console.log(Object.keys(cliente[0]).map(key => `${key} = ?`).join(", "))
-  const query = `UPDATE ${tableName} SET ${Object.keys(cliente[0]).map(key => `${key} = ?`).join(", ")} WHERE Id = ? AND Codigo = ?`;
+const batchUpdate = async (tableName, cases) => {
+  const query = `
+    UPDATE ${tableName}
+    SET 
+      nombre = CASE ${cases.nombreCase} END,
+      apellido = CASE ${cases.apellidoCase} END,
+      direccion_principal = CASE ${cases.direccion_principal} END,
+      dni = CASE ${cases.dni} END,
+      email = CASE ${cases.emailCase} END
+    WHERE Id IN (${cases.ids.join(', ')}) AND Codigo IN (${cases.codigos.join(', ')});
+  `;
 
   try {
-    const [results] = await pool.query(query, [records]);
+    const [results] = await pool.query(query);
     return results;
   } catch (err) {
     console.log("actualizar", err);
