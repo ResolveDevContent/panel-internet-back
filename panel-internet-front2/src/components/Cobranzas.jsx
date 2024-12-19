@@ -94,9 +94,9 @@ export const Cobranzas = ({user = {}}) => {
         let dataObj = {}
 
         for(let [name, value] of formData) {
-            if(name == 'ID_Cliente' || name == 'nombre' || name == 'cobrador' || 
+            if(name == 'ID_Cliente' || name == 'nombre' || name == 'cobrador' || name == 'tipo' ||
                 name == 'puntos_pago' || name == 'monto_total' || name == 'pasarela') {
-                    dataObj[name] = value
+                    dataObj[name] = value;
             }
         }
 
