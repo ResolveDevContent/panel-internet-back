@@ -632,17 +632,7 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
 });
 
 async function agregarClientes(datos) {
-    console.log("ACA ARRANCA ========================================================================")
     const clientes = await selectTable("clientes");
-
-
-    let nombreCase = '';
-    let apellidoCase = '';
-    let dniCase = '';
-    let direccion_principalCase = '';
-    let emailCase = '';
-    let ids = [];
-    let codigos = [];
 
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
@@ -665,18 +655,7 @@ async function agregarClientes(datos) {
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
 
-    clientesParaActualizar.forEach((cliente) => {
-        ids.push(cliente.Id);
-        codigos.push(cliente.Codigo);
-        nombreCase += `WHEN Id = ${cliente.Id} AND Codigo = ${cliente.Codigo} THEN '${cliente.nombre}' `;
-        apellidoCase += `WHEN Id = ${cliente.Id} AND Codigo = ${cliente.Codigo} THEN '${cliente.apellido}' `;
-        dniCase += `WHEN Id = ${cliente.Id} AND Codigo = ${cliente.Codigo} THEN '${cliente.dni}' `;
-        direccion_principalCase += `WHEN Id = ${cliente.Id} AND Codigo = ${cliente.Codigo} THEN '${cliente.direccion_principal}' `;
-        emailCase += `WHEN Id = ${cliente.Id} AND Codigo = ${cliente.Codigo} THEN '${cliente.email}' `;
-    })
-
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
-    // const clientesActualizar = clientesParaActualizar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
     
     try {
         if(clientesParaAgregar.length > 0) {
@@ -684,16 +663,15 @@ async function agregarClientes(datos) {
         }
 
         if(clientesParaActualizar.length > 0) {
-            const cases = {
-                nombreCase,
-                apellidoCase,
-                dniCase,
-                direccion_principalCase,
-                emailCase,
-                ids,
-                codigos
-            }
-            await batchUpdate("clientes", cases);
+            const promisesActualizar = clientesParaActualizar.map(async (cliente) => {
+                await updateRecordCliente('clientes', cliente, 
+                    { first: 'Id', second: 'Codigo' }, 
+                    { first: row.Id.toString(), second: row.Codigo.toString() }
+                );
+                return true;
+            })
+
+            const resultadosAct = await Promise.all(promisesActualizar);
         }
 
         return clientesParaAgregar.length + clientesParaActualizar.length;
