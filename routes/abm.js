@@ -531,10 +531,9 @@ router.get("/clientes/puntos/:id", authenticate, async (req, res) => {
 router.post("/clientes/importarcsv", authenticate, async (req, res) => {
     const user = req.body.user;
     delete req.body.user;
-    console.log(req.body)
+
     try {
         const result = await agregarClientes(req.body.datos);
-        console.log(result)
         if (result !== false) {
             const date = new Date().toLocaleString()
             let nombre_user = '';
@@ -546,9 +545,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
             } else {
                 nombre_superadmin = user.email
             }
-            console.log("ERNTRA")
             if(nombre_superadmin) {
-            console.log("ERNTRA 2")
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             } else {
                 const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
@@ -636,7 +633,6 @@ async function agregarClientes(datos) {
     console.log("ENTRA A AGREGAR")
     const clientes = await selectTable("clientes");
 
-    console.log(datos)
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
@@ -663,10 +659,8 @@ async function agregarClientes(datos) {
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id,cliente.Codigo,cliente.dni,cliente.nombre,cliente.apellido,cliente.direccion_principal,cliente.email,cliente.zona,cliente.activo]);
 
-    console.log(clientesParaAgregar)
     try {
         if(clientesParaAgregar.length > 0) {
-            console.count("AGREGAR")
             await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
         }
 

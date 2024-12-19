@@ -84,7 +84,10 @@ export const ImportCsv = ({titulo, user = {}}) => {
 
                 setState({text: data.message, res: "primary"})
 
-                navigate(`/${titulo}/listar`)
+                setTimeout(() => {
+                    setState({text: "", res: ""})
+                    navigate(`/${titulo}/listar`)
+                }, 2000)
             })
         };
         reader.readAsText(input);
