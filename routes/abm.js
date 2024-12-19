@@ -637,6 +637,7 @@ async function agregarClientes(datos) {
 
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
+        console.log(row)
         if (row.Id && row.Codigo) {
             row.nombre = row.nombre || ""
             row.apellido = row.apellido || ""
