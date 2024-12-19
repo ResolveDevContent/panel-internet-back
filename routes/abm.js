@@ -546,14 +546,15 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
             } else {
                 nombre_superadmin = user.email
             }
-
+            console.log("ERNTRA")
             if(nombre_superadmin) {
+            console.log("ERNTRA 2")
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             } else {
                 const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             }
-            res.status(201).json({ message: result + "/" + req.body.length + " clientes creados/editados correctamente" });
+            res.status(201).json({ message: "clientes creados/editados correctamente" });
         } else {
             res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
         }
