@@ -659,10 +659,12 @@ async function agregarClientes(datos) {
     
     try {
         if(clientesParaAgregar.length > 0) {
+            console.log("ENTRA?")
             await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
         }
 
         if(clientesParaActualizar.length > 0) {
+            console.log("actualizar")
             const promisesActualizar = clientesParaActualizar.map(async (cliente) => {
                 await updateRecordCliente('clientes', cliente, 
                     { first: 'Id', second: 'Codigo' }, 
@@ -673,9 +675,10 @@ async function agregarClientes(datos) {
 
             const resultadosAct = await Promise.all(promisesActualizar);
         }
-
+        console.log(clientesParaAgregar.length + clientesParaActualizar.length)
         return clientesParaAgregar.length + clientesParaActualizar.length;
     } catch (error) {
+        console.log(error)
         return false
     }
 }
