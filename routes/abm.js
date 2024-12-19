@@ -534,6 +534,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 
     try {
         const result = await agregarClientes(req.body);
+        console.log(result);
         if (result.every(r => r !== false)) {
             const date = new Date().toLocaleString()
             let nombre_user = '';
@@ -656,10 +657,12 @@ async function agregarClientes(datos) {
                 );
 
                 if (results.length === 0) {
+                    console.count("agregar")
                     // Insertar el nuevo cliente
                     await insertRecord("clientes", cliente);
                     return true;
                 } else {
+                    console.count("actualizar")
                     // Actualizar el cliente existente
                     await updateRecordCliente('clientes', cliente, 
                         { first: 'Id', second: 'Codigo' }, 
