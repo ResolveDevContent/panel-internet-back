@@ -551,7 +551,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
                 const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             }
-            res.status(201).json({ message: result + "/" + req.body.datos.length + "clientes creados/editados correctamente" });
+            res.status(201).json({ message: result + "/" + req.body.datos.length + " clientes creados/editados correctamente" });
         } else {
             res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
         }
