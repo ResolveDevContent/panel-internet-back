@@ -36,7 +36,7 @@ export const Listado = ({titulo, user = {}}) => {
                 })
                 : titulo == 'cobranzas' 
                     ? listado
-                    : []
+                    : listado
         } else {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
