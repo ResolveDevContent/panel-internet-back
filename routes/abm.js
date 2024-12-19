@@ -1,5 +1,5 @@
 const express = require("express");
-const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, selectZonaByAdmin } = require("../controllers/sqlFunctions");
+const { selectTable, selectOneRecord, insertRecord, updateRecord, updateRecordCliente, deleteRecord, checkRecordExists, selectComercio, selectAsociaciones, selectPermisos, selectByAdminPermisos, selectByAdmin, calcularPuntosTotales, selectOrderByASC, selectFechaLimite, selectZonaByAdmin, batchInsert, batchUpdate } = require("../controllers/sqlFunctions");
 const { authenticate } = require("../middlewares/auth");
 const { calcularPuntos } = require("../utils/calcularPuntos");
 
@@ -534,8 +534,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 
     try {
         const result = await agregarClientes(req.body);
-        console.log(result);
-        if (result.every(r => r !== false)) {
+        if (result !== false) {
             const date = new Date().toLocaleString()
             let nombre_user = '';
             let nombre_superadmin = '';
@@ -553,7 +552,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
                 const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
                 await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " agrego clientes a traves de un archivo csv", fecha: new Date(date).getTime()});
             }
-            res.status(201).json({ message: "Clientes creados/editados correctamente!" });
+            res.status(201).json({ message: result + "/" + req.body.length + " clientes creados/editados correctamente" });
         } else {
             res.status(500).json({ message: "No se pudieron agregar/editar los clientes correctamente!" });
         }
@@ -632,60 +631,45 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
 });
 
 async function agregarClientes(datos) {
-    console.log("CLIENTES", datos)
+
+    const clientes = await selectTable("clientes");
+
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
-            // Preparar el objeto cliente con valores predeterminados
-            const cliente = {
-                Id: row.Id,
-                Codigo: row.Codigo,
-                nombre: row.nombre || "",
-                apellido: row.apellido || "",
-                dni: row.dni || "",
-                direccion_principal: row.direccion_principal || "",
-                email: row.email || "",
-                activo: 1,
-                zona: row.zona
-            };
+            row.activo = 1;
+            row.nombre = row.nombre || ""
+            row.apellido = row.apellido || ""
+            row.dni = row.dni || ""
+            row.direccion_principal = row.direccion_principal || ""
+            row.email = row.email || ""
 
-            try {
-                console.count("ARRANCA TRY")
-                // Verificar si el cliente ya existe
-                const results = await selectAsociaciones("clientes", 
-                    { first: "Id", second: "Codigo" }, 
-                    { first: row.Id.toString(), second: row.Codigo.toString() }
-                );
-                console.count("EXISTE")
+            const findClient = clientes.find((doc) => doc.Id == row.Id && doc.Codigo == row.Codigo)
 
-                if (results.length === 0) {
-                    console.count("agregar")
-                    // Insertar el nuevo cliente
-                    await insertRecord("clientes", cliente);
-                    return true;
-                } else {
-                    console.count("actualizar")
-                    // Actualizar el cliente existente
-                    await updateRecordCliente('clientes', cliente, 
-                        { first: 'Id', second: 'Codigo' }, 
-                        { first: row.Id.toString(), second: row.Codigo.toString() }
-                    );
-                    return true;
-                }
-            } catch (err) {
-                console.count("catch")
-                console.error("Error en la operación con el cliente:", err);
-                return false;
-            }
+            findClient ? "actualizar" : "agregar"
         } else {
-            console.count("else")
-            return false;
+            return "false";
         }
     });
 
     const resultados = await Promise.all(promises);
+    
+    const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
+    const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
 
-    return resultados;
+    try {
+        if(clientesParaAgregar.length > 0) {
+            await batchInsert("clientes", clientesParaAgregar);
+        }
+
+        if(clientesParaActualizar.length > 0) {
+            await batchUpdate("clientes", clientesParaActualizar);
+        }
+
+        return clientesParaAgregar.length + clientesParaActualizar.length;
+    } catch (error) {
+        return false
+    }
 }
 
 //CRUD: COBRANZAS ---------------------------------------------------------------------------------

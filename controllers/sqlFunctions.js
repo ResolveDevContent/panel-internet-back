@@ -150,10 +150,8 @@ const selectAsociaciones = async (tableName, columns, values) => {
 
   try {
     const [results] = await pool.query(query, [values.first, values.second]);
-    console.count("RESULT ASOCIACIONES")
     return results;
   } catch (err) {
-    console.log(err)
     console.error('Error executing query:', err); // Manejo de errores
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }
@@ -222,6 +220,30 @@ const updateRecordCliente = async (tableName, update, column, values) => {
   }
 }
 
+const batchInsert = async (tableName, records) => {
+  const query = `INSERT INTO ${tableName} (${Object.keys(records[0])}) VALUES ?`;
+
+  try {
+    const [results] = await pool.query(query, [records]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+};
+
+const batchUpdate = async (tableName, records) => {
+  const query = `UPDATE ${tableName} SET ${Object.keys(records).map(key => `${key} = ?`).join(", ")} WHERE Id = ? AND Codigo = ?`;
+
+  try {
+    const [results] = await pool.query(query, [records]);
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err); // Manejo de errores
+    throw err; // Re-lanzar el error si deseas que el llamador maneje el error
+  }
+};
+
 module.exports = {
   createTable,
   checkRecordExists,
@@ -241,4 +263,6 @@ module.exports = {
   calcularPuntosTotales,
   selectOneDato,
   selectByAdminPermisos,
+  batchInsert,
+  batchUpdate
 };
