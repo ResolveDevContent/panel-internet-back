@@ -531,7 +531,7 @@ router.get("/clientes/puntos/:id", authenticate, async (req, res) => {
 router.post("/clientes/importarcsv", authenticate, async (req, res) => {
     const user = req.body.user;
     delete req.body.user;
-
+    console.log(user)
     try {
         const result = await agregarClientes(req.body);
         console.log(result)
