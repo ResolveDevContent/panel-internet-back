@@ -234,6 +234,7 @@ const batchInsert = async (tableName, cliente, records) => {
 };
 
 const batchUpdate = async (tableName, cliente, records) => {
+  console.log(Object.keys(cliente[0]).map(key => `${key} = ?`).join(", "))
   const query = `UPDATE ${tableName} SET ${Object.keys(cliente[0]).map(key => `${key} = ?`).join(", ")} WHERE Id = ? AND Codigo = ?`;
 
   try {
