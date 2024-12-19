@@ -656,7 +656,7 @@ async function agregarClientes(datos) {
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
 
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
-    
+    console.log(clientesParaAgregar)
     try {
         if(clientesParaAgregar.length > 0) {
             console.count("agregar")
