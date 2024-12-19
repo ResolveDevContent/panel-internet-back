@@ -3,7 +3,7 @@ import '../assets/css/filtros.css'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Toast } from './Toast'
 import { Loading } from '../components/Loading'
-import { listar, listarByAdmin, listarByComercio, listarByEmail, listarUno } from '../services/abm'
+import { listar, listarByAdmin, listarByCobrador, listarByComercio, listarByEmail, listarUno } from '../services/abm'
 import { PerfilAuth } from '../services/auth'
 import { Filter, Search } from '../assets/icons/icons'
 import { Tabla } from './Tabla'
@@ -36,7 +36,7 @@ export const Listado = ({titulo, user = {}}) => {
                 })
                 : titulo == 'cobranzas' 
                     ? listado
-                    : listado
+                    : []
         } else {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
@@ -351,7 +351,6 @@ export const Listado = ({titulo, user = {}}) => {
                     })
                 } else {
                     listar(titulo, signal).then(datos => {
-                        console.log(datos)
                         if(datos.error) {
                             setLoading(false);
                             setState({
