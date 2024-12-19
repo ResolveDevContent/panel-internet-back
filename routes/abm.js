@@ -534,6 +534,7 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
 
     try {
         const result = await agregarClientes(req.body);
+        console.log(result)
         if (result !== false) {
             const date = new Date().toLocaleString()
             let nombre_user = '';
