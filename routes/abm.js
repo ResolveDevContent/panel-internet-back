@@ -637,7 +637,6 @@ async function agregarClientes(datos) {
 
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
-        console.log(row)
         if (row.Id && row.Codigo) {
             row.nombre = row.nombre || ""
             row.apellido = row.apellido || ""
@@ -646,7 +645,7 @@ async function agregarClientes(datos) {
             row.email = row.email || ""
 
             const findClient = clientes.find((doc) => doc.Id == row.Id && doc.Codigo == row.Codigo)
-            
+            console.log(findClient)
             return Object.keys(findClient).length > 0 ? "actualizar" : "agregar"
         } else {
             return "false";
