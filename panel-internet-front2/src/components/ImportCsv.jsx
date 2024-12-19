@@ -74,19 +74,19 @@ export const ImportCsv = ({titulo, user = {}}) => {
             }
             const filteredData = filterKeys(result, 'Id', 'Codigo', 'dni', 'nombre', 'apellido', 'direccion_principal', 'email', 'zona');
             console.log(filteredData)
-            // importarCSV(titulo, filteredData)
-            // .then(data => {
-            //     if(data.error) {
-            //         setState({text: data.error, res: "secondary"})
-            //         setLoading(false)
-            //         return
-            //     }
-            //     setLoading(false)
+            importarCSV(titulo, filteredData)
+            .then(data => {
+                if(data.error) {
+                    setState({text: data.error, res: "secondary"})
+                    setLoading(false)
+                    return
+                }
+                setLoading(false)
 
-            //     setState({text: data.message, res: "primary"})
+                setState({text: data.message, res: "primary"})
 
-            //     navigate(`/${titulo}/listar`)
-            // })
+                navigate(`/${titulo}/listar`)
+            })
         };
         reader.readAsText(input);
     };
