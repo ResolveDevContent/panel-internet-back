@@ -631,6 +631,7 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
 });
 
 async function agregarClientes(datos) {
+    console.log("CLIENTES", datos)
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
