@@ -657,20 +657,20 @@ async function agregarClientes(datos) {
 
     const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
     const clientesActualizar = clientesParaActualizar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
-    console.log(Object.keys(clientesParaActualizar[0]).map(key => `${key} = ?`).join(", "))
-    // try {
-    //     if(clientesParaAgregar.length > 0) {
-    //         await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
-    //     }
+    
+    try {
+        if(clientesParaAgregar.length > 0) {
+            await batchInsert("clientes", clientesParaAgregar, clientesAgregar);
+        }
 
-    //     if(clientesParaActualizar.length > 0) {
-    //         await batchUpdate("clientes", clientesParaActualizar, clientesActualizar);
-    //     }
+        if(clientesParaActualizar.length > 0) {
+            await batchUpdate("clientes", clientesParaActualizar, clientesActualizar);
+        }
 
-    //     return clientesParaAgregar.length + clientesParaActualizar.length;
-    // } catch (error) {
-    //     return false
-    // }
+        return clientesParaAgregar.length + clientesParaActualizar.length;
+    } catch (error) {
+        return false
+    }
 }
 
 //CRUD: COBRANZAS ---------------------------------------------------------------------------------
