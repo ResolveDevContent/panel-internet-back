@@ -671,10 +671,12 @@ async function agregarClientes(datos) {
                     return true;
                 }
             } catch (err) {
+                console.count("catch")
                 console.error("Error en la operación con el cliente:", err);
                 return false;
             }
         } else {
+            console.count("else")
             return false;
         }
     });
