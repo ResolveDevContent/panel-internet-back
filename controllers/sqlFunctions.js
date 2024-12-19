@@ -215,6 +215,7 @@ const updateRecordCliente = async (tableName, update, column, values) => {
     const [results] = await pool.query(query, parameters);
     return {message: "Se actualizo correctamente"};
   } catch (err) {
+    console.log(err)
     console.error('Error executing query:', err); // Manejo de errores
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }

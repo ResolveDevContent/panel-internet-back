@@ -533,7 +533,6 @@ router.post("/clientes/importarcsv", authenticate, async (req, res) => {
     delete req.body.user;
 
     try {
-        console.log("INICIO =======")
         const result = await agregarClientes(req.body);
         if (result !== false) {
             const date = new Date().toLocaleString()
