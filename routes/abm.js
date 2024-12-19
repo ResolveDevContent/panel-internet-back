@@ -663,15 +663,15 @@ async function agregarClientes(datos) {
         }
 
         if(clientesParaActualizar.length > 0) {
-            const promisesActualizar = clientesParaActualizar.map(async (cliente) => {
-                await updateRecordCliente('clientes', cliente, 
-                    { first: 'Id', second: 'Codigo' }, 
-                    { first: cliente.Id.toString(), second: cliente.Codigo.toString() }
-                );
-                return true;
-            })
+            // const promisesActualizar = clientesParaActualizar.map(async (cliente) => {
+            //     await updateRecordCliente('clientes', cliente, 
+            //         { first: 'Id', second: 'Codigo' }, 
+            //         { first: cliente.Id.toString(), second: cliente.Codigo.toString() }
+            //     );
+            //     return true;
+            // })
 
-            const resultadosAct = await Promise.all(promisesActualizar);
+            // const resultadosAct = await Promise.all(promisesActualizar);
         }
         return clientesParaAgregar.length + clientesParaActualizar.length;
     } catch (error) {
