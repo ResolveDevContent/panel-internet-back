@@ -638,8 +638,8 @@ async function agregarClientes(datos) {
         if (row.Id && row.Codigo) {
             // Preparar el objeto cliente con valores predeterminados
             const cliente = {
-                id: row.Id,
-                codigo: row.Codigo,
+                Id: row.Id,
+                Codigo: row.Codigo,
                 nombre: row.nombre || "",
                 apellido: row.apellido || "",
                 dni: row.dni || "",
@@ -655,6 +655,7 @@ async function agregarClientes(datos) {
                     { first: "Id", second: "Codigo" }, 
                     { first: row.Id.toString(), second: row.Codigo.toString() }
                 );
+                console.count("EXISTE")
 
                 if (results.length === 0) {
                     console.count("agregar")
