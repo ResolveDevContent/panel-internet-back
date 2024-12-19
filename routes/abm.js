@@ -646,7 +646,7 @@ async function agregarClientes(datos) {
 
             const findClient = clientes.find((doc) => doc.Id == row.Id && doc.Codigo == row.Codigo)
 
-            return findClient ? "actualizar" : "agregar"
+            return Object.keys(findClient).length > 0 ? "actualizar" : "agregar"
         } else {
             return "false";
         }
