@@ -409,6 +409,40 @@ router.post("/zonas/agregar", authenticate, async (req, res) => {
     }
 });
 
+router.put("/zonas/modificar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const user = req.body.user;
+    delete req.body.user
+
+    const zona = {
+        nombre: req.body.nombre,
+        activo: 1
+    }
+    
+    try {
+        const udpateZona = await updateRecord("zonas", zona, "ID_Zona", id);
+        
+        const date = new Date().toLocaleString()
+        let nombre_user = '';
+        let nombre_superadmin = '';
+        if(user.role == 'admin') {
+            nombre_user = await selectOneRecord('admins', 'email', user.email)
+        } else {
+            nombre_superadmin = user.email
+        }
+
+        if(nombre_superadmin) {
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre_superadmin + " actualizo la zona " + req.body.nombre, fecha: new Date(date).getTime()});
+        }else {
+            const nombre = nombre_user[0].nombre ? nombre_user[0].nombre : nombre_user[0].nombre_comercio
+            await insertRecord('historial', {message: "El " + user.role +  " " + nombre + " actualizo la zona " + req.body.nombre, fecha: new Date(date).getTime()});
+        }
+        res.status(200).json(udpateZona);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 //CRUD: CLIENTES ---------------------------------------------------------------------------------
 
 router.get("/clientes/listar", async (req, res) => {
