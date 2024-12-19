@@ -656,7 +656,8 @@ async function agregarClientes(datos) {
     
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
-
+    console.log("agregar", clientesParaAgregar.length)
+    console.log("actualizar", clientesParaActualizar.length)
     try {
         if(clientesParaAgregar.length > 0) {
             await batchInsert("clientes", clientesParaAgregar);
