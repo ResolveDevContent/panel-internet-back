@@ -633,6 +633,7 @@ router.put("/clientes/modificar/:id", authenticate, async (req, res) => {
 });
 
 async function agregarClientes(datos) {
+    console.log("ENTRA A AGREGAR")
     const clientes = await selectTable("clientes");
 
     // Crear un array de promesas para inserciones y actualizaciones
