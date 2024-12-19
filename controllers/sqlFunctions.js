@@ -222,6 +222,7 @@ const updateRecordCliente = async (tableName, update, column, values) => {
 }
 
 const batchInsert = async (tableName, cliente, records) => {
+  console.log(cliente[0])
   const query = `INSERT INTO ${tableName} (${Object.keys(cliente[0])}) VALUES ?`;
 
   try {
