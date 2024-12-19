@@ -234,16 +234,7 @@ const batchInsert = async (tableName, cliente, records) => {
 };
 
 const batchUpdate = async (tableName, cases) => {
-  const query = `
-    UPDATE ${tableName}
-    SET 
-      nombre = CASE ${cases.nombreCase} END,
-      apellido = CASE ${cases.apellidoCase} END,
-      direccion_principal = CASE ${cases.direccion_principal} END,
-      dni = CASE ${cases.dni} END,
-      email = CASE ${cases.emailCase} END
-    WHERE Id IN (${cases.ids.join(', ')}) AND Codigo IN (${cases.codigos.join(', ')});
-  `;
+  const query = `UPDATE ${tableName} SET nombre = CASE ${cases.nombreCase} END, apellido = CASE ${cases.apellidoCase} END, direccion_principal = CASE ${cases.direccion_principal} END, dni = CASE ${cases.dni} END, email = CASE ${cases.emailCase} END WHERE Id IN (${cases.ids.join(', ')}) AND Codigo IN (${cases.codigos.join(', ')});`;
 
   try {
     const [results] = await pool.query(query);
