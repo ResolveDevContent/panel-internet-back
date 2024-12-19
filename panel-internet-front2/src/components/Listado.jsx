@@ -351,6 +351,7 @@ export const Listado = ({titulo, user = {}}) => {
                     })
                 } else {
                     listar(titulo, signal).then(datos => {
+                        console.log(datos)
                         if(datos.error) {
                             setLoading(false);
                             setState({

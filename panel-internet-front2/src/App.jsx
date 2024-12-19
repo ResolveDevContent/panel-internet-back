@@ -77,6 +77,7 @@ function App() {
               <Route element={<PrivateRoutes user={user} roles={['admin', 'superadmin']}/>}>
                 <Route path="zonas/listar" element={<Listado user={user} titulo={"zonas"}/>} />
                 <Route path="zonas/agregar" element={<Form elementos={ELEMENTOS.zonas} user={user} titulo={'zonas'}/>} />
+                <Route path="zonas/editar/:id" element={<Form elementos={ELEMENTOS.zonas} user={user} titulo={'zonas'}/>} />
                 <Route path="clientes/listar" element={<Listado user={user} titulo={"clientes"}/>} />
                 <Route path="clientes/editar/:id" element={<Form elementos={ELEMENTOS.clientes} titulo={'clientes'} user={user}/>}/>
                 <Route path="comercios/listar" element={<Listado user={user} titulo={"comercios"}/>} />
