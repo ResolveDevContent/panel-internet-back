@@ -3,6 +3,7 @@ import { downloadFile, importarCSV } from "../services/abm"
 import { useNavigate } from "react-router-dom"
 import { ListTemplate } from "../templates/ListTemplate"
 import { listar } from "../services/abm"
+import { Toast } from "./Toast"
 
 export const ImportCsv = ({titulo, user = {}}) => {
     const [ fileName, setFileName ] = useState("")
@@ -212,6 +213,7 @@ export const ImportCsv = ({titulo, user = {}}) => {
                 <span className="list-file" >{fileName}</span>
                 <button className="btn btn-success">Confirmar</button>
             </form>
+            { state.text ? <Toast texto={state.text} res={state.res}/> : null }
         </article>
     )
 }
