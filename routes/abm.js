@@ -637,7 +637,6 @@ async function agregarClientes(datos) {
     // Crear un array de promesas para inserciones y actualizaciones
     const promises = datos.map(async (row) => {
         if (row.Id && row.Codigo) {
-            row.activo = 1;
             row.nombre = row.nombre || ""
             row.apellido = row.apellido || ""
             row.dni = row.dni || ""
@@ -653,18 +652,22 @@ async function agregarClientes(datos) {
     });
     console.log(promises)
     const resultados = await Promise.all(promises);
-    
+
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
     const clientesParaActualizar = datos.filter((cliente, index) => resultados[index] === "actualizar");
     console.log("agregar", clientesParaAgregar.length)
     console.log("actualizar", clientesParaActualizar.length)
+
+    const clientesAgregar = clientesParaAgregar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
+    const clientesActualizar = clientesParaActualizar.map((cliente) => [cliente.Id, cliente.Codigo, cliente.nombre, cliente.apellido, cliente.dni, cliente.direccion_principal, cliente.email, 1]);
+
     try {
         if(clientesParaAgregar.length > 0) {
-            await batchInsert("clientes", clientesParaAgregar);
+            await batchInsert("clientes", clientesAgregar);
         }
 
         if(clientesParaActualizar.length > 0) {
-            await batchUpdate("clientes", clientesParaActualizar);
+            await batchUpdate("clientes", clientesActualizar);
         }
 
         return clientesParaAgregar.length + clientesParaActualizar.length;
