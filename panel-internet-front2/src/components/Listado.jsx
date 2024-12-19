@@ -375,7 +375,7 @@ export const Listado = ({titulo, user = {}}) => {
                         }
 
                         if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" 
-                            || titulo == 'clientes' || titulo == "cobranzas") {
+                            || titulo == 'clientes' || titulo == "cobranzas" || titulo == "zonas") {
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
