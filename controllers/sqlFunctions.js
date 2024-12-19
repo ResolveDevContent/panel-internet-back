@@ -150,8 +150,10 @@ const selectAsociaciones = async (tableName, columns, values) => {
 
   try {
     const [results] = await pool.query(query, [values.first, values.second]);
+    console.count("RESULT ASOCIACIONES")
     return results;
   } catch (err) {
+    console.count("ERROR ASOCIACIONES")
     console.error('Error executing query:', err); // Manejo de errores
     throw err; // Re-lanzar el error si deseas que el llamador maneje el error
   }

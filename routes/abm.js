@@ -650,6 +650,7 @@ async function agregarClientes(datos) {
             };
 
             try {
+                console.count("ARRANCA TRY")
                 // Verificar si el cliente ya existe
                 const results = await selectAsociaciones("clientes", 
                     { first: "Id", second: "Codigo" }, 
