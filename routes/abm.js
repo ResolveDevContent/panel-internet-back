@@ -415,7 +415,7 @@ router.put("/zonas/modificar/:id", authenticate, async (req, res) => {
     delete req.body.user
 
     const zona = {
-        nombre: req.body.nombre,
+        zona: req.body.zona,
         activo: 1
     }
     
