@@ -646,12 +646,12 @@ async function agregarClientes(datos) {
 
             const findClient = clientes.find((doc) => doc.Id == row.Id && doc.Codigo == row.Codigo)
 
-            findClient ? "actualizar" : "agregar"
+            return findClient ? "actualizar" : "agregar"
         } else {
             return "false";
         }
     });
-
+    console.log(promises)
     const resultados = await Promise.all(promises);
     
     const clientesParaAgregar = datos.filter((cliente, index) => resultados[index] === "agregar");
