@@ -28,7 +28,6 @@ export const Listado = ({titulo, user = {}}) => {
     const originalListado = useRef([])
 
     const filteredNombre = useMemo(() => {
-        console.log(user)
         let newArr = [];
         if(titulo == "clientes" || titulo == "cobranzas") {
             newArr = nombre != null && nombre.length > 0
