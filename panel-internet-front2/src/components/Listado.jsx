@@ -28,6 +28,7 @@ export const Listado = ({titulo, user = {}}) => {
     const originalListado = useRef([])
 
     const filteredNombre = useMemo(() => {
+        console.log(user)
         let newArr = [];
         if(titulo == "clientes" || titulo == "cobranzas") {
             newArr = nombre != null && nombre.length > 0
@@ -36,7 +37,7 @@ export const Listado = ({titulo, user = {}}) => {
                 })
                 : titulo == 'cobranzas' 
                     ? listado
-                    : []
+                    : user.role == 'superadmin' ? listado : []
         } else {
             newArr = nombre != null && nombre.length > 0
                 ? listado.filter(row => {
