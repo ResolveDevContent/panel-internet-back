@@ -177,9 +177,11 @@ export const Listado = ({titulo, user = {}}) => {
                     }
 
                     row.ID_Cliente = cliente[0].nombre
-                    row.apellido = cliente[0].apellido
-                    row.email = cliente[0].email
-                    row.direccion_principal = cliente[0].direccion_principal
+                    if(titulo != 'historial/transacciones') {
+                        row.apellido = cliente[0].apellido
+                        row.email = cliente[0].email
+                        row.direccion_principal = cliente[0].direccion_principal
+                    }
                 }
 
                 if(titulo != 'zonas' && row.zona) {
@@ -344,9 +346,8 @@ export const Listado = ({titulo, user = {}}) => {
                                 return;
                             }
 
+                            formatToNombres(result)
                             setLoading(false);
-                            setListado(result)
-                            originalListado.current = result;
                         })
                     })
                 } else {
