@@ -350,6 +350,29 @@ export const Listado = ({titulo, user = {}}) => {
                             setLoading(false);
                         })
                     })
+                } else if (titulo == 'comercios-adheridos') {
+                    listarUno(titulo, user.message._id, signal).then(datos => {
+                        if(datos.error) {
+                            setLoading(false);
+                            setState({
+                                text: datos.error,
+                                res: "secondary"
+                            })
+                            setTimeout(() => {
+                                setState({text: "", res: ""})
+                            }, 4000)
+                            return;
+                        }
+
+                        if(!datos || datos.length == 0) {
+                            setLoading(false);
+                            setListado([])
+                            originalListado.current = [];
+                            return;
+                        }
+
+                        formatToNombres(datos)
+                    })
                 } else {
                     listar(titulo, signal).then(datos => {
                         if(datos.error) {

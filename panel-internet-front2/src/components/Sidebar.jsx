@@ -306,6 +306,10 @@ export const Sidebar = ({user}) => {
                 <input type="radio" id="clientes" name="solapa"/>
                 <NavLink className={({isActive}) => isActive ? 'active' : ''} to="historial/transacciones/listar">Historial</NavLink>
               </li>
+              <li>
+                <input type="radio" id="clientes" name="solapa"/>
+                <NavLink className={({isActive}) => isActive ? 'active' : ''} to="comercios-adheridos/listar">Comercios adheridos</NavLink>
+              </li>
             </>
           ) : null}
           {user && user.role == "comercio" ? (

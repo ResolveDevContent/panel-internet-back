@@ -1120,6 +1120,16 @@ router.get("/asociaciones/listar", async (req, res) => {
     }
 });
 
+router.get("/comercios-adheridos/listar/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const results = await selectOneRecord("asociaciones", "ID_Cliente", id);
+        res.send(results);
+    } catch (err) {
+        res.status(500).json({ error: "Se ha producido un error, inténtelo nuevamente." });
+    }
+});
+
 // Obtener asociación por ID
 router.get("/asociaciones/listar/:id", authenticate, async (req, res) => {
     const { id } = req.params;

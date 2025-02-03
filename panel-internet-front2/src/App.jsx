@@ -110,6 +110,7 @@ function App() {
                 <Route element={<PrivateRoutes user={user} roles={['cliente']}/>}>
                   <Route path='cliente' element={<User />} />
                   <Route path='historial/transacciones/listar' element={<Listado user={user} titulo={'historial/transacciones'} />} />
+                  <Route path='comercios-adheridos/listar/:id' element={<Listado user={user} titulo={'comercios-adheridos'} />} />
                 </Route>
               ) : null}
             </Route>
