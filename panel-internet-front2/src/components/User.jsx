@@ -45,6 +45,20 @@ export const User = () => {
               return;
             }
             setTotal(datos[0])
+          })  
+
+          listarUno('zonas', cliente[0].zona)
+          .then(datos => {
+            if(datos.error) {
+              setLoading(false)
+              setState({
+                  text: datos.error,
+                  res: "secondary"
+              })
+              return;
+            }
+            console.log("zona", datos)
+            setCliente(prevState => ({...prevState, zona: datos[0]}))
             setLoading(false)
           })
         })
