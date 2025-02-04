@@ -210,7 +210,7 @@ export const Listado = ({titulo, user = {}}) => {
                     }
 
                     console.log(newArr)
-                    row.direccion_principal = newArr[0].direccion_principal
+                    row.tipo = newArr[0].nombre
                 }
 
                 if(row.activo) {

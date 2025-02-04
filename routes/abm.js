@@ -822,6 +822,7 @@ router.delete("/cobranzas/borrar/:id", authenticate, async (req, res) => {
         const cobranza = await selectOneRecord("cobranzas", "ID_Cobranzas", id);
 
         if(cobranza[0].puntos_pagos && cobranza[0].puntos_pagos > 0) {
+            console.log(cobranza)
             await insertRecord('puntos', {ID_Cliente: cobranza[0].ID_Cliente, puntos: cobranza[0].puntos_pagos, fecha: Date.now()});
         }
         const results = await deleteRecord("cobranzas", "ID_Cobranzas", id);
