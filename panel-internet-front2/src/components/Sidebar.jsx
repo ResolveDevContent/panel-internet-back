@@ -54,6 +54,7 @@ export const Sidebar = ({user}) => {
   }
 
   useEffect(() => {
+    console.log(user)
     getMonto()
   }, [])
 
