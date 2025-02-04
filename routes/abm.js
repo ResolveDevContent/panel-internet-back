@@ -779,10 +779,10 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
 
                 console.log(puntos)
 
-                puntos.forEach(async row => {
-                    result = currentPay - Number(row.puntos);
-                    console.log(result, currentPay)
+                for(const row of puntos) {
                     if(!flag) {
+                        result = currentPay - Number(row.puntos);
+                        console.log(result, currentPay)
                         console.log("if", flag)
                         if(result >= 0) {
                             if(result == 0) {
@@ -791,11 +791,11 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
                             await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
                             currentPay -= Number(row.puntos);
                         } else {
-                            await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
                             flag = true;
+                            await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);
                         }
                     }
-                });
+                }
             }
 
             const cliente = await selectOneRecord("clientes", 'ID_Cliente', req.body.ID_Cliente);
