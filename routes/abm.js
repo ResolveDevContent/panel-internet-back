@@ -777,14 +777,17 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
                 let flag = false;
                 let currentPay = Number(req.body.puntos_pago);
 
+                console.log(puntos)
+
                 puntos.forEach(async row => {
                     result = currentPay - Number(row.puntos);
+                    console.log(result, currentPay)
                     if(!flag) {
                         if(result >= 0) {
                             if(result == 0) {
                                 flag = true;
                             }
-                            await deleteRecord("puntos", 'ID_puntos', row.ID_Puntos);
+                            await deleteRecord("puntos", 'ID_Puntos', row.ID_Puntos);
                             currentPay -= Number(row.puntos);
                         } else {
                             await updateRecord("puntos", {puntos: (result * -1)} , 'ID_Puntos', row.ID_Puntos);

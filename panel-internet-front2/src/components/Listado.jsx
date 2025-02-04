@@ -45,7 +45,6 @@ export const Listado = ({titulo, user = {}}) => {
                 : listado
         }
 
-        console.log("listado", listado)
         setSortedListado(newArr)
     }, [listado, nombre])
 
@@ -159,7 +158,6 @@ export const Listado = ({titulo, user = {}}) => {
     }
 
     async function formatToNombres(data) {
-        console.log("format", data)
         let resultados = []
         const actualizaciones = data.map(async (row, idx) => {
             try {
@@ -229,10 +227,7 @@ export const Listado = ({titulo, user = {}}) => {
         })
 
         resultados = await Promise.all(actualizaciones);
-        // Filtra los resultados nulos (en caso de errores)
         const datosActualizados = resultados.filter(row => row !== null);
-        console.log("datos actualizados", datosActualizados)
-        // Actualiza el estado después de que todos los datos se han procesado
         setLoading(false);
         setListado(datosActualizados);
         originalListado.current = datosActualizados;
@@ -378,7 +373,6 @@ export const Listado = ({titulo, user = {}}) => {
                     })
                 } else {
                     listar(titulo, signal).then(datos => {
-                        console.log("cobranzas", datos)
                         if(datos.error) {
                             setLoading(false);
                             setState({
