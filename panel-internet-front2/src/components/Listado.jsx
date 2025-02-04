@@ -193,7 +193,7 @@ export const Listado = ({titulo, user = {}}) => {
                     row.zona = zona[0].zona
                 }
 
-                if(titulo == 'cobranzas' && row.tipo && row.tipo != 'superadmin') {
+                if(titulo == 'cobranzas' && row.tipo != 'superadmin') {
                     let newArr = [];
                     if(row.tipo == 'admin') {
                         newArr = await listarByEmail("admins", row.cobrador);
