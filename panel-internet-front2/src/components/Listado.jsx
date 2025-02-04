@@ -208,7 +208,9 @@ export const Listado = ({titulo, user = {}}) => {
                     }
 
                     console.log(newArr)
-                    row.tipo = newArr[0].nombre
+                    if(newArr.length > 0) {
+                        row.cobrador = newArr[0].nombre
+                    }
                 }
 
                 if(row.activo) {
