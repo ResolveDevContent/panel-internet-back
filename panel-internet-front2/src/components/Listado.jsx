@@ -207,7 +207,6 @@ export const Listado = ({titulo, user = {}}) => {
                         }
                     }
 
-                    console.log(newArr)
                     if(newArr.length > 0) {
                         row.cobrador = newArr[0].nombre
                     }

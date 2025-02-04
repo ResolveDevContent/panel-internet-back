@@ -58,7 +58,7 @@ export const User = () => {
               return;
             }
             console.log("zona", datos)
-            setCliente(prevState => ({...prevState, zona: datos[0]}))
+            setCliente(prevState => ({...prevState, zona: datos[0].zona}))
             setLoading(false)
           })
         })
