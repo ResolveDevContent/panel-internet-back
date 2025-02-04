@@ -179,7 +179,7 @@ export const Listado = ({titulo, user = {}}) => {
                     }
 
                     row.ID_Cliente = cliente[0].nombre
-                    if(titulo != 'historial/transacciones') {
+                    if(titulo != 'historial/transacciones' && titulo != 'comercios-adheridos') {
                         row.apellido = cliente[0].apellido
                         row.email = cliente[0].email
                         row.direccion_principal = cliente[0].direccion_principal
@@ -209,6 +209,7 @@ export const Listado = ({titulo, user = {}}) => {
                         }
                     }
 
+                    console.log(newArr)
                     row.direccion_principal = newArr[0].direccion_principal
                 }
 
@@ -403,7 +404,6 @@ export const Listado = ({titulo, user = {}}) => {
 
                         if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" 
                             || titulo == 'clientes' || titulo == "cobranzas" || titulo == "zonas") {
-                            console.log("if",datos)
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
