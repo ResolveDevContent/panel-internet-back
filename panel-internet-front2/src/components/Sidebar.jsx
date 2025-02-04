@@ -54,9 +54,6 @@ export const Sidebar = ({user}) => {
   }
 
   useEffect(() => {
-    if(user && user.role == 'cliente') {
-
-    }
     getMonto()
   }, [])
 
