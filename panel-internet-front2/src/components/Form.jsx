@@ -7,7 +7,7 @@ import { InputTemplate } from '../templates/InputTemplate'
 import { MultipleSelectTemplate } from '../templates/MultipleSelectTemplate'
 import { ListTemplate } from "../templates/ListTemplate"
 import { Loading } from "./Loading"
-import { PermisosTemplate } from "../templates/permisosTemplate";
+import { PermisosTemplate } from "../templates/PermisosTemplate";
 import { FiltroCliente } from "../templates/FiltroCliente";
 import { ZonasTemplate } from "../templates/ZonasTemplate";
 
