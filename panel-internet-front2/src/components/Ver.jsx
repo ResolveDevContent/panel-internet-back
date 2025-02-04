@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import { listarUno } from "../services/abm";
 import { Toast } from "./Toast";
 import { InputTemplate } from '../templates/InputTemplate'
-import { MultipleSelectTemplate } from '../templates/MultipleSelectTemplate'
-import { ListTemplate } from "../templates/ListTemplate"
 import { Loading } from "./Loading"
-import { PermisosTemplate } from "../templates/permisosTemplate";
 import { TextareaTemplate } from "../templates/TextareaTemplate";
 
 export const Ver = ({elementos = [], titulo = '', user = {}}) => {
