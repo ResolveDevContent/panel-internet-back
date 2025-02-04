@@ -858,6 +858,7 @@ async function agregarCobros(body) {
         ID_Cliente: body.ID_Cliente,
         nombre: body.nombre,
         cobrador: body.cobrador,
+        tipo: body.tipo
     };
 
     const promises = body.results.map(async (row) => {
