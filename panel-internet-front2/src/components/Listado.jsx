@@ -375,6 +375,7 @@ export const Listado = ({titulo, user = {}}) => {
                     })
                 } else {
                     listar(titulo, signal).then(datos => {
+                        console.log("cobranzas", datos)
                         if(datos.error) {
                             setLoading(false);
                             setState({
@@ -556,7 +557,7 @@ export const Listado = ({titulo, user = {}}) => {
                                             </div>
                                         : null}
                                         {titulo != "clientes" && titulo != "historial" && titulo != "historial/transacciones" && titulo != "cobranzas" && titulo != "zonas"
-                                            && titulo != "cobradores"
+                                            && titulo != "cobradores" && titulo != "comercios-adheridos"
                                             ? <div className='buscador-field'>
                                                 <input type="text" onChange={e => {
                                                     setnombreComercio(e.target.value)

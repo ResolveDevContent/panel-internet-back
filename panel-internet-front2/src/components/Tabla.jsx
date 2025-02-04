@@ -75,7 +75,8 @@ const formatearDatos = (datos) => {
         return newArr
     })
 
-    if(titulo == "transacciones" || titulo == "asociaciones" || titulo == "comercios/pagos" || titulo == "historial/transacciones") {
+    if(titulo == "transacciones" || titulo == "asociaciones" || titulo == "comercios/pagos" || titulo == "historial/transacciones"
+        || titulo == "comercios-adheridos") {
         const idxComercio = columns.findIndex(column => column == "ID_Comercio");
         columns[idxComercio] = "Nombre Comercio" 
 
