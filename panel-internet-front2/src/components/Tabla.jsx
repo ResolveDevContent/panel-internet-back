@@ -63,7 +63,6 @@ const formatearDatos = (datos) => {
 
         if((titulo == 'cobranzas')) {
             delete data.ID_Cliente;
-            delete data.tipo;
         }
 
         if((titulo == 'cobradores')) {
