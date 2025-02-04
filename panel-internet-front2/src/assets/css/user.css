@@ -62,3 +62,9 @@
 .mt-3 {
   margin-top: 3em;
 }
+
+@media screen and (max-width: 767px) {
+  .user-container {
+    width: 85%;
+  } 
+}
