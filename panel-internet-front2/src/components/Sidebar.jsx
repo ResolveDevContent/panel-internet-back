@@ -54,7 +54,9 @@ export const Sidebar = ({user}) => {
   }
 
   useEffect(() => {
-    console.log(user)
+    if(user && user.role == 'cliente') {
+
+    }
     getMonto()
   }, [])
 
@@ -309,7 +311,7 @@ export const Sidebar = ({user}) => {
               </li>
               <li>
                 <input type="radio" id="clientes" name="solapa"/>
-                <NavLink className={({isActive}) => isActive ? 'active' : ''} to={`comercios-adheridos/listar/${user.userId}`}>Comercios adheridos</NavLink>
+                <NavLink className={({isActive}) => isActive ? 'active' : ''} to={`comercios-adheridos/listar/${user.ID_Cliente}`}>Comercios adheridos</NavLink>
               </li>
             </>
           ) : null}
