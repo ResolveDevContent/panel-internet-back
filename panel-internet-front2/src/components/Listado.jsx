@@ -159,6 +159,7 @@ export const Listado = ({titulo, user = {}}) => {
     }
 
     async function formatToNombres(data) {
+        console.log("format", data)
         let resultados = []
         const actualizaciones = data.map(async (row, idx) => {
             try {
@@ -402,6 +403,7 @@ export const Listado = ({titulo, user = {}}) => {
 
                         if(titulo == "asociaciones" || titulo == "transacciones" || titulo == "comercios/pagos" 
                             || titulo == 'clientes' || titulo == "cobranzas" || titulo == "zonas") {
+                            console.log("if",datos)
                             formatToNombres(datos)
                         } else {
                             setLoading(false);
