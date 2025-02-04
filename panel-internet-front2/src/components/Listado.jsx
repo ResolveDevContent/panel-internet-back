@@ -45,6 +45,7 @@ export const Listado = ({titulo, user = {}}) => {
                 : listado
         }
 
+        console.log("listado", listado)
         setSortedListado(newArr)
     }, [listado, nombre])
 
@@ -228,7 +229,7 @@ export const Listado = ({titulo, user = {}}) => {
         resultados = await Promise.all(actualizaciones);
         // Filtra los resultados nulos (en caso de errores)
         const datosActualizados = resultados.filter(row => row !== null);
-
+        console.log("datos actualizados", datosActualizados)
         // Actualiza el estado después de que todos los datos se han procesado
         setLoading(false);
         setListado(datosActualizados);
