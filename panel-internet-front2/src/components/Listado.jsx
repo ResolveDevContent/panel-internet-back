@@ -351,7 +351,7 @@ export const Listado = ({titulo, user = {}}) => {
                         })
                     })
                 } else if (titulo == 'comercios-adheridos') {
-                    listarUno(titulo, user.message.id, signal).then(datos => {
+                    listarUno(titulo, user.message.userId, signal).then(datos => {
                         if(datos.error) {
                             setLoading(false);
                             setState({
