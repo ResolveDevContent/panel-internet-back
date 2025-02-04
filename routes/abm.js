@@ -783,6 +783,7 @@ router.post("/cobranzas/agregar", authenticate, async (req, res) => {
                     result = currentPay - Number(row.puntos);
                     console.log(result, currentPay)
                     if(!flag) {
+                        console.log("if", flag)
                         if(result >= 0) {
                             if(result == 0) {
                                 flag = true;
