@@ -193,14 +193,14 @@ export const Cobranzas = ({user = {}}) => {
       originalListado.current = [];
 
         if(user.role == "cobrador") {
-            const newArr = listarByEmail("cobradores", row.cobrador);
+            const newArr = listarByEmail("cobradores", user.email);
             if(newArr.length <= 0) {
                 cobradorNombre.current = user.email;
             }
             cobradorNombre.current = newArr[0].nombre;
 
-        } else if(user.role == "cobrador") {
-            const newArr = listarByEmail("admins", row.cobrador);
+        } else if(user.role == "admin") {
+            const newArr = listarByEmail("admins", user.email);
             if(newArr.length <= 0) {
                 cobradorNombre.current = user.email;
             }
