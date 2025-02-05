@@ -211,6 +211,8 @@ export const Cobranzas = ({user = {}}) => {
             cobradorNombre.current = user.email;
         }
 
+        console.log(cobradorNombre.current, cobradorNombre.value)
+
       if(user.role == "superadmin" || user.role == "cobrador") {
           listar('clientes', signal)
           .then(datos => {
@@ -376,7 +378,7 @@ export const Cobranzas = ({user = {}}) => {
                     <li className="list-template">
                         <div>
                             <label htmlFor="clientes" className="text-capitalize">Cobrador</label>
-                            <input type='text' className="form-control" id='pasarela' name='pasarela' value={cobradorNombre.value} readOnly/>
+                            <input type='text' className="form-control" id='pasarela' name='pasarela' ref={cobradorNombre} readOnly/>
                         </div>
                     </li>
                     <li className="list-template">
