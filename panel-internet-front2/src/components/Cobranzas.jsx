@@ -20,6 +20,7 @@ export const Cobranzas = ({user = {}}) => {
 
     const totalFacturasRef = useRef(0)
     const originalListado = useRef([])
+    const cobradorNombre = useRef('')
     const navigate = useNavigate();
 
     const filteredNombre = useMemo(() => {
@@ -191,6 +192,26 @@ export const Cobranzas = ({user = {}}) => {
       setSortedListado([])
       originalListado.current = [];
 
+    
+                            
+
+        if(user.role == "cobrador") {
+            const newArr = listarByEmail("cobradores", row.cobrador);
+            if(newArr.length <= 0) {
+                cobradorNombre.current = user.email;
+            }
+            cobradorNombre.current = newArr[0].nombre;
+
+        } else if(user.role == "cobrador") {
+            const newArr = listarByEmail("admins", row.cobrador);
+            if(newArr.length <= 0) {
+                cobradorNombre.current = user.email;
+            }
+            cobradorNombre.current = newArr[0].nombre;
+        } else {
+            cobradorNombre.current = user.email;
+        }
+
       if(user.role == "superadmin" || user.role == "cobrador") {
           listar('clientes', signal)
           .then(datos => {
@@ -355,23 +376,8 @@ export const Cobranzas = ({user = {}}) => {
                     </li>
                     <li className="list-template">
                         <div>
-                            <select name="pasarela">
-                                <option value="Efectivo Oficina/Sucursal">Efectivo Oficina/Sucursal</option>
-                                <option value="Depósito bancario">Depósito bancario</option>
-                                <option value="Transferencia Bancaria">Transferencia Bancaria</option>
-                                <option value="Mercadopago">Mercadopago</option>
-                                <option value="Oxxo Pay">Oxxo Pay</option>
-                                <option value="Conekta">Conekta</option>
-                                <option value="Pagofácil">Pagofácil</option>
-                                <option value="Kushki">Kushki</option>
-                                <option value="khipu">khipu</option>
-                                <option value="Webpay">Webpay</option>
-                                <option value="Epayco">Epayco</option>
-                                <option value="Cobro Digital">Cobro Digital</option>
-                                <option value="Cuenta Digital">Cuenta Digital</option>
-                                <option value="Flow">Flow</option>
-                                <option value="PayPal/Visa/Mastercard">PayPal/Visa/Mastercard</option>
-                            </select> 
+                            <label htmlFor="clientes" className="text-capitalize">Cobrador</label>
+                            <input type='text' className="form-control" id='pasarela' name='pasarela' value={cobradorNombre.current} readOnly/>
                         </div>
                     </li>
                     <li className="list-template">
