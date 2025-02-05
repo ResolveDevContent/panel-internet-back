@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { listarFacturas, pagarFacturas } from "../services/Mikrowisp";
 import { Loading } from "./Loading";
-import { listarUno, agregar, listar, listarByAdmin } from '../services/abm'
+import { listarUno, agregar, listar, listarByAdmin, listarByEmail } from '../services/abm'
 import { puntosTotales } from '../services/totales'
 import { Toast } from '../components/Toast'
 import { useNavigate } from 'react-router-dom'
@@ -191,9 +191,6 @@ export const Cobranzas = ({user = {}}) => {
 
       setSortedListado([])
       originalListado.current = [];
-
-    
-                            
 
         if(user.role == "cobrador") {
             const newArr = listarByEmail("cobradores", row.cobrador);
