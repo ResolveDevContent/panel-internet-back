@@ -205,7 +205,7 @@ export const Cobranzas = ({user = {}}) => {
                 if(row.length <= 0) {
                     setCobradorNombre(user.email);
                 }
-                setCobradorNombre(row[0].nombre) = row[0].nombre;
+                setCobradorNombre(row[0].nombre);
             });
         } else {
             setCobradorNombre(user.email);
