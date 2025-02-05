@@ -376,7 +376,7 @@ export const Cobranzas = ({user = {}}) => {
                     <li className="list-template">
                         <div>
                             <label htmlFor="clientes" className="text-capitalize">Cobrador</label>
-                            <input type='text' className="form-control" id='pasarela' name='pasarela' value={cobradorNombre.current} readOnly/>
+                            <input type='text' className="form-control" id='pasarela' name='pasarela' value={cobradorNombre.value} readOnly/>
                         </div>
                     </li>
                     <li className="list-template">
