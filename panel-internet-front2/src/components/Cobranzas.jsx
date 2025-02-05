@@ -17,10 +17,10 @@ export const Cobranzas = ({user = {}}) => {
     const [ totalFacturas, setTotalFacturas ] = useState({total: 0, arr: []});
     const [ sortedListado, setSortedListado ] = useState([]);
     const [ nombreCliente, setNombreCliente ] = useState('')
+    const [ cobradorNombre, setCobradorNombre ] = useState('')
 
     const totalFacturasRef = useRef(0)
     const originalListado = useRef([])
-    const cobradorNombre = useRef('')
     const navigate = useNavigate();
 
     const filteredNombre = useMemo(() => {
@@ -195,23 +195,21 @@ export const Cobranzas = ({user = {}}) => {
         if(user.role == "cobrador") {
             listarByEmail("cobradores", user.email).then(row => {
                 if(row.length <= 0) {
-                    cobradorNombre.current = user.email;
+                    setCobradorNombre(user.email);
                 }
-                cobradorNombre.current = row[0].nombre;
+                setCobradorNombre(row[0].nombre);
             });
 
         } else if(user.role == "admin") {
             listarByEmail("admins", user.email).then(row => {
                 if(row.length <= 0) {
-                    cobradorNombre.current = user.email;
+                    setCobradorNombre(user.email);
                 }
-                cobradorNombre.current = row[0].nombre;
+                setCobradorNombre(row[0].nombre) = row[0].nombre;
             });
         } else {
-            cobradorNombre.current = user.email;
+            setCobradorNombre(user.email);
         }
-
-        console.log(cobradorNombre.current, cobradorNombre.value)
 
       if(user.role == "superadmin" || user.role == "cobrador") {
           listar('clientes', signal)
@@ -378,7 +376,7 @@ export const Cobranzas = ({user = {}}) => {
                     <li className="list-template">
                         <div>
                             <label htmlFor="clientes" className="text-capitalize">Cobrador</label>
-                            <input type='text' className="form-control" id='pasarela' name='pasarela' ref={cobradorNombre} readOnly/>
+                            <input type='text' className="form-control" id='pasarela' name='pasarela' value={cobradorNombre} readOnly/>
                         </div>
                     </li>
                     <li className="list-template">
