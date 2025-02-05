@@ -193,19 +193,20 @@ export const Cobranzas = ({user = {}}) => {
       originalListado.current = [];
 
         if(user.role == "cobrador") {
-            const newArr = listarByEmail("cobradores", user.email);
-            if(newArr.length <= 0) {
-                cobradorNombre.current = user.email;
-            }
-            console.log(newArr)
-            cobradorNombre.current = newArr[0].nombre;
+            listarByEmail("cobradores", user.email).then(row => {
+                if(row.length <= 0) {
+                    cobradorNombre.current = user.email;
+                }
+                cobradorNombre.current = row[0].nombre;
+            });
 
         } else if(user.role == "admin") {
-            const newArr = listarByEmail("admins", user.email);
-            if(newArr.length <= 0) {
-                cobradorNombre.current = user.email;
-            }
-            cobradorNombre.current = newArr[0].nombre;
+            listarByEmail("admins", user.email).then(row => {
+                if(row.length <= 0) {
+                    cobradorNombre.current = user.email;
+                }
+                cobradorNombre.current = row[0].nombre;
+            });
         } else {
             cobradorNombre.current = user.email;
         }
