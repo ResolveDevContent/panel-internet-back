@@ -106,7 +106,6 @@ export const Cobranzas = ({user = {}}) => {
 
         dataObj.user = user;
 
-        console.log(totalFacturas, dataObj, clienteObj, totalFacturasRef.current)
         if(totalFacturas.arr.length > 0 && (Number(dataObj.monto_total) > 0 || Number(dataObj.puntos_pago) == Number(totalFacturasRef.current)) &&
             (Number(dataObj.puntos_pago) == 0 || Number(dataObj.puntos_pago) <= Number(clienteObj.puntos))) {
             setLoading(true)
