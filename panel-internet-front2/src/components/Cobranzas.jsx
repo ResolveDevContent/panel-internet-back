@@ -197,6 +197,7 @@ export const Cobranzas = ({user = {}}) => {
             if(newArr.length <= 0) {
                 cobradorNombre.current = user.email;
             }
+            console.log(newArr)
             cobradorNombre.current = newArr[0].nombre;
 
         } else if(user.role == "admin") {
