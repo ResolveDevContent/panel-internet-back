@@ -63,6 +63,10 @@ export const Cobranzas = ({user = {}}) => {
     const buscarCliente = id => {
         if(!id) return;
 
+        setFacturasList({ total: 0, arr: [] });
+        setTotalFacturas({total: 0, arr: []})
+        totalFacturasRef.current = 0;
+
         listarUno("clientes", id)
         .then(datos => {
             if(!datos || datos.length == 0) {
@@ -102,6 +106,7 @@ export const Cobranzas = ({user = {}}) => {
 
         dataObj.user = user;
 
+        console.log(totalFacturas, dataObj.monto_total, dataObj.puntos_pago, clienteObj)
         if(totalFacturas.arr.length > 0 && (Number(dataObj.monto_total) > 0 || Number(dataObj.puntos_pago) == Number(dataObj.monto_total)) &&
             (Number(dataObj.puntos_pago) == 0 || Number(dataObj.puntos_pago) <= Number(clienteObj.puntos))) {
             setLoading(true)
