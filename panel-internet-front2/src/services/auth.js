@@ -2,7 +2,7 @@ import Cookies from "js-cookie"
 
 export const LoginAuth = async (credentials, setAuth, setState, signal) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/login', {
+        const response = await fetch('https://panel.winetinternet.com.ar/auth/login', {
             signal,
             method: 'POST',
             headers: {
@@ -32,7 +32,7 @@ export const LoginAuth = async (credentials, setAuth, setState, signal) => {
 
 export const LoginCliente = async (credentials, setAuth, setState, signal) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/login/cliente', {
+        const response = await fetch('https://panel.winetinternet.com.ar/auth/login/cliente', {
             signal,
             method: 'POST',
             headers: {
@@ -61,7 +61,7 @@ export const LoginCliente = async (credentials, setAuth, setState, signal) => {
 
 export const LogoutAuth = async (setAuth, setState, signal) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/logout', {
+        const response = await fetch('https://panel.winetinternet.com.ar/auth/logout', {
             signal,
             method: 'GET',
         });
@@ -85,7 +85,7 @@ export const PerfilAuth = (signal) => {
     const token = Cookies.get("token");
 
     return (
-        fetch('http://vps-4375167-x.dattaweb.com/auth/perfil', {
+        fetch('https://panel.winetinternet.com.ar/auth/perfil', {
             signal,
             method: 'GET',
             headers: {
@@ -97,7 +97,7 @@ export const PerfilAuth = (signal) => {
 
 export const RegisterAuth = async (credentials, setAuth, setState, signal) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/register', {
+        const response = await fetch('https://panel.winetinternet.com.ar/auth/register', {
             signal,
             method: 'POST',
             headers: {
@@ -126,7 +126,7 @@ export const RegisterAuth = async (credentials, setAuth, setState, signal) => {
 
 export const CambiarContraseña = async (credentials, setAuth, setState, signal) => {
     try {
-        const response = await fetch('http://vps-4375167-x.dattaweb.com/auth/changepassword', {
+        const response = await fetch('https://panel.winetinternet.com.ar/auth/changepassword', {
             signal,
             method: 'PUT',
             headers: {

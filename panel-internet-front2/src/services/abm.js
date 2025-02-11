@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 export const listar = (model, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listar`, {
             signal,
             method: "GET",
             headers: {
@@ -18,7 +18,7 @@ export const listar = (model, signal) => {
 export const listarUno = (model, id, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/${id}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listar/${id}`, {
             signal,
             method: "GET",
             headers: {
@@ -33,7 +33,7 @@ export const listarUno = (model, id, signal) => {
 export const listarByZona = (zona, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/clientes/listar/zona/${zona}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/clientes/listar/zona/${zona}`, {
             signal,
             method: "GET",
             headers: {
@@ -48,7 +48,7 @@ export const listarByZona = (zona, signal) => {
 export const listaZonaByAdmin = (zona, email, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/clientes/listar/zona/admin/${email}?zona=${zona}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/clientes/listar/zona/admin/${email}?zona=${zona}`, {
             signal,
             method: "GET",
             headers: {
@@ -63,7 +63,7 @@ export const listaZonaByAdmin = (zona, email, signal) => {
 export const listarByComercio = (model, id, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/comercio/${id}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listar/comercio/${id}`, {
             signal,
             method: "GET",
             headers: {
@@ -78,7 +78,7 @@ export const listarByComercio = (model, id, signal) => {
 export const listarByAdmin = (model, email, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/admin/${email}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listar/admin/${email}`, {
             signal,
             method: "GET",
             headers: {
@@ -93,7 +93,7 @@ export const listarByAdmin = (model, email, signal) => {
 export const listarByAdminAndParam = (model, email, param, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listar/admin/${email}/${param}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listar/admin/${email}/${param}`, {
             signal,
             method: "GET",
             headers: {
@@ -108,7 +108,7 @@ export const listarByAdminAndParam = (model, email, param, signal) => {
 export const listarByEmail = (model, email, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listarByEmail/${email}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listarByEmail/${email}`, {
             signal,
             method: "GET",
             headers: {
@@ -123,7 +123,7 @@ export const listarByEmail = (model, email, signal) => {
 export const listarByCobrador = (model, email, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/listarByCobrador/${email}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/listarByCobrador/${email}`, {
             signal,
             method: "GET",
             headers: {
@@ -138,7 +138,7 @@ export const listarByCobrador = (model, email, signal) => {
 export const importarCSV = (model, body, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/importarcsv`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/importarcsv`, {
             signal,
             method: "POST",
             headers: {
@@ -155,7 +155,7 @@ export const importarCSV = (model, body, signal) => {
 export const agregar = (model, body, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/agregar`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/agregar`, {
             signal,
             method: "POST",
             headers: {
@@ -172,7 +172,7 @@ export const agregar = (model, body, signal) => {
 export const modificar = (model, id, body, signal) => {
     const token = Cookies.get("token");
     return (
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/modificar/${id}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/modificar/${id}`, {
             signal,
             method: "PUT",
             headers: {
@@ -189,7 +189,7 @@ export const modificar = (model, id, body, signal) => {
 export const borrar = (model, id, body) => {
     const token = Cookies.get("token");
     return(
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/${model}/borrar/${id}`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/${model}/borrar/${id}`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ export const borrar = (model, id, body) => {
 export const makeBackup = (signal) => {
     const token = Cookies.get("token");
     return(
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/backup`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/backup`, {
             signal,
             method: "POST",
             headers: {
@@ -221,7 +221,7 @@ export const makeBackup = (signal) => {
 export const listBackups = (signal) => {
     const token = Cookies.get("token");
     return(
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/backups`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/backups`, {
             signal,
             method: "GET",
             headers: {
@@ -237,7 +237,7 @@ export const restoreBackup = (file, signal) => {
     const token = Cookies.get("token");
     const body = {file: file}
     return(
-        fetch(`http://vps-4375167-x.dattaweb.com/abm/restore`, {
+        fetch(`https://panel.winetinternet.com.ar/abm/restore`, {
             signal,
             method: "POST",
             headers: {
@@ -253,7 +253,7 @@ export const restoreBackup = (file, signal) => {
 
 export const downloadFile = () => {
     return(
-        fetch(`http://vps-4375167-x.dattaweb.com/descargar-archivo`, {
+        fetch(`https://panel.winetinternet.com.ar/descargar-archivo`, {
             method: "GET"
         })
         .then((res) => res.blob())
