@@ -34,8 +34,6 @@ app.get('/descargar-archivo', (req, res) => {
 // 📌 Luego sirve el frontend
 app.use(express.static(__dirname + "/panel-internet-front2/dist"))
 
-// 📌 Captura rutas que no sean API y devuelve index.html
-const path = require("path");
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "panel-internet-front2/dist", "index.html"));
 });
