@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import { Login } from './components/Login'
@@ -50,7 +50,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/login/cliente" element={<LoginClienteForm />} />
@@ -116,7 +116,7 @@ function App() {
             </Route>
             <Route path='*' element={<Component404 />}/>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
     </AuthContext.Provider>
   )
 }
